@@ -27,6 +27,14 @@ SKIP=(
   "ts-markdown-basic_markdown # goldmark vs pulldown-cmark: HTML block boundary, see MIGRATION.md"
 )
 
+# Front-end fork (Writer 观感, 2026-08-09): 模板与前端有意与 Rust 端分叉
+# —— writer.css 替代 github-markdown/hljs 主题、新增右侧大纲栏
+# （outline-rail.js + rail-zone 标记）、book.js 删掉样式表切换。
+# 所有 fixture 的 html 输出因此都不再逐字节可比，逐字节 diff 失去意义；
+# 内容级回归由 `go test ./...` 的 markdown golden tests 承担。
+# 恢复逐字节比较：MDBOOK_NO_FRONTEND_DIFF=0 ./harness/diff.sh
+NO_FRONTEND_DIFF="${MDBOOK_NO_FRONTEND_DIFF:-1}"
+
 if [[ $# -gt 0 ]]; then
   FIXTURES=("$@")
 else
@@ -53,6 +61,11 @@ for fixture in "${FIXTURES[@]}"; do
   if [[ ! -d "$fixture_dir" ]]; then
     echo "unknown fixture: $fixture" >&2
     exit 2
+  fi
+
+  if [[ "$NO_FRONTEND_DIFF" == "1" ]]; then
+    echo "SKIP $fixture (front-end fork, see KNOWN_DIFFS.md)" >&2
+    continue
   fi
 
   skip=0

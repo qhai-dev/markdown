@@ -74,6 +74,10 @@ func NewStaticFiles(t *Theme, cfg *model.HtmlConfig, root string) (*Files, error
 	f.AddBuiltin("nav-normal.js", t.NavNormalJS)
 	f.AddBuiltin("css/github-markdown-light.css", t.GitHubMarkdownLightCSS)
 	f.AddBuiltin("css/github-markdown-dark.css", t.GitHubMarkdownDarkCSS)
+	// Go-only Writer front-end fork (no Rust counterpart): chapter body
+	// styling via css/writer.css and the right-hand heading rail.
+	f.AddBuiltin("css/writer.css", t.WriterCSS)
+	f.AddBuiltin("outline-rail.js", t.OutlineRailJS)
 
 	for _, custom := range append(append([]string{}, cfg.AdditionalCSS...), cfg.AdditionalJS...) {
 		f.addAdditional(custom, filepath.Join(root, filepath.FromSlash(custom)))

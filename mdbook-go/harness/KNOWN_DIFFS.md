@@ -5,8 +5,28 @@ and Go outputs. Every line below is **expected** and corresponds to either
 an intentionally skipped fixture or a parser-level deviation that requires
 non-trivial work to close.
 
-Last updated: 2026-08-03 — both `basic` (40 files) and `nested` (48 files)
-produce byte-identical output, so no fixture is currently in `SKIP`.
+Last updated: 2026-08-09.
+
+## Front-end fork (Writer 观感) — ALL fixtures
+
+2026-08-09 起前端有意与 Rust 端分叉，逐字节 diff 对所有 fixture 失效
+（`diff.sh` / `diff_rust_testsuite.sh` 默认全部跳过，
+`MDBOOK_NO_FRONTEND_DIFF=0` 可恢复）：
+
+- 新增 `internal/static/css/writer.css`（Go-only）：设计令牌（主题 class
+  映射的 color-mix 推导）+ `.markdown-body` 正文样式 + `.hljs-*` oklch
+  色板 + 右侧大纲栏（`.rail-*`）。替代原 github-markdown/hljs 主题。
+- 新增 `internal/static/js/outline-rail.js`（Go-only）：大纲栏交互
+  （hover 弹卡片、点击跳转、滚动高亮、右键复制标题链接、Esc）。
+- `templates/index.html`：head 换 writer.css 链接、加 rail-zone 标记与
+  outline-rail.js 脚本。
+- `js/book.js`：`themes()` 删掉 github-markdown/hljs 样式表切换
+  （这些 css 仍随构建输出，作为备份留在仓库；恢复旧观感见
+  templates/index.html 里的注释）。
+- 参考 demo：`mdbook-go/test-html-css/index.html`。
+
+内容级回归不再由 harness 承担，由 `go test ./...` 的 markdown golden
+tests 覆盖。
 
 ## Skipped fixtures
 

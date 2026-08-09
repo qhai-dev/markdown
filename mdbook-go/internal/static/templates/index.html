@@ -18,13 +18,13 @@
         <link rel="stylesheet" href="{{.Resource "css/variables.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/general.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/chrome.css"}}">
-        <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="mdbook-highlight-css" href="{{.Resource "highlight.css"}}">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="{{.Resource "tomorrow-night.css"}}">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="{{.Resource "ayu-highlight.css"}}">
-        <!-- GitHub markdown stylesheets (chapter body via .markdown-body) -->
-        <link rel="stylesheet" id="mdbook-github-markdown-light-css" href="{{.Resource "css/github-markdown-light.css"}}">
-        <link rel="stylesheet" id="mdbook-github-markdown-dark-css" href="{{.Resource "css/github-markdown-dark.css"}}" disabled>
+        <!-- Writer 观感样式：正文（.markdown-body）+ 语法高亮色板 + 右侧大纲栏。
+             替代原 github-markdown/hljs 主题；备份文件仍随构建输出，恢复旧观感只需
+             重新加上以下链接并去掉 writer.css：
+             css/github-markdown-light.css  css/github-markdown-dark.css
+             css/highlight.css  css/tomorrow-night.css  css/ayu-highlight.css
+             （同时还原 js/book.js 里 themes() 的样式表切换） -->
+        <link rel="stylesheet" href="{{.Resource "css/writer.css"}}">
         <!-- Custom theme stylesheets -->
         {{range .AdditionalCSS}}
         <link rel="stylesheet" href="{{$.Resource .}}">
@@ -163,6 +163,17 @@
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
+                <!-- 右侧大纲栏（outline-rail.js 驱动：hover tick 条弹卡片，
+                     点击跳转，滚动高亮，右键复制标题链接，Esc 关闭） -->
+                <div class="rail-zone" id="rail-zone">
+                    <div class="rail-fade"></div>
+                    <div class="rail-trigger" id="rail-trigger">
+                        <nav class="rail-ticks" id="rail-ticks" aria-label="页面章节"></nav>
+                    </div>
+                    <div class="rail-popover" id="rail-popover" data-state="closed" hidden>
+                        <div class="rail-popover-list" id="rail-popover-list"></div>
+                    </div>
+                </div>
                 <div id="mdbook-content" class="content">
                     <main class="markdown-body">
                         {{.Content}}
@@ -238,6 +249,7 @@
         <script src="{{.Resource "clipboard.min.js"}}"></script>
         <script src="{{.Resource "highlight.min.js"}}"></script>
         <script src="{{.Resource "book.js"}}"></script>
+        <script src="{{.Resource "outline-rail.js"}}"></script>
 
         {{range .AdditionalJS}}
         <script src="{{$.Resource .}}"></script>

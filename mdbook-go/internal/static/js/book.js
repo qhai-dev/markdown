@@ -100,13 +100,11 @@ aria-label="Show hidden lines"></button>';
     const html = document.querySelector('html');
     const themeToggleButton = document.getElementById('mdbook-theme-toggle');
     const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-    const stylesheets = {
-        ayuHighlight: document.querySelector('#mdbook-ayu-highlight-css'),
-        tomorrowNight: document.querySelector('#mdbook-tomorrow-night-css'),
-        highlight: document.querySelector('#mdbook-highlight-css'),
-        githubMarkdownLight: document.querySelector('#mdbook-github-markdown-light-css'),
-        githubMarkdownDark: document.querySelector('#mdbook-github-markdown-dark-css'),
-    };
+
+    // Note: the per-theme stylesheet switching for the hljs themes and the
+    // github-markdown variants was removed with the Writer front-end fork
+    // (css/writer.css owns the syntax palette and both theme states). The
+    // backup stylesheets are still emitted — see templates/index.html.
 
     function get_saved_theme() {
         let theme = null;
@@ -139,32 +137,6 @@ aria-label="Show hidden lines"></button>';
 
     let previousTheme = default_theme;
     function set_theme(theme, store = true) {
-        let ace_theme;
-
-        if (theme === 'coal' || theme === 'navy') {
-            stylesheets.ayuHighlight.disabled = true;
-            stylesheets.tomorrowNight.disabled = false;
-            stylesheets.highlight.disabled = true;
-            stylesheets.githubMarkdownLight.disabled = true;
-            stylesheets.githubMarkdownDark.disabled = false;
-
-            ace_theme = 'ace/theme/tomorrow_night';
-        } else if (theme === 'ayu') {
-            stylesheets.ayuHighlight.disabled = false;
-            stylesheets.tomorrowNight.disabled = true;
-            stylesheets.highlight.disabled = true;
-            stylesheets.githubMarkdownLight.disabled = true;
-            stylesheets.githubMarkdownDark.disabled = false;
-            ace_theme = 'ace/theme/tomorrow_night';
-        } else {
-            stylesheets.ayuHighlight.disabled = true;
-            stylesheets.tomorrowNight.disabled = true;
-            stylesheets.highlight.disabled = false;
-            stylesheets.githubMarkdownLight.disabled = false;
-            stylesheets.githubMarkdownDark.disabled = true;
-            ace_theme = 'ace/theme/dawn';
-        }
-
         setTimeout(function() {
             themeColorMetaTag.content = getComputedStyle(document.documentElement).backgroundColor;
         }, 1);
