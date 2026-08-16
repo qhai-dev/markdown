@@ -93,8 +93,8 @@ func replaceAll(s, baseDir, sourcePath string, depth int, chapterTitle *string) 
 			// implementation drops the included content entirely and only
 			// logs an error — it does NOT emit the inner `{{#include}}`
 			// directive as literal text. Without this drop the recursive
-			// fixtures (e.g. tests/testsuite/includes/all_includes)
-			// accumulate one extra repetition per level past the limit.
+			// include accumulates one extra repetition per level past the
+			// limit (covered by TestRecursiveIncludeDepthLimit).
 			fmt.Fprintf(os.Stderr, "links preprocessor: stack depth exceeded in %s (cyclic includes?)\n", sourcePath)
 		}
 		lastEnd = link.end

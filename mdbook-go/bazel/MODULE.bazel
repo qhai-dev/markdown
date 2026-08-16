@@ -1,0 +1,34 @@
+"""rules_devdoc — Bazel rules for devdoc (https://github.com/qhai-dev/mdBook).
+
+This file lives at `./bazel/MODULE.bazel` while rules_devdoc is being
+developed in-tree under mdbook-go. When the rules are split into their own
+repository (see DEVLOG.md §7), this file becomes the root MODULE.bazel of
+that repository — no content changes are required, only its physical
+location moves up one directory.
+"""
+
+module(
+    name = "rules_devdoc",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# devdoc 工具链的 release tarball 拉取规则在 private/release/archive.bzl 定义。
+# 注意：v1 不调用 register_toolchains()——devdoc rule 直接通过 mandatory devdoc attr
+# 引用具体 host 平台的二进制仓库，不走 bazel 工具链注册表（见 DEVLOG.md §4.3）。
+archive_ext = use_extension("//private/release:extensions.bzl", "archive_ext")
+
+# Path to the pre-built devdoc binary. Run `make build` in mdbook-go/
+# first, then point this at the resulting bin/devdoc. When the first
+# GitHub release ships this becomes unnecessary.
+archive_ext.devdoc_bin(path = "/Users/qhai-dev/qhai-dev/mdBook/mdbook-go/bin/devdoc")
+
+use_repo(
+    archive_ext,
+    "rules_devdoc_toolchains_linux_amd64",
+    "rules_devdoc_toolchains_darwin_amd64",
+    "rules_devdoc_toolchains_darwin_arm64",
+)

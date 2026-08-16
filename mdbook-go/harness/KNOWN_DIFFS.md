@@ -1,92 +1,55 @@
-# Known Rust vs Go differences
+# Known harness differences
 
-The diff harness exits non-zero on any byte difference between the Rust
-and Go outputs. Every line below is **expected** and corresponds to either
-an intentionally skipped fixture or a parser-level deviation that requires
-non-trivial work to close.
-
-Last updated: 2026-08-09.
-
-## Front-end fork (Writer 观感) — ALL fixtures
-
-2026-08-09 起前端有意与 Rust 端分叉，逐字节 diff 对所有 fixture 失效
-（`diff.sh` / `diff_rust_testsuite.sh` 默认全部跳过，
-`MDBOOK_NO_FRONTEND_DIFF=0` 可恢复）：
-
-- 新增 `internal/static/css/writer.css`（Go-only）：设计令牌（主题 class
-  映射的 color-mix 推导）+ `.markdown-body` 正文样式 + `.hljs-*` oklch
-  色板 + 右侧大纲栏（`.rail-*`）。替代原 github-markdown/hljs 主题。
-- 新增 `internal/static/js/outline-rail.js`（Go-only）：大纲栏交互
-  （hover 弹卡片、点击跳转、滚动高亮、右键复制标题链接、Esc）。
-- `templates/index.html`：head 换 writer.css 链接、加 rail-zone 标记与
-  outline-rail.js 脚本。
-- `js/book.js`：`themes()` 删掉 github-markdown/hljs 样式表切换
-  （这些 css 仍随构建输出，作为备份留在仓库；恢复旧观感见
-  templates/index.html 里的注释）。
-- 参考 demo：`mdbook-go/test-html-css/index.html`。
-
-内容级回归不再由 harness 承担，由 `go test ./...` 的 markdown golden
-tests 覆盖。
+`harness/diff.sh` runs `devdoc build` against each fixture under
+`tests/` and bytes-compares the generated `book/` against the
+captured expected output. Every entry below is an **expected**
+deviation: typically an intentionally-skipped fixture, an asset the
+harness ignores, or a category of known mismatch the Go side won't
+close.
 
 ## Skipped fixtures
 
-(None. Both `basic` and `nested` pass strict diff.)
+(None at present. `basic` and `nested` both pass strict diff.)
 
-## Markdown parser deviations (goldmark vs pulldown-cmark)
+## Front-end fork vs. historical baseline
 
-These are tracked in `internal/html/markdown_golden_test.go`'s
-`knownDeviations` slice. The corresponding fixtures under
-`tests/testsuite/markdown/` are skipped from the golden regression. They
-do **not** affect `basic` or `nested`; they only show up when reusing the
-Rust `testsuite` fixtures as Go goldens, which is a separate test path.
+All fixtures use Go-only front-end assets shipped under
+`internal/static/`. These replace the historical CSS/JS theme stack
+(fontAwesome / github-markdown-css / etc.). When generated outputs are
+re-captured by running `devdoc build`, the `book/` is byte-stable
+for the new stack.
 
-1. `tests/testsuite/markdown/definition_lists/definition_lists.md` —
-   goldmark requires a single-line plain-text term; inline links or
-   multi-line terms do not become `<dt>`.
-2. `tests/testsuite/markdown/basic_markdown/html.md` — when an opening
-   HTML tag spans two lines, goldmark treats it as a block element while
-   pulldown-cmark falls back to inline HTML inside a paragraph.
-
-Fixing either requires swapping out part of goldmark's block parser;
-deferred until a fixture explicitly demands it.
+The harness script itself does not compare against any external
+reference; byte-equality is checked against the in-tree captured
+output at `tests/<fixture>/book/`. To refresh expectations:
+`devdoc build --dir tests/<fixture> --dest-dir tests/<fixture>/book`.
 
 ## Items removed from this file
 
-These were listed under M1/M2 and have since been closed:
+Closed decisions; kept here as a project-history breadcrumb.
 
-- `404.html`, `print.html`, `toc.html`, `toc.js`, `searchindex.js` — M2.
-- Font Awesome CSS/JS/icons and the menu bar / sidebar / footer JS — M2.
-- Theme asset hashing and `{{ resource }}` rewriting — M2.
-- **M-n (2026-08-15)**: Left-side chapter list sidebar
-  (`<nav id="mdbook-sidebar">` + the JS-generated chapter list inside
-  `<mdbook-sidebar-scrollbox>`, the CSS layout, the `<input
-  id="mdbook-sidebar-toggle-anchor">` toggle, the menu-bar toggle button,
-  and `buildTocJS`/`MDBookSidebarScrollbox`) was temporarily deleted
-  before being partially restored the same day — only the in-page outline
-  splice (`SidebarHeaderNavSource` IIFE) and the no-JS `toc.html` iframe
-  fallback are gone. The right-side outline rail (`outline-rail.js`)
-  continues to be the sole in-page outline. See
-  `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`.
-- **M-n (2026-08-15)**: `SidebarHeaderNavSource` (in-page heading outline
-  spliced into the chapter list sidebar via a `main.querySelectorAll`
-  IIFE) and the `sidebar-header-nav` config key are now removed entirely.
-  The right-side rail (`outline-rail.js`) supersedes this functionality.
-- **M-n+1 (2026-08-16)**: `[chapters]` YAML block (and `ChaptersConfig` /
-  `ChapterItem` Go types) deleted entirely. Chapter discovery is now
-  filesystem-walk + per-file YAML front-matter
-  (`title:` required, `index:` optional). See
-  `docs/configuration.md` §4 + `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`.
-- **M-n+1 (2026-08-16)**: Section numbering (`Chapter.Number`,
-  `SectionNumber`, `1.`/`1.1.` sidebar prefix) deleted. No replacement;
-  sidebar items have no numeric prefix.
-- **M-n+1 (2026-08-16)**: `Part` titles, `Separator` entries deleted.
-  Author can express nested grouping by filesystem subdirectory
-  (sidebar shows directory basename as a non-rendering container
-  node).
-- **M-n+1 (2026-08-16)**: All 18 fixtures' `devdoc.yaml` files now
-  lack `[chapters]`; corresponding `SUMMARY.md` Rust-leg files deleted
-  from each `tests/*/src/`. All `.md` files in those fixtures carry
-  `title:` front-matter.
+- `404.html`, `print.html`, `toc.html`, `toc.js`, `searchindex.js`,
+  Font Awesome CSS/JS/icons, the menu-bar / sidebar / footer JS,
+  Theme asset hashing, `{{ resource }}` rewriting — M2 removal.
 - `redirect` table support — M2.
-- `additional-css` and `fold` rendering — M2 (nested fixture).
+- `additional-css` and `fold` rendering — M2 (`nested` fixture).
 - Strict-mode byte-for-byte equivalence on `basic` and `nested` — M2.
+- **2026-08-15**: Left-side chapter list sidebar initially deleted,
+  then partially restored. Today only the no-JS `toc.html` iframe
+  fallback and the `SidebarHeaderNavSource` IIFE stay gone. The
+  right-side outline rail (`outline-rail.js`) is the sole in-page
+  outline.
+- **2026-08-16**: `[chapters]` YAML config (`ChaptersConfig`,
+  `ChapterItem`) removed entirely; chapter discovery is now
+  filesystem-walk + per-file YAML front-matter (`title:` required,
+  `index:` optional). See `docs/configuration.md` §4.
+- **2026-08-16**: Section numbering (`Chapter.Number`, `SectionNumber`,
+  `1.`/`1.1.` sidebar prefix) deleted. No replacement.
+- **2026-08-16**: `Part` titles, `Separator` entries deleted. Nesting
+  is expressed via filesystem subdirectory only.
+- **2026-08-16**: All 18 fixtures' `devdoc.yaml` files stripped of
+  `[chapters]` blocks; corresponding `tests/*/src/SUMMARY.md`
+  Rust-leg files removed. Every `.md` carries `title:` front-matter.
+- **2026-08-16**: Rust source tree (`crates/`, `src/`, `tests/testsuite/`,
+  `tests/gui/`, `ci/`, `guide/`, `doc/`, root Rust configs) removed
+  from the repo. The Go port `mdbook-go/` stands alone.

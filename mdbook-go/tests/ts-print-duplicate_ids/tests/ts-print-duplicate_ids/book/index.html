@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        
+        <meta charset="UTF-8">
+        <title>Chapter 1 - duplicate_ids</title>
+        
+
+        
+        
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="stylesheet" href="css/variables-bb698050.css">
+        <link rel="stylesheet" href="css/general-8ff3c398.css">
+        <link rel="stylesheet" href="css/chrome-7d3642a5.css">
+        
+        <link rel="stylesheet" href="css/writer-b15f4754.css">
+        
+        
+
+        
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            
+            window.path_to_searchindex_js = "searchindex-e14b759b.js";
+            
+        </script>
+        
+        <script src="nav-vim-90327dbf.js"></script>
+        
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+            } catch (e) { }
+        </script>
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+            <div class="page">
+                
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme">
+                        </button>
+                        
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            搜索
+                        </button>
+                        
+                    </div>
+                    <h1 class="menu-title">duplicate_ids</h1>
+                    <div class="right-buttons">
+                        
+                        
+                    </div>
+                </div>
+                
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                
+                <div class="rail-zone" id="rail-zone">
+                    <div class="rail-fade"></div>
+                    <div class="rail-trigger" id="rail-trigger">
+                        <nav class="rail-ticks" id="rail-ticks" aria-label="页面章节"></nav>
+                    </div>
+                    <div class="rail-popover" id="rail-popover" data-state="closed" hidden>
+                        <div class="rail-popover-list" id="rail-popover-list"></div>
+                    </div>
+                </div>
+                <div id="mdbook-content" class="content">
+                    <main class="markdown-body">
+                        <h1 id="chapter-1"><a class="header" href="#chapter-1">Chapter 1</a></h1>
+<h2 id="some-title"><a class="header" href="#some-title">Some title</a></h2>
+<p>See <a href="chapter_2.html#some-title">other</a></p>
+<p>See <a href="chapter_1.html#some-title">this</a></p>
+<p>See <a href="#some-title">this anchor only</a></p>
+
+                    </main>
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        
+                        
+                            <a rel="next prefetch" href="chapter_2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                
+                                ›
+                                
+                            </a>
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                
+                    <a rel="next prefetch" href="chapter_2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        
+                        ›
+                        
+                    </a>
+                
+            </nav>
+        </div>
+
+        
+
+        
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-664dc21f.js"></script>
+        
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.min.js"></script>
+        <script src="book-a295f4b2.js"></script>
+        <script src="outline-rail-d069693d.js"></script>
+
+        
+
+        
+    </div>
+    </body>
+</html>

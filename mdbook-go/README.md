@@ -1,25 +1,23 @@
-# mdbook-go
+# mdbook-go (devdoc)
 
-Go port of [mdBook](https://github.com/rust-lang/mdBook). This directory is a
-parallel implementation: the Rust source tree under `src/` and `crates/`
-stays as the canonical baseline; everything under `mdbook-go/` is a
-reimplementation in Go that aims to reach behavioural and output
-compatibility milestone by milestone.
-
-See `../doc/plan/README.md` for the full plan and `../doc/plan/progress.md`
-for live status.
+Go port that replaces [mdBook](https://github.com/rust-lang/mdBook).
+Everything under this directory is a single-binary Go implementation
+that reads `devdoc.yaml` + per-file YAML front-matter (`title:` required,
+`index:` optional) and emits the rendered HTML. See
+[`docs/old-plan/`](docs/old-plan/) for the original rewrite plan and
+historical status.
 
 ## Quick start
 
 ```bash
 cd mdbook-go
-go build -o bin/mdbook-go ./cmd/devdoc
-./bin/mdbook-go build --dir tests/basic --dest-dir /tmp/out
+go build -o bin/devdoc ./cmd/devdoc
+./bin/devdoc build --dir tests/basic --dest-dir /tmp/out
+./bin/devdoc init [--dir DIR] [--theme]   # scaffold a new book
 ```
 
-`./bin/devdoc init [--dir DIR] [--theme]` creates a new book
-skeleton (`devdoc.yaml` with a `[chapters]` table of contents, first
-chapters; no `.gitignore` is generated).
+## Layout
+
 
 ## Layout
 
@@ -111,8 +109,9 @@ MDBOOK_RUST_BIN=/path/to/mdbook ./harness/diff.sh basic nested
 ## Running the Rust test suite
 
 ```bash
-cargo test --workspace
+go test ./...
 ```
 
-The Go side reuses the Rust fixtures under `tests/testsuite/` as goldens
-for its own regressions; the Rust suite itself is unchanged.
+The Go side has its own fixture set under `tests/`; historically some
+were imported from the Rust `tests/testsuite/` while that source was
+available.

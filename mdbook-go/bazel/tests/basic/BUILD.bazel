@@ -1,0 +1,70 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("@rules_devdoc//:defs.bzl", "devdoc", "devdoc_server")
+
+# The host-specific devdoc repository is exposed by the archive_ext
+# extension in MODULE.bazel. For local macOS-arm64 development the
+# `darwin_arm64` repository is the one that actually runs the build action.
+# To make the test portable, `select()` is used below to pick the
+# appropriate repository per host.
+DEVDOC_HOST = {
+    "darwin_arm64": "@rules_devdoc_toolchains_darwin_arm64//:devdoc",
+    "darwin_amd64": "@rules_devdoc_toolchains_darwin_amd64//:devdoc",
+    "linux_amd64": "@rules_devdoc_toolchains_linux_amd64//:devdoc",
+}
+
+# `config_setting`s for each host. Bazel evaluates these against the
+# exec configuration at analysis time.
+config_setting(
+    name = "is_darwin_arm64",
+    values = {"cpu": "darwin_arm64"},
+)
+config_setting(
+    name = "is_darwin_amd64",
+    values = {"cpu": "darwin_amd64"},
+)
+config_setting(
+    name = "is_linux_amd64",
+    values = {"cpu": "k8"},
+)
+
+devdoc(
+    name = "book",
+    devdoc = select({
+        ":is_darwin_arm64": DEVDOC_HOST["darwin_arm64"],
+        ":is_darwin_amd64": DEVDOC_HOST["darwin_amd64"],
+        ":is_linux_amd64": DEVDOC_HOST["linux_amd64"],
+        "//conditions:default": DEVDOC_HOST["darwin_arm64"],
+    }),
+    book = "devdoc.yaml",
+    srcs = glob(["docs/**/*.md"]),
+)
+
+build_test(
+    name = "build_test",
+    targets = [":book"],
+)
+
+# devdoc_server wraps `devdoc serve` and exposes the book via HTTP.
+# The serve_test.sh below spawns it, curls the rendered pages, and
+# kills it. The server itself doesn't need to be built (it's just a
+# symlink to the devdoc binary), but we declare it so the runfiles
+# include the book's srcs.
+devdoc_server(
+    name = "book_server",
+    book = ":book",
+    devdoc = select({
+        ":is_darwin_arm64": DEVDOC_HOST["darwin_arm64"],
+        ":is_darwin_amd64": DEVDOC_HOST["darwin_amd64"],
+        ":is_linux_amd64": DEVDOC_HOST["linux_amd64"],
+        "//conditions:default": DEVDOC_HOST["darwin_arm64"],
+    }),
+    port = "34567",
+)
+
+sh_test(
+    name = "serve_test",
+    srcs = ["serve_test.sh"],
+    args = ["$(rootpath :book_server)"],
+    data = [":book_server"],
+)
