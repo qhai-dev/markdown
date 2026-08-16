@@ -1,3 +1,7 @@
+---
+title: Passing Tests 1
+---
+
 # Passing Tests 1
 
 ```rust

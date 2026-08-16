@@ -1,0 +1,9 @@
+package:
+  root: src
+  build-dir: book
+  title: empty_theme
+
+output:
+  html:
+    theme: ./theme
+

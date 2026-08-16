@@ -1,0 +1,6 @@
+package:
+  root: src
+
+build:
+  build-dir: book
+

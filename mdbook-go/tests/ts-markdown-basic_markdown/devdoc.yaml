@@ -1,0 +1,7 @@
+package:
+  title: basic_markdown
+  root: src
+
+build:
+  build-dir: book
+

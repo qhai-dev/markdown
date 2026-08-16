@@ -57,6 +57,36 @@ These were listed under M1/M2 and have since been closed:
 - `404.html`, `print.html`, `toc.html`, `toc.js`, `searchindex.js` — M2.
 - Font Awesome CSS/JS/icons and the menu bar / sidebar / footer JS — M2.
 - Theme asset hashing and `{{ resource }}` rewriting — M2.
+- **M-n (2026-08-15)**: Left-side chapter list sidebar
+  (`<nav id="mdbook-sidebar">` + the JS-generated chapter list inside
+  `<mdbook-sidebar-scrollbox>`, the CSS layout, the `<input
+  id="mdbook-sidebar-toggle-anchor">` toggle, the menu-bar toggle button,
+  and `buildTocJS`/`MDBookSidebarScrollbox`) was temporarily deleted
+  before being partially restored the same day — only the in-page outline
+  splice (`SidebarHeaderNavSource` IIFE) and the no-JS `toc.html` iframe
+  fallback are gone. The right-side outline rail (`outline-rail.js`)
+  continues to be the sole in-page outline. See
+  `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`.
+- **M-n (2026-08-15)**: `SidebarHeaderNavSource` (in-page heading outline
+  spliced into the chapter list sidebar via a `main.querySelectorAll`
+  IIFE) and the `sidebar-header-nav` config key are now removed entirely.
+  The right-side rail (`outline-rail.js`) supersedes this functionality.
+- **M-n+1 (2026-08-16)**: `[chapters]` YAML block (and `ChaptersConfig` /
+  `ChapterItem` Go types) deleted entirely. Chapter discovery is now
+  filesystem-walk + per-file YAML front-matter
+  (`title:` required, `index:` optional). See
+  `docs/configuration.md` §4 + `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`.
+- **M-n+1 (2026-08-16)**: Section numbering (`Chapter.Number`,
+  `SectionNumber`, `1.`/`1.1.` sidebar prefix) deleted. No replacement;
+  sidebar items have no numeric prefix.
+- **M-n+1 (2026-08-16)**: `Part` titles, `Separator` entries deleted.
+  Author can express nested grouping by filesystem subdirectory
+  (sidebar shows directory basename as a non-rendering container
+  node).
+- **M-n+1 (2026-08-16)**: All 18 fixtures' `devdoc.yaml` files now
+  lack `[chapters]`; corresponding `SUMMARY.md` Rust-leg files deleted
+  from each `tests/*/src/`. All `.md` files in those fixtures carry
+  `title:` front-matter.
 - `redirect` table support — M2.
 - `additional-css` and `fold` rendering — M2 (nested fixture).
 - Strict-mode byte-for-byte equivalence on `basic` and `nested` — M2.

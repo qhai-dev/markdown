@@ -1,6 +1,7 @@
 package html_template
 
 import (
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -13,6 +14,27 @@ import (
 // single space, matching collapse_whitespace in
 // crates/mdbook-html/src/html_handlebars/search.rs. A single newline is left
 // alone, which is why chapter bodies keep their soft line breaks.
+
+// breadcrumbsForChapter derives a breadcrumb trail from a chapter's source
+// path. We use the directory components (each non-container parent
+// chapter's basename, in path order) and append the chapter's own name.
+// Empty if SourcePath is empty.
+func breadcrumbsForChapter(c *model.Chapter) []string {
+	if c == nil || c.SourcePath == "" {
+		return nil
+	}
+	dir := filepath.ToSlash(filepath.Dir(c.SourcePath))
+	var crumbs []string
+	if dir != "." && dir != "" && dir != "/" {
+		for _, part := range strings.Split(dir, "/") {
+			if part == "" {
+				continue
+			}
+			crumbs = append(crumbs, part)
+		}
+	}
+	return append(crumbs, c.Name)
+}
 var multiWhitespace = regexp.MustCompile(`\s\s+`)
 
 func collapseWhitespace(text string) string {
@@ -52,7 +74,7 @@ func chapterSearchEnabled(cfg model.Search, path string) bool {
 // indexChapter produces the search documents for a single chapter.
 func indexChapter(cfg model.Search, item *chapterTree) []Doc {
 	anchorBase := fs.ToURLPath(strings.TrimPrefix(item.chapter.HTMLPath(), "./"))
-	breadcrumbs := append(append([]string{}, item.chapter.ParentNames...), item.chapter.Name)
+	breadcrumbs := breadcrumbsForChapter(item.chapter)
 
 	var (
 		docs      []Doc

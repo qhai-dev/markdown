@@ -11,14 +11,14 @@ import (
 
 // InitOptions configures a single Init call. It is the Go analogue of the
 // clap arguments on src/cmd/init.rs::make_subcommand, minus the interactive
-// prompts (Go never prompts) and the .gitignore generation (doclens does
-// not create one; the watch gitignore parser still honours a user-provided
-// .gitignore, see pkg/cmd/watch/gitignore.go).
+// prompts (Go never prompts) and the .gitignore generation (devdoc does
+// not create one; the watcher scans whatever the file system says, no
+// .gitignore filtering — that partial parser was removed in 2026-08-16).
 //
 // The zero value is meaningful: an empty Title produces the Rust-equivalent
 // default "My Book" and Theme=false skips theme copy.
 type InitOptions struct {
-	// Title is the book title written to doclens.yaml. "" defaults to
+	// Title is the book title written to devdoc.yaml. "" defaults to
 	// "My Book" so the generated config is usable without further edits.
 	Title string
 	// Theme copies the embedded default theme into <root>/theme/.
@@ -30,12 +30,12 @@ type InitOptions struct {
 }
 
 // Init creates a fresh book skeleton at root. It mirrors
-// `crates/mdbook/src/cmd/init.rs::execute` end-to-end (with doclens
+// `crates/mdbook/src/cmd/init.rs::execute` end-to-end (with devdoc
 // deviations: sources go to docs/ instead of src/, no .gitignore, and
-// the build directory default is .doclens/):
+// the build directory default is .devdoc/):
 //
 //   - <root>/docs/                directory
-//   - <root>/doclens.yaml         minimal config (with the chosen title and a
+//   - <root>/devdoc.yaml         minimal config (with the chosen title and a
 //                                 [chapters] skeleton in place of SUMMARY.md)
 //   - <root>/docs/intro.md        intro chapter
 //   - <root>/docs/chapter_1.md    first numbered chapter with a sample code block
@@ -48,18 +48,18 @@ func Init(root string, opts InitOptions) error {
 	if title == "" {
 		title = "My Book"
 	}
-	doclensYAML := fmt.Sprintf(
-		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .doclens\n  create-missing: true\n\nchapters:\n  prefix:\n    - name: Introduction\n      path: intro.md\n  numbered:\n    - name: Chapter 1\n      path: chapter_1.md\n",
+	devdocYAML := fmt.Sprintf(
+		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .devdoc\n  create-missing: true\n",
 		title,
 	)
-	if err := os.WriteFile(filepath.Join(root, model.ConfigFileName), []byte(doclensYAML), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, model.ConfigFileName), []byte(devdocYAML), 0o644); err != nil {
 		return err
 	}
-	intro := "# Introduction\n\nWelcome to **mdbook-go**.\n"
+	intro := "---\ntitle: Introduction\n---\n\nWelcome to **mdbook-go**.\n"
 	if err := os.WriteFile(filepath.Join(root, "docs", "intro.md"), []byte(intro), 0o644); err != nil {
 		return err
 	}
-	c1 := "# Chapter 1\n\nFirst chapter content.\n\n```text\nHello, doclens!\n```\n"
+	c1 := "---\ntitle: Chapter 1\nindex: 1\n---\n\nFirst chapter content.\n\n```text\nHello, devdoc!\n```\n"
 	if err := os.WriteFile(filepath.Join(root, "docs", "chapter_1.md"), []byte(c1), 0o644); err != nil {
 		return err
 	}

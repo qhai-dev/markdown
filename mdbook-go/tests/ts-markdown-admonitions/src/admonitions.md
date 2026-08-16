@@ -1,3 +1,7 @@
+---
+title: Admonitions
+---
+
 # Admonitions
 
 > [!NOTE]

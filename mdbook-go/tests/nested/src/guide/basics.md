@@ -1,3 +1,7 @@
+---
+title: Basics
+---
+
 # Basics
 
 A nested chapter, one level down.

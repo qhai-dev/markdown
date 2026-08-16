@@ -15,16 +15,16 @@ minimal: one book chapter plus an `examples/` directory registered via
 ```
 serve/
 ├── README.md
-├── book.toml          # Rust-side config (harness); kept in sync with doclens.yaml
-├── doclens.yaml
+├── book.toml          # Rust-side config (harness); kept in sync with devdoc.yaml
+├── devdoc.yaml
 ├── src/
-│   ├── SUMMARY.md      # 仅供 harness 的 Rust 参考腿；Go 侧读 doclens.yaml [chapters]
+│   ├── SUMMARY.md      # 仅供 harness 的 Rust 参考腿；Go 侧读 devdoc.yaml [chapters]
 │   └── intro.md
 └── examples/
     └── snippet.md
 ```
 
-`doclens.yaml` declares `examples/` as an extra-watch-dir so a change
+`devdoc.yaml` declares `examples/` as an extra-watch-dir so a change
 inside that directory (which the source scanner does not pick up) still
 triggers a rebuild — this exercises M5.4 alongside the basic M5.1
 behaviour.
@@ -36,7 +36,7 @@ Each command should be run from the repository root.
 ### watch (poll)
 
 ```bash
-go run ./cmd/doclens watch --dir fixtures/serve --watcher poll
+go run ./cmd/devdoc watch --dir fixtures/serve --watcher poll
 # in another shell:
 echo "extra line" >> fixtures/serve/src/intro.md
 # → "Files changed: ..." in the watcher output
@@ -45,13 +45,13 @@ echo "extra line" >> fixtures/serve/src/intro.md
 ### watch (native)
 
 ```bash
-go run ./cmd/doclens watch --dir fixtures/serve --watcher native
+go run ./cmd/devdoc watch --dir fixtures/serve --watcher native
 ```
 
 ### serve
 
 ```bash
-go run ./cmd/doclens serve --dir fixtures/serve --port 3000
+go run ./cmd/devdoc serve --dir fixtures/serve --port 3000
 # open http://localhost:3000 in a browser
 # the browser console should show a websocket connection
 # to /__livereload and a "reload" message after each rebuild
@@ -60,7 +60,7 @@ go run ./cmd/doclens serve --dir fixtures/serve --port 3000
 ### serve --open
 
 ```bash
-go run ./cmd/doclens serve --dir fixtures/serve --open
+go run ./cmd/devdoc serve --dir fixtures/serve --open
 # equivalent to invoking `Open(serving_url)` after the listener is up
 ```
 

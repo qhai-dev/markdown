@@ -1,6 +1,6 @@
-# Local dev/test Makefile for doclens (mdbook-go).
+# Local dev/test Makefile for devdoc (mdbook-go).
 #
-#   make build               build bin/doclens with version injected
+#   make build               build bin/devdoc with version injected
 #   make build VERSION=v1.0.0   override the injected version
 #   make version             build and print version (verify -X works)
 #   make serve               build + serve the test book
@@ -9,9 +9,9 @@
 #   make test                run Go tests
 #   make clean               remove the binary
 
-BINARY  := doclens
+BINARY  := devdoc
 OUT     := bin
-PKG     := mdbook-go/cmd/doclens
+PKG     := mdbook-go/cmd/devdoc
 VER_PKG := mdbook-go/pkg/cmd/version
 
 VERSION ?= 0.1.0
@@ -26,7 +26,7 @@ LDFLAGS := -buildid= -s -w -X $(VER_PKG).Version=$(VERSION)
 build:
 	go build -trimpath -ldflags="$(LDFLAGS)" -o $(OUT)/$(BINARY) $(PKG)
 
-# quickly verify the -X injection: prints e.g. "doclens v1.0.0 go1.26.4 darwin/arm64"
+# quickly verify the -X injection: prints e.g. "devdoc v1.0.0 go1.26.4 darwin/arm64"
 version: build
 	$(OUT)/$(BINARY) version
 

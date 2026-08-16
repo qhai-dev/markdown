@@ -1,3 +1,7 @@
+---
+title: Rustdoc Includes
+---
+
 # Rustdoc Includes
 
 ## Rustdoc include adds the rest of the file as hidden

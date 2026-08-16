@@ -1,3 +1,7 @@
+---
+title: Introduction
+---
+
 # Introduction
 
 Welcome to the CLI fixture. This page exists so that `mdbook test` has

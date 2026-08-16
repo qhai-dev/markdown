@@ -1,0 +1,7 @@
+package:
+  title: all_includes
+  root: src
+
+build:
+  build-dir: book
+

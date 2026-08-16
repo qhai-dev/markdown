@@ -1,3 +1,7 @@
+---
+title: Deeper Still
+---
+
 # Deeper Still
 
 Four levels of nesting, in a subdirectory, so `path_to_root` is `../../`.

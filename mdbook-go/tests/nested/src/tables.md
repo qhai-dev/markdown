@@ -1,3 +1,7 @@
+---
+title: Tables And Footnotes
+---
+
 # Tables And Footnotes
 
 | Left | Center | Right |

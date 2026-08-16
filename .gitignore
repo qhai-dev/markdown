@@ -30,4 +30,4 @@ mdbook-go/dist/
 .claude/
 tmp/
 .superpowers/
-.doclens
+.devdoc

@@ -11,11 +11,11 @@ import (
 )
 
 // ConfigFileName is the book configuration file read by the loader and
-// written by create. The Rust baseline still reads book.toml (TOML); this
+// written by init. The Rust baseline still reads book.toml (TOML); this
 // YAML file is the Go-side equivalent, with the same keys.
-const ConfigFileName = "doclens.yaml"
+const ConfigFileName = "devdoc.yaml"
 
-// Load reads a doclens.yaml file from disk and returns a populated Config.
+// Load reads a devdoc.yaml file from disk and returns a populated Config.
 // Dynamic sections (output.* and preprocessor.*) are retained as raw yaml
 // values so plugins can decode them with their own schema.
 func Load(path string) (*Config, error) {
@@ -30,7 +30,7 @@ func Load(path string) (*Config, error) {
 	return cfg, nil
 }
 
-// LoadBook is a convenience that resolves doclens.yaml inside root.
+// LoadBook is a convenience that resolves devdoc.yaml inside root.
 func LoadBook(root string) (*Config, error) {
 	return Load(filepath.Join(root, ConfigFileName))
 }
@@ -70,11 +70,12 @@ type HtmlConfig struct {
 	AdditionalCSS    []string `yaml:"additional-css"`
 	AdditionalJS     []string `yaml:"additional-js"`
 
-	Fold Fold `yaml:"fold"`
 	Code Code `yaml:"code"`
 
-	NoSectionLabel bool    `yaml:"no-section-label"`
-	Search         *Search `yaml:"search"`
+	Fold          Fold  `yaml:"fold"`
+	NoSectionLabel bool `yaml:"no-section-label"`
+
+	Search *Search `yaml:"search"`
 
 	GitRepositoryURL  string `yaml:"git-repository-url"`
 	GitRepositoryIcon string `yaml:"git-repository-icon"`
@@ -86,12 +87,11 @@ type HtmlConfig struct {
 	SiteURL  string  `yaml:"site-url"`
 	CName    string  `yaml:"cname"`
 
-	// LiveReloadEndpoint is set by `serve`, never read from doclens.yaml.
+	// LiveReloadEndpoint is set by `serve`, never read from devdoc.yaml.
 	LiveReloadEndpoint string `yaml:"-"`
 
-	Redirect         map[string]string `yaml:"redirect"`
-	HashFiles        bool              `yaml:"hash-files"`
-	SidebarHeaderNav bool              `yaml:"sidebar-header-nav"`
+	Redirect  map[string]string `yaml:"redirect"`
+	HashFiles bool              `yaml:"hash-files"`
 }
 
 // SearchChapter is a per-chapter search override in [output.html.search.chapter].
@@ -114,40 +114,20 @@ type Search struct {
 	Chapter           map[string]SearchChapter `yaml:"chapter"`
 }
 
-// ChaptersConfig is the [chapters] section: the book's table of contents.
-// It replaces SUMMARY.md — the three lists mirror the mdBook summary grammar:
-// prefix chapters precede the numbered list, the numbered list carries the
-// section numbering, and suffix chapters follow it.
-type ChaptersConfig struct {
-	Prefix   []ChapterItem `yaml:"prefix"`
-	Numbered []ChapterItem `yaml:"numbered"`
-	Suffix   []ChapterItem `yaml:"suffix"`
-}
-
-// ChapterItem is one entry in a chapters list. Exactly one form applies: a
-// chapter has Name/Path (Path "" marks a draft chapter that still consumes a
-// number), a part title has Part set, and a separator has Separator set.
-type ChapterItem struct {
-	Name      string        `yaml:"name"`
-	Path      string        `yaml:"path"`
-	Children  []ChapterItem `yaml:"children"`
-	Part      string        `yaml:"part"`
-	Separator bool          `yaml:"separator"`
-}
-
-// Config is the full effective configuration loaded from doclens.yaml.
+// Config is the full effective configuration loaded from devdoc.yaml.
 // Output and Preprocessor are kept as generic maps so plugin configurations
-// stay dynamic.
+// stay dynamic. The book table of contents is no longer configured here —
+// it is discovered by walking the source directory and reading per-file
+// YAML front-matter (title required, index optional).
 type Config struct {
 	Package      PackageConfig  `yaml:"package"`
 	Build        BuildConfig    `yaml:"build"`
-	Chapters     ChaptersConfig `yaml:"chapters"`
 	Output       map[string]any `yaml:"output"`
 	Preprocessor map[string]any `yaml:"preprocessor"`
 }
 
-// New returns a Config populated with the doclens defaults. These deviate
-// from mdbook-core: doclens uses docs/ for sources and .doclens/ for the
+// New returns a Config populated with the devdoc defaults. These deviate
+// from mdbook-core: devdoc uses docs/ for sources and .devdoc/ for the
 // build output (Rust mdbook defaults to src/ and book/).
 func New() *Config {
 	return &Config{
@@ -155,7 +135,7 @@ func New() *Config {
 			Root: "docs",
 		},
 		Build: BuildConfig{
-			BuildDir:                ".doclens",
+			BuildDir:                ".devdoc",
 			CreateMissing:           true,
 			UseDefaultPreprocessors: true,
 		},

@@ -1,7 +1,9 @@
-# Chapter 1
+---
+title: Chapter 1
+---
 
 First chapter content.
 
 ```text
-Hello, doclens!
+Hello, devdoc!
 ```

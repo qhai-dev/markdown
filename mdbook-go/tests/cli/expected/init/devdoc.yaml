@@ -1,0 +1,8 @@
+package:
+  title: "My Book"
+  language: en
+  root: docs
+
+build:
+  build-dir: .devdoc
+  create-missing: true

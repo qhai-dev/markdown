@@ -1,13 +1,13 @@
-# doclens.yaml 配置参考
+# devdoc.yaml 配置参考
 
 > 更新时间：2026-08-09，分支 v1。
 > 代码位置：`internal/model/config.go`（加载与顶层默认）、`internal/model/html.go`
 > （`DefaultHTML` / `DefaultSearch`）。
 > Rust 基线：`crates/mdbook-core/src/config.rs`。
 
-**结论先行**：`doclens.yaml` 是 `book.toml`（TOML）的 Go 端等价物，键名一致，
+**结论先行**：`devdoc.yaml` 是 `book.toml`（TOML）的 Go 端等价物，键名一致，
 但格式为 YAML。默认值大部分与 Rust 基线一致，**刻意偏离**的有三处：
-`package.root` 默认 `docs`（Rust 为 `src`）、`build.build-dir` 默认 `.doclens`
+`package.root` 默认 `docs`（Rust 为 `src`）、`build.build-dir` 默认 `.devdoc`
 （Rust 为 `book`），以及 Go 端新增的若干字段（`build.pre-render`、
 `output.html.mode`）。
 `output.html.playground` / `output.html.print` 与 `[rust]` 相关配置已被硬删除，写了会被忽略。
@@ -18,9 +18,10 @@
 |---|---|---|
 | `package` | 表 | 书籍元信息 |
 | `build` | 表 | 构建流程配置 |
-| `chapters` | 表 | 目录树配置（2026-08-09 起取代 `SUMMARY.md`），见 §4 |
-| `output` | 表 | 渲染器配置，键为渲染器名；目前仅 `html` 被实现，其余透传给插件 |
+| `output` | 表 | 渲染器配置，键为渲染器名；目前仅 `html` 被实现,其余透传给插件 |
 | `preprocessor` | 表 | 预处理器配置，键为插件名；Go 端不解析，由插件用自有 schema 解码 |
+
+**章节结构由文件树 + 每文件 front-matter 提供**,不再有顶层 `chapters` 表(2026-08-16 起),详见 §4。
 
 加载时缺失文件会报错；`preprocessor` / `output` 之外的表缺省取各段默认值。
 
@@ -38,54 +39,74 @@
 
 | 字段 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
-| `build-dir` | string | `.doclens` | ⚠️ **与 Rust 基线不同**（Rust 默认 `book`） |
+| `build-dir` | string | `.devdoc` | ⚠️ **与 Rust 基线不同**（Rust 默认 `book`） |
 | `extra-watch-dirs` | string[] | `[]` | watch/serve 时额外触发重建的目录 |
-| `create-missing` | bool | `true` | `[chapters]` 引用的缺失章节文件是否自动创建（⚠️ Go 端当前未实现，见 `docs/runner-vs-rust.md` §3-1） |
+| `create-missing` | bool | `true` | 此字段保留对 Rust 配置的兼容性；Go 端不走 [chapters]，没有"缺失章节文件"的概念 |
 | `pre-render` | string[] | `[]` | Go 端特有字段 |
 | `use-default-preprocessors` | bool | `true` | 是否始终启用与渲染器兼容的默认 preprocessor |
 
-## 4. `chapters` 段
+## 4. 章节发现:文件树 + 每文件 front-matter
 
-目录树配置，2026-08-09 起取代 `SUMMARY.md`（Go 端不再读 `SUMMARY.md`）。
-三个列表对应 mdBook summary 语法：`prefix` 排在编号章节之前、`numbered`
-承载章节编号、`suffix` 排在最后。每一项（`ChapterItem`）恰好取一种形态：
+2026-08-16 起,Go 端不再读 `devdoc.yaml` 里的 `[chapters]` 段。
+章节列表由文件树(`package.root` 目录)扫描 + 每个 `.md` 文件顶部的 YAML front-matter 决定。
 
-| 形态 | 写法 | 说明 |
-|---|---|---|
-| 章节 | `name` + `path` | 普通章节；`path` 相对 `package.root`，前导 `./` 会被剥掉 |
-| 草稿 | `name` + `path: ""` | 空路径的章节，**仍消耗一个编号**（对齐 Rust） |
-| 部件标题 | `part` | 部件标题（对应 `# Part`），不消耗编号 |
-| 分隔线 | `separator: true` | 对应 `---`，不消耗编号 |
-| 嵌套 | `children` | 章节下的子章节列表，递归 |
+**front-matter 语法**:
 
-```yaml
-chapters:
-  prefix:
-    - name: Preface
-      path: preface.md
-  numbered:
-    - part: Guide            # 部件标题，不消耗编号
-    - name: Chapter 1
-      path: chapter_1.md
-      children:
-        - name: Section 1.1  # 编号 1.1
-          path: s1.md
-    - name: Draft            # 草稿：消耗编号，不渲染正文
-      path: ""
-    - separator: true
-  suffix:
-    - name: Afterword
-      path: afterword.md
+```markdown
+---
+title: Chapter 1
+index: 10
+draft: false
+---
+正文内容...
 ```
 
-**编号规则**（与 Rust 的 `toc.html` 输出逐字节对齐验证过）：只有
-`numbered` 列表编号；顶层 1, 2, 3…，子级 1.1, 1.2…，逐层追加；
-部件标题与分隔线不重置计数器；草稿仍占一个编号；`prefix` / `suffix`
-不编号。
+| 字段 | 必填 | 类型 | 说明 |
+|---|---|---|---|
+| `title` | **是** | string | 该文件的 sidebar 标签 + `<title>`;H1 不参与 |
+| `index` | 否 | int | 同级兄弟的排序权重,数字小者靠前;缺省时按文件名 lex 排 |
+| `draft` | 否 | bool | 为 `true` 时该章节不出现在 sidebar(2026-08-16 当前未实现,先保留字段) |
 
-> 注意：fixture（`tests/`）中的 `SUMMARY.md` 文件仍保留，但仅供
-> `harness/diff.sh` 的 Rust 参考腿使用（Rust mdbook 仍读
-> book.toml + SUMMARY.md）。修改 fixture 目录树时须同时改两处。
+**排序规则(2026-08-16 起)**:
+
+- 同目录内:有 `index` 的按数字升序,**排前**;没 `index` 的按文件名 lex 排后
+- 不同目录之间:各自的 `index` / lex 互不影响
+- 例:`a.md`(`index: 5`)+ `b.md`(`index: 1`)+ `c.md`(无) → 顺序 `b, a, c`
+
+**目录 = 嵌套**。每个子目录在 sidebar 里出现为容器节点(显示其基
+名),其下包含子 `.md` + 递归子目录。空目录被跳过。
+
+**front-matter 缺省 = 非章节**。任何不带 `---` 头的 `.md` 被 walker
+跳过(供 `{{#include}}` 共用的 include-source 用)。
+
+**示例文件树**:
+
+```
+package.root: docs/
+docs/
+├── intro.md                       # front-matter: title: "Introduction"
+├── chapter_1/
+│   ├── index.md                   # "Chapter 1"
+│   └── section_1_1.md            # "Section 1.1" (sidebar 嵌在 chapter_1/ 下)
+└── chapter_2.md                   # "Chapter 2"
+```
+
+**配套 `devdoc.yaml`** 不再有 `chapters:` 段,只需:
+
+```yaml
+package:
+  title: My Book
+  language: zh
+  root: src
+
+build:
+  build-dir: .devdoc
+  create-missing: true
+```
+
+**与 Rust `SUMMARY.md` 的差异**:Rust 端继续读 `book.toml` + `SUMMARY.md`;
+Go 端走文件系统 + front-matter,这是 M 系列的设计选择。fixture
+(`tests/`) 里的 `SUMMARY.md` 在 2026-08-16 起迁移时已删除。
 
 ## 5. `output.html` 段
 
@@ -116,11 +137,12 @@ chapters:
 | `cname` | string | 空 | CNAME |
 | `redirect` | map<string,string> | `{}` | 重定向映射 |
 | `hash-files` | bool | `true` | 静态资源是否加内容 hash |
-| `sidebar-header-nav` | bool | `true` | 侧边栏头部导航 |
 
 **已硬删除的字段**（2026-08-07/09 提交移除，写了会被忽略）：
 `playground`（含 `rust.edition` 的运行时用途）、`print`、`[rust]` 表、
-`package.authors`、`package.multilingual`。
+`package.authors`、`package.multilingual`、`sidebar-header-nav`、
+章节大纲 in-page sidebar `SidebarHeaderNavSource`（右侧 rail `outline-rail.js`
+仍保留）。
 
 ## 6. `output.html.search` 段
 
@@ -148,7 +170,7 @@ chapters:
    默认值、不会被零值覆盖。因此**想关掉默认开启的项（如 `admonitions`、
    `hash-files`）必须显式写 `false`**。
 2. **`root` / `build-dir` 与 Rust 默认不同**：想沿用 mdbook 习惯的
-   `src` / `book` 需显式配置，例如 fixture（`tests/basic/doclens.yaml`）：
+   `src` / `book` 需显式配置，例如 fixture（`tests/basic/devdoc.yaml`）：
    ```yaml
    package:
      root: src
@@ -173,14 +195,7 @@ build:
   build-dir: book
   create-missing: true
   use-default-preprocessors: true
-
-chapters:
-  prefix:
-    - name: Introduction
-      path: intro.md
-  numbered:
-    - name: Chapter 1
-      path: chapter_1.md
+# 章节由 src/ 目录树 + front-matter 提供,不写 [chapters]
 
 output:
   html:
@@ -198,4 +213,7 @@ output:
       enable: true
       limit-results: 30
       boost-title: 2
+```
+```
+  title = "测试"
 ```

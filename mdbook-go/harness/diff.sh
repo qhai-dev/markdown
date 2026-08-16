@@ -50,7 +50,7 @@ if [[ ! -x "$RUST_BIN" ]]; then
 fi
 
 echo "=== building Go binary ===" >&2
-(cd "$ROOT" && go build -o "$GO_BIN" ./cmd/doclens)
+(cd "$ROOT" && go build -o "$GO_BIN" ./cmd/devdoc)
 
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT

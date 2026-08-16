@@ -1,0 +1,9 @@
+package:
+  title: Basic Fixture
+  language: en
+  root: src
+
+build:
+  build-dir: book
+  create-missing: true
+

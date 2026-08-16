@@ -1,3 +1,7 @@
+---
+title: Introduction
+---
+
 # Introduction
 
 Text with *emphasis*, **strong**, ~~strikethrough~~ and `inline code`.

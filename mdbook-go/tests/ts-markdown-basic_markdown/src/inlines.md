@@ -1,3 +1,7 @@
+---
+title: Inlines
+---
+
 # Inlines
 
 *emphasis* **bold** **_bold emphasis_**

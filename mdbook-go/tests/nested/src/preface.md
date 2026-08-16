@@ -1,3 +1,7 @@
+---
+title: Preface
+---
+
 # Preface
 
 A prefix chapter, so it carries no section number.

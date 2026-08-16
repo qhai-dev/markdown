@@ -4,10 +4,10 @@ This directory holds the books the harness (`harness/diff.sh`) builds and
 byte-compares against the Rust `mdbook` reference output. There are three
 kinds of fixtures.
 
-> 2026-08-09 起，目录树配置从 `SUMMARY.md` 迁移到 `doclens.yaml` 的
+> 2026-08-09 起，目录树配置从 `SUMMARY.md` 迁移到 `devdoc.yaml` 的
 > `[chapters]` 段（`SUMMARY.md` 被淘汰）。fixture 中的 `SUMMARY.md`
 > 文件**保留**，但仅供 harness 的 Rust 参考腿使用（Rust mdbook 仍读
-> book.toml + SUMMARY.md）；Go 侧只读 `doclens.yaml` 的 `[chapters]`。
+> book.toml + SUMMARY.md）；Go 侧只读 `devdoc.yaml` 的 `[chapters]`。
 > 修改目录树时必须同时更新两处，保持两边一致。
 >
 > ⚠️ 下方 "Result" 列的 `OK (N files)` 是 2026-08-07 之前（硬删除
@@ -41,10 +41,10 @@ divergence and is registered in `harness/diff.sh`'s `SKIP` list.
 |---|---|---|
 | `ts-build-basic_build/` | `tests/testsuite/build/basic_build/` | OK (37 files) |
 | `ts-build-create_missing/` | `tests/testsuite/build/create_missing/` | OK (37 files) |
-| `ts-config-empty/` | `tests/testsuite/config/empty/` | OK (37 files) — 2026-08-09 起 `doclens.yaml` 显式声明 `root: src` / `build-dir: book`（Go 默认已改为 docs/.doclens，与 Rust 默认 src/book 不同，空配置无法再两边对齐） |
+| `ts-config-empty/` | `tests/testsuite/config/empty/` | OK (37 files) — 2026-08-09 起 `devdoc.yaml` 显式声明 `root: src` / `build-dir: book`（Go 默认已改为 docs/.devdoc，与 Rust 默认 src/book 不同，空配置无法再两边对齐） |
 | `ts-index-basic_readme/` | `tests/testsuite/index/basic_readme/` | OK (39 files) |
 | `ts-markdown-admonitions/` | `tests/testsuite/markdown/admonitions/` | OK (37 files) |
-| `ts-markdown-basic_markdown/` | `tests/testsuite/markdown/basic_markdown/` | SKIP (goldmark HTML block boundary; see `MIGRATION.md`) — 2026-08-09 起 `doclens.yaml` 显式声明 `root: src` / `build-dir: book` |
+| `ts-markdown-basic_markdown/` | `tests/testsuite/markdown/basic_markdown/` | SKIP (goldmark HTML block boundary; see `MIGRATION.md`) — 2026-08-09 起 `devdoc.yaml` 显式声明 `root: src` / `build-dir: book` |
 | `ts-playground-disabled_playground/` | `tests/testsuite/playground/disabled_playground/` | OK (37 files) |
 | `ts-playground-playground_on_rust_code/` | `tests/testsuite/playground/playground_on_rust_code/` | OK (37 files) |
 | `ts-print-duplicate_ids/` | `tests/testsuite/print/duplicate_ids/` | OK (38 files) |
@@ -52,9 +52,9 @@ divergence and is registered in `harness/diff.sh`'s `SKIP` list.
 | `ts-redirects-redirects_are_emitted_correctly/` | `tests/testsuite/redirects/redirects_are_emitted_correctly/` | OK (40 files) |
 | `ts-theme-custom_fonts_css/` | `tests/testsuite/theme/custom_fonts_css/` | OK (24 files) |
 | `ts-theme-empty_theme/` | `tests/testsuite/theme/empty_theme/` | OK (with an empty `theme/index.hbs` added — Rust requires the dir to exist) |
-| `ts-includes-all_includes/` | `tests/testsuite/includes/all_includes/` | OK (46 files) — recursive `{{#include}}` self-reference + `{{#include FILE:ANCHOR}}` stripping orphan ANCHOR directives (`see internal/runner/links_test.go`)；2026-08-09 起 `doclens.yaml` 显式声明 `root: src` / `build-dir: book` |
-| `ts-test-passing_tests/` | `tests/testsuite/test/passing_tests/` | OK (42 files) — happy-path coverage of `{{#include}}` / `{{#playground}}` / anchor mode；2026-08-09 起 `doclens.yaml` 显式声明 `root: src` / `build-dir: book` |
-| `ts-toc-basic_toc/` | `tests/testsuite/toc/basic_toc/` | OK (45 files) — exercises the loader's handling of an indented bare-link continuation entry, which the Rust parser drops (`internal/runner/loader.go`); the corresponding `chapters` entry is therefore absent from `doclens.yaml` |
+| `ts-includes-all_includes/` | `tests/testsuite/includes/all_includes/` | OK (46 files) — recursive `{{#include}}` self-reference + `{{#include FILE:ANCHOR}}` stripping orphan ANCHOR directives (`see internal/runner/links_test.go`)；2026-08-09 起 `devdoc.yaml` 显式声明 `root: src` / `build-dir: book` |
+| `ts-test-passing_tests/` | `tests/testsuite/test/passing_tests/` | OK (42 files) — happy-path coverage of `{{#include}}` / `{{#playground}}` / anchor mode；2026-08-09 起 `devdoc.yaml` 显式声明 `root: src` / `build-dir: book` |
+| `ts-toc-basic_toc/` | `tests/testsuite/toc/basic_toc/` | OK (45 files) — exercises the loader's handling of an indented bare-link continuation entry, which the Rust parser drops (`internal/runner/loader.go`); the corresponding `chapters` entry is therefore absent from `devdoc.yaml` |
 
 The `ts-theme-empty_theme/theme/` directory was added during M6.1 import
 because Rust refuses to render into a non-existent theme directory; the

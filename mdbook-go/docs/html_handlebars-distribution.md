@@ -1,9 +1,16 @@
-# Rust html_handlebars → Go 版分布盘点（聚合准备）
+# Rust html_handlebars → Go 版分布盘点（聚合准备 + 历史归档）
 
 > ⚠️ 已执行（2026-08-09）：本文描述的 7 包分散状态已被聚合为
 > `internal/html_template` 单包（render/data/redirect/searchdocs/engine/
-> helpers/toc_render/static/theme/search/index/pipeline/stemmer +
-> templates/ 5 个 .gohtml）。以下内容为聚合前的分布记录，供追溯。
+> helpers/static/theme/search/index/pipeline/stemmer + templates/ 4 个 .gohtml）。
+>
+> ⚠️ 部分删除（2026-08-15）：章节列表 sidebar 渲染的"in-page 大纲 + noscript
+> iframe 兜底"被删 —— `SidebarHeaderNavSource` IIFE、`toc.html` 模板、
+> `Env.SidebarHeaderNav*` 字段、`index.html` 的 `<noscript><iframe>` 块。
+> 仍然保留：`renderTocSidebar`、`Env.TocHTML`、`buildTocJS`、
+> `MDBookSidebarScrollbox`、`<nav id="mdbook-sidebar">` 容器 + JS 注入
+> 章节列表、`chapterSummaries`、`[output.html].fold.*` / `no-section-label` 配置。
+> 见 `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`。
 >
 > 更新时间：2026-08-09，分支 v1。
 > 背景：Rust 的 HTML 渲染器是 `crates/mdbook-html/src/html_handlebars/`
@@ -34,8 +41,8 @@
 | `render_404` | `render/render.go:402` `render404` | |
 | `render_print_page` | — | print 功能已删 |
 | 模板注册（index/redirect/head/header/toc_js/toc_html） | `render/render.go:156` `newRegistry` + `tplgotpl.LoadProduction` | handlebars.register_template_string → tplgotpl |
-| `register_hbs_helpers` | tplgotpl 的 Env 方法（TocHTML 等）；fa helper 已删 | |
-| render "toc_js" 模板 | `render/render.go:182` `buildTocJS` + 3 个 JS 常量（225 行） | Rust 里是 theme/toc.hbs 模板，Go 硬编码 |
+| `register_hbs_helpers` | tplgotpl 的 Env 方法（TocHTML + Resource 等）；fa helper 已删 | |
+| render "toc_js" 模板 | `render/render.go:182` `buildTocJS` + 3 个 JS 常量（含 `MDBookSidebarScrollbox` 注入章节列表 sidebar） | Rust 里是 theme/toc.hbs 模板，Go 硬编码。SidebarHeaderNavSource 已删（只保留章节列表 splice） |
 | `emit_redirects` / `emit_redirect` | `render/redirect.go:17` `emitRedirects` | |
 | `combine_fragment_redirects` | `render/redirect.go:54` `combineFragmentRedirects` | |
 | `collect_redirects_for_path` | **缺失** | 每章 fragment_map 注入没移植（见 §4） |
@@ -46,7 +53,7 @@
 
 | Rust helper | Go 位置 | 散落情况 |
 |---|---|---|
-| `helpers/toc.rs::RenderToc`（{{#toc}}） | `tplgotpl/toc_render.go:15` `renderTocSidebar`（算法）<br>`tplgotpl/helpers.go:64` `Env.TocHTML`（方法）<br>`render/toc.go:15` `NewSidebarEnv`（构造器）<br>`render/render.go:182` `buildTocJS`（toc.js 里的拼接） | **1 个 helper 拆了 4 处** |
+| `helpers/toc.rs::RenderToc`（{{#toc}}） | `tplgotpl/toc_render.go:15` `renderTocSidebar`（算法）<br>`tplgotpl/helpers.go:64` `Env.TocHTML`（方法）<br>`render/render.go:182` `buildTocJS`（toc.js 里的拼接） | **1 个 helper 拆了 3 处**（SidebarHeaderNavSource 拼接已删；`render/toc.go:NewSidebarEnv` 构造器也并入 buildTocJS） |
 | `helpers/resources.rs::ResourceHelper`（{{resource}}） | `tplgotpl/helpers.go:53` `Env.Resource`（方法逻辑）<br>`render/render.go:102` 填充 `Env.Resources`（数据）<br>`static/static.go:156` `Write` 产出 map（产物） | **数据/逻辑/产物三处** |
 | `helpers/fontawesome.rs::fa_helper` | — | FontAwesome 已删 |
 
@@ -72,23 +79,26 @@
 | Rust | Go |
 |---|---|
 | handlebars crate（**外部依赖**） | html/template（标准库）+ `tplgotpl` 薄封装（Registry/Env） |
-| theme/*.hbs 模板（index/redirect/head/header/toc_js/toc_html） | `tplgotpl/prod/` 5 个 .gohtml（index/redirect/head/header/toc.html） |
+| theme/*.hbs 模板（index/redirect/head/header/toc_js；toc_html 已删） | `tplgotpl/prod/` 4 个 .gohtml（index/redirect/head/header；toc.html 已删） |
 
 ### F. 周边被拉动的
 
 - `runner/build.go:29` `Build()` —— Rust 的 `impl Renderer for HtmlHandlebars` 本在
   hbs_renderer.rs 里，Go 直接由 runner 调 `render.Render`，没有 Renderer 接口对象
 - `theme.go` —— Rust 的 Theme 结构有 **6 个模板字段**（index/head/redirect/
-  header/toc_js/toc_html），Go 的 Theme 只有 css/js，模板全归 tplgotpl
+  header/toc_js/toc_html），Go 的 Theme 只有 css/js + 4 个 gohtml 模板字段
+  （index/redirect/head/header；2026-08-15 起 toc.html 已删，toc.js 改由
+  render.go 直接生成并 AddBuiltin）
 
 ## 3. 散落问题清单（聚合的动机）
 
 1. **一个渲染器 = 7 个包**，且 `render` 包内部还混着编排/数据/重定向/搜索/JS 资产 5 件事
-2. **toc helper 拆 4 处**（算法/toc_render.go、方法/helpers.go、构造器/render/toc.go、拼接/render.go）
+2. **toc helper 拆 3 处**（算法/toc_render.go、方法/helpers.go、拼接/render.go；
+   2026-08-15 后 in-page outline 那条拆点已删）
 3. **resource helper 拆 3 处**（方法在 tplgotpl、数据在 render、产物在 static）
 4. **search.rs 拆两半**：文档收集（render/searchdocs.go）和索引构建（search/）分离，
    `create_files` 的调用方还挂在 render 里
-5. **toc.js 的 225 行 JS 常量**在 render.go 里（Rust 是 theme 模板）
+5. **toc.js 的 3 段 JS 常量**在 render.go 里（Rust 是 theme 模板）
 6. **模板（tplgotpl/prod/）与渲染器（render/）分离**——Rust 里模板是 theme 字段、
    渲染器注册，一个 crate 内的事
 7. **`collect_redirects_for_path` 缺失**（真实功能缺口，见 §4）
@@ -108,13 +118,13 @@ Rust `hbs_renderer.rs:93-99` + `:674-696`：`render_chapter` 为**已有章节�
 ```
 internal/html/
 ├── …现有 markdown 管线 10 文件（不动）
-├── render.go      # hbs_renderer.rs：Render / renderChapter / render404 / redirects
-├── data.go        # RenderData + makeData（删 loose map 层）
-├── tocjs.go       # toc.js 常量 + 构建器（Rust 的 theme/toc.hbs）
+├── render.go      # hbs_renderer.rs：Render / renderChapter / render404 / redirects + buildTocJS + tocJSPrefix/Middle/AfterClass
+├── data.go        # RenderData + makeData + chapterSummaries
 ├── search.go      # index_chapter / create_files（从 render/searchdocs.go 迁入）
 ├── static.go      # StaticFiles（从 internal/static 迁入）
 ├── helpers.go     # Env / Resource / TocHTML（从 tplgotpl 迁入）
-└── templates/     # prod/*.gohtml（从 tplgotpl 迁入）
+├── toc_render.go  # renderTocSidebar(算法,从 toc.rs::RenderToc 移植)
+└── templates/     # prod/*.gohtml index/redirect/head/header
 ```
 
 未决问题：

@@ -4,101 +4,38 @@
 // crates/mdbook-preprocessor/src/lib.rs and crates/mdbook-renderer/src/lib.rs).
 // Keeping this wire format separate from the internal book model lets the
 // latter evolve without breaking plugin compatibility.
+//
+// Note (2026-08-16): the wire shape was simplified alongside the
+// switch from `[chapters]` + section-numbering to front-matter + filesystem
+// walk. External plugin shipping is currently frozen (see cmd.go header).
+// A future plugin integration round will need to consume the new shape.
 package plugin
 
 import (
-	"encoding/json"
-
 	"mdbook-go/internal/model"
 )
 
-// WireBook is the externally visible form of a book. It is serialised as the
-// second element of the preprocessor input tuple and as the standalone
+// WireBook is the externally visible form of a book. It is serialised as
+// the second element of the preprocessor input tuple and as the standalone
 // preprocessor output.
 //
-// Field order and JSON tags are chosen so encoding/json produces the same byte
-// stream serde does for crates/mdbook-core/src/book.rs::Book.
+// Items form a tree of WireChapter; container-only chapters (used purely
+// for sidebar nesting) are tagged with IsContainer and have an empty
+// Content plus no Path.
 type WireBook struct {
-	Items []WireBookItem `json:"items"`
+	Items []WireChapter `json:"items"`
 }
 
-// WireBookItem is the externally-tagged enum produced by serde for
-// `enum BookItem { Chapter(Chapter), Separator, PartTitle(String) }`. The
-// three cases are encoded as:
-//
-//	{"Chapter": {...}}      // tuple variant with named struct payload
-//	null                    // unit variant
-//	{"PartTitle": "name"}   // newtype variant
-type WireBookItem struct {
-	// Only one of the following is non-nil at a time. MarshalJSON below
-	// produces the right externally-tagged shape and UnmarshalJSON
-	// dispatches on which key is present.
-	Chapter   *WireChapter `json:"-"`
-	Separator *struct{}    `json:"-"`
-	PartTitle *string      `json:"-"`
-}
-
-// MarshalJSON renders WireBookItem as the externally tagged enum.
-func (b WireBookItem) MarshalJSON() ([]byte, error) {
-	switch {
-	case b.Chapter != nil:
-		return json.Marshal(struct {
-			Chapter *WireChapter `json:"Chapter"`
-		}{b.Chapter})
-	case b.PartTitle != nil:
-		return json.Marshal(struct {
-			PartTitle string `json:"PartTitle"`
-		}{*b.PartTitle})
-	default:
-		// Unit variant (Separator) renders as JSON null.
-		return []byte("null"), nil
-	}
-}
-
-// UnmarshalJSON is the inverse: dispatch on which key is present.
-func (b *WireBookItem) UnmarshalJSON(data []byte) error {
-	if string(data) == "null" {
-		b.Separator = &struct{}{}
-		return nil
-	}
-	var probe struct {
-		Chapter   *WireChapter `json:"Chapter"`
-		Separator *struct{}    `json:"Separator"`
-		PartTitle *string      `json:"PartTitle"`
-	}
-	if err := json.Unmarshal(data, &probe); err != nil {
-		return err
-	}
-	switch {
-	case probe.Chapter != nil:
-		b.Chapter = probe.Chapter
-	case probe.PartTitle != nil:
-		b.PartTitle = probe.PartTitle
-	default:
-		if probe.Separator == nil {
-			probe.Separator = &struct{}{}
-		}
-		b.Separator = probe.Separator
-	}
-	return nil
-}
-
-// WireChapter mirrors crates/mdbook-core/src/book.rs::Chapter.
+// WireChapter mirrors the internal Chapter (subset of fields that plugins
+// need).
 type WireChapter struct {
-	Name        string          `json:"name"`
-	Content     string          `json:"content"`
-	Number      *WireSectionNum `json:"number,omitempty"`
-	SubItems    []WireBookItem  `json:"sub_items"`
-	Path        *string         `json:"path"`        // Option<PathBuf>
-	SourcePath  *string         `json:"source_path"` // Option<PathBuf>
-	ParentNames []string        `json:"parent_names"`
+	Name        string        `json:"name"`
+	Content     string        `json:"content"`
+	Path        string        `json:"path,omitempty"`
+	SourcePath  string        `json:"source_path,omitempty"`
+	IsContainer bool          `json:"is_container,omitempty"`
+	SubItems    []WireChapter `json:"sub_items,omitempty"`
 }
-
-// WireSectionNum mirrors `Option<SectionNumber>` so it can serialise as null
-// or an array of integers. Section numbers in SUMMARY.md are 1-based and fit
-// easily in 32 bits; using uint32 keeps the JSON wire form identical to
-// serde's u32 representation.
-type WireSectionNum []uint32
 
 // WireConfig mirrors crates/mdbook-core/src/config.rs::Config. Field tags are
 // snake_case to match serde's defaults; the dynamic `output` and
@@ -162,50 +99,26 @@ func ToWireBook(b *model.Book) WireBook {
 	if b == nil {
 		return WireBook{}
 	}
-	out := WireBook{Items: make([]WireBookItem, 0, len(b.Items))}
+	out := WireBook{Items: make([]WireChapter, 0, len(b.Items))}
 	for _, it := range b.Items {
-		out.Items = append(out.Items, toWireItem(it))
+		out.Items = append(out.Items, toWireChapter(it))
 	}
 	return out
 }
 
-func toWireItem(it model.BookItem) WireBookItem {
-	switch {
-	case it.Chapter != nil:
-		return WireBookItem{Chapter: toWireChapter(it.Chapter)}
-	case it.PartTitle != nil:
-		name := it.PartTitle.Name
-		return WireBookItem{PartTitle: &name}
-	default:
-		return WireBookItem{Separator: &struct{}{}}
-	}
-}
-
-func toWireChapter(c *model.Chapter) *WireChapter {
-	wc := &WireChapter{
+func toWireChapter(c *model.Chapter) WireChapter {
+	wc := WireChapter{
 		Name:        c.Name,
 		Content:     c.Content,
-		SubItems:    make([]WireBookItem, 0, len(c.SubItems)),
-		ParentNames: append([]string(nil), c.ParentNames...),
+		IsContainer: c.IsContainer,
+		SubItems:    make([]WireChapter, 0, len(c.SubItems)),
 	}
-	if c.IsDraft() {
-		wc.Path = nil
-		wc.SourcePath = nil
-	} else {
-		p := c.Path
-		sp := c.SourcePath
-		wc.Path = &p
-		wc.SourcePath = &sp
-	}
-	if len(c.Number) > 0 {
-		wn := make(WireSectionNum, 0, len(c.Number))
-		for _, v := range c.Number {
-			wn = append(wn, uint32(v))
-		}
-		wc.Number = &wn
+	if !c.IsContainer && !c.IsDraft() {
+		wc.Path = c.Path
+		wc.SourcePath = c.SourcePath
 	}
 	for _, sub := range c.SubItems {
-		wc.SubItems = append(wc.SubItems, toWireItem(sub))
+		wc.SubItems = append(wc.SubItems, toWireChapter(sub))
 	}
 	return wc
 }
@@ -215,43 +128,25 @@ func toWireChapter(c *model.Chapter) *WireChapter {
 func FromWireBook(w WireBook) *model.Book {
 	out := model.NewBook()
 	for _, it := range w.Items {
-		out.Items = append(out.Items, fromWireItem(it))
+		out.Items = append(out.Items, fromWireChapter(it))
 	}
 	return out
 }
 
-func fromWireItem(it WireBookItem) model.BookItem {
-	switch {
-	case it.Chapter != nil:
-		return model.BookItem{Chapter: fromWireChapter(it.Chapter)}
-	case it.PartTitle != nil:
-		return model.BookItem{PartTitle: &model.PartTitle{Name: *it.PartTitle}}
-	default:
-		return model.BookItem{Separator: &model.Separator{}}
-	}
-}
-
-func fromWireChapter(wc *WireChapter) *model.Chapter {
-	c := model.NewChapter(wc.Name, "")
-	c.Content = wc.Content
-	c.ParentNames = append([]string(nil), wc.ParentNames...)
-	if wc.Path != nil {
-		c.Path = *wc.Path
-	}
-	if wc.SourcePath != nil {
-		c.SourcePath = *wc.SourcePath
-	}
-	if wc.Number != nil {
-		sn := make(model.SectionNumber, 0, len(*wc.Number))
-		for _, v := range *wc.Number {
-			sn = append(sn, uint(v))
+func fromWireChapter(wc WireChapter) *model.Chapter {
+	if wc.IsContainer {
+		children := make([]*model.Chapter, 0, len(wc.SubItems))
+		for _, sub := range wc.SubItems {
+			children = append(children, fromWireChapter(sub))
 		}
-		c.Number = sn
+		return model.NewContainerChapter(wc.Name, wc.SourcePath, children)
 	}
+	ch := model.NewChapter(wc.Name, wc.Path)
+	ch.Content = wc.Content
 	for _, sub := range wc.SubItems {
-		c.SubItems = append(c.SubItems, fromWireItem(sub))
+		ch.SubItems = append(ch.SubItems, fromWireChapter(sub))
 	}
-	return c
+	return ch
 }
 
 // ToWireConfig converts the internal config to the wire shape.

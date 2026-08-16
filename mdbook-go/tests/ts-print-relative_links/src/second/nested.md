@@ -1,3 +1,7 @@
+---
+title: Testing relative links for the print page
+---
+
 # Testing relative links for the print page
 
 When we link to [the first section](../first/nested.md), it should work on

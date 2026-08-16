@@ -1,3 +1,7 @@
+---
+title: Chapter 2
+---
+
 ## GitHub Markdown fixture
 
 

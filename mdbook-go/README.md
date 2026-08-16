@@ -13,22 +13,22 @@ for live status.
 
 ```bash
 cd mdbook-go
-go build -o bin/mdbook-go ./cmd/doclens
+go build -o bin/mdbook-go ./cmd/devdoc
 ./bin/mdbook-go build --dir tests/basic --dest-dir /tmp/out
 ```
 
-`./bin/mdbook-go create [--dir DIR] [--theme]` creates a new book
-skeleton (`doclens.yaml` with a `[chapters]` table of contents, first
+`./bin/devdoc init [--dir DIR] [--theme]` creates a new book
+skeleton (`devdoc.yaml` with a `[chapters]` table of contents, first
 chapters; no `.gitignore` is generated).
 
 ## Layout
 
 ```text
 mdbook-go/
-├── cmd/doclens/       CLI entry point (build, init, version)
+├── cmd/devdoc/       CLI entry point (build, init, version)
 ├── internal/
-│   ├── model/         book model + config (doclens.yaml loading, html config)
-│   ├── runner/        MDBook orchestrator: loader, build, create + builtin
+│   ├── model/         book model + config (devdoc.yaml loading, html config)
+│   ├── runner/        MDBook orchestrator: loader, build, init + builtin
 │   │                  preprocessors (links/index/cmd) + preprocessor registry
 │   ├── static/        go:embed default frontend assets (原 theme)
 │   ├── hbs/           Handlebars subset engine (standalone whitespace, helpers)
@@ -37,7 +37,7 @@ mdbook-go/
 │   ├── search/        elasticlunr-compatible searchindex.js
 │   ├── plugin/        external preprocessor / renderer protocol (interfaces + wire)
 ├── pkg/
-│   ├── cmd/           CLI subcommands (build, create, clean, open, serve, watch)
+│   ├── cmd/           CLI subcommands (build, init, clean, open, serve, watch)
 │   └── fs/            path helpers + file copy/write utilities
 ├── tests/          shared test books (basic, nested)
 ├── harness/           Rust-vs-Go diff harness (strict mode)
@@ -60,7 +60,7 @@ Implemented:
 
 - `Book`, `Chapter`, `SectionNumber` data model with hierarchical
   numbering and per-chapter subdirectory preservation.
-- `doclens.yaml` (YAML) parsing with dynamic `output.*` and
+- `devdoc.yaml` (YAML) parsing with dynamic `output.*` and
   `preprocessor.*` sections.
 - `[chapters]` config (replacing `SUMMARY.md`): arbitrary nesting,
   prefix / numbered / suffix zones, part title, separator, draft,
@@ -84,7 +84,7 @@ Implemented:
 Not yet implemented:
 
 - M3: preprocessor / renderer plugin protocol (wire protocol in `internal/plugin`; builtin impls in `internal/runner`; external-plugin acceptance **frozen**, see cmd.go FROZEN note)
-- M4: `test`, `clean`, `completions` subcommands
+- M4: `test`, `clean` subcommands
 - M5: `watch`, `serve`, live reload
 - M6: regression matrix, cross-platform builds, performance benchmarks
 

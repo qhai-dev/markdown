@@ -80,12 +80,13 @@ func Render(ctx *Context) error {
 		}
 	}
 
-	// toc.js is a generated asset, so it has to exist before hashing. The
+	// toc.js is a generated asset, so it must be added before hashing. The
 	// source is built directly in Go because the body contains the sidebar
-	// injection inside a single-quoted JS string literal, which html/template
-	// cannot evaluate. The sidebar HTML and the optional header-tracking IIFE
-	// are spliced in by string concatenation.
-	tocJS, err := buildTocJS(data, htmlCfg, ctx.Book)
+	// HTML spliced inside a single-quoted JS string literal, which
+	// html/template cannot evaluate. Only the chapter list is spliced — the
+	// in-page outline (SidebarHeaderNavSource) was removed in 2026-08-15 in
+	// favour of the right-side outline rail.
+	tocJS, err := buildTocJS(data)
 	if err != nil {
 		return fmt.Errorf("build toc.js: %w", err)
 	}
@@ -99,21 +100,6 @@ func Render(ctx *Context) error {
 		return err
 	}
 	data["resources"] = resources
-	// Rebuild the typed view now that Resources is populated.
-	view := BuildRenderData(data, false)
-
-	// toc.html is the no-JavaScript fallback sidebar.
-	tocView := view
-	tocView.IsTocHTML = true
-	tocView.Path = "toc.html"
-	tocView.PathToRoot = fs.PathToRoot("toc.html")
-	tocHTML, err := registry.Render("toc.html", tocView)
-	if err != nil {
-		return fmt.Errorf("render toc.html: %w", err)
-	}
-	if err := fs.WriteFile(filepath.Join(ctx.Destination, "toc.html"), []byte(tocHTML)); err != nil {
-		return err
-	}
 
 	if err := fs.WriteFile(filepath.Join(ctx.Destination, ".nojekyll"),
 		[]byte("This file makes sure that Github Pages doesn't process mdBook's output.\n")); err != nil {
@@ -169,23 +155,43 @@ func newRegistry(th *Theme, cfg *model.HtmlConfig) (*Registry, error) {
 	return r, nil
 }
 
-// buildTocJS assembles the toc.js source. The sidebar HTML is computed by
-// tplgotpl.Env.TocHTML() (the same path that produced the {{#toc}} block
-// under the legacy engine); the optional header-tracking IIFE is spliced
-// in when SidebarHeaderNav is enabled.
+// buildTrees renders every non-draft chapter's Markdown into a node tree.
+func buildTrees(b *model.Book, cfg *model.HtmlConfig) ([]*chapterTree, error) {
+	var trees []*chapterTree
+	for _, ch := range b.Chapters() {
+		if ch.IsDraft() {
+			continue
+		}
+		opts := html.Options{
+			Path:             ch.Path,
+			SmartPunctuation: cfg.SmartPunctuation,
+			DefinitionLists:  cfg.DefinitionLists,
+			Admonitions:      cfg.Admonitions,
+			MathJax:          cfg.MathJaxSupport,
+			HideLines:        cfg.Code.HideLines,
+		}
+		tree, err := html.BuildTree(ch.Content, opts)
+		if err != nil {
+			return nil, fmt.Errorf("render %s: %w", ch.Path, err)
+		}
+		trees = append(trees, &chapterTree{chapter: ch, tree: tree})
+	}
+	return trees, nil
+}
+
+// buildTocJS assembles the toc.js source. The chapter list HTML is
+// computed by Env.TocHTML(); the optional SidebarHeaderNavSource IIFE is
+// no longer spliced here (that mechanism is gone since 2026-08-15).
 //
 // tocJSPrefix / tocJSMiddle / tocJSAfterClass are the three slices of
-// toc.js that surround the variable parts (sidebar HTML, path_to_root,
-// optional IIFE). Keeping them as constants keeps buildTocJS short and
-// makes the differences with the source obvious.
-func buildTocJS(data map[string]any, cfg *model.HtmlConfig, b *model.Book) (string, error) {
-	chapters, _ := data["chapters"].([]any)
+// toc.js that surround the variable parts (sidebar HTML, path_to_root).
+// Keeping them as constants keeps buildTocJS short and makes the
+// differences with the source obvious.
+func buildTocJS(data map[string]any) (string, error) {
+	chapters, _ := data["chapters"].([]*model.Chapter)
 	foldEnable, _ := data["fold_enable"].(bool)
 	foldLevel := asInt(data, "fold_level")
-	noSectionLabel := cfg.NoSectionLabel
-	if _, ok := data["no_section_label"]; ok {
-		noSectionLabel = asBool(data, "no_section_label")
-	}
+	noSectionLabel := asBool(data, "no_section_label")
 	env := Env{
 		Chapters:       chapters,
 		FoldEnable:     foldEnable,
@@ -201,12 +207,6 @@ func buildTocJS(data map[string]any, cfg *model.HtmlConfig, b *model.Book) (stri
 	out.WriteString("';\n")
 	out.WriteString(tocJSMiddle)
 	out.WriteString(tocJSAfterClass)
-
-	if cfg.SidebarHeaderNav {
-		out.WriteString("\n")
-		out.WriteString(SidebarHeaderNavSource)
-	}
-	out.WriteString("\n")
 	return out.String(), nil
 }
 
@@ -304,30 +304,6 @@ func escapeForJSSingleQuoted(s string) string {
 	return r.Replace(s)
 }
 
-// buildTrees renders every non-draft chapter's Markdown into a node tree.
-func buildTrees(b *model.Book, cfg *model.HtmlConfig) ([]*chapterTree, error) {
-	var trees []*chapterTree
-	for _, ch := range b.Chapters() {
-		if ch.IsDraft() {
-			continue
-		}
-		opts := html.Options{
-			Path:             ch.Path,
-			SmartPunctuation: cfg.SmartPunctuation,
-			DefinitionLists:  cfg.DefinitionLists,
-			Admonitions:      cfg.Admonitions,
-			MathJax:          cfg.MathJaxSupport,
-			HideLines:        cfg.Code.HideLines,
-		}
-		tree, err := html.BuildTree(ch.Content, opts)
-		if err != nil {
-			return nil, fmt.Errorf("render %s: %w", ch.Path, err)
-		}
-		trees = append(trees, &chapterTree{chapter: ch, tree: tree})
-	}
-	return trees, nil
-}
-
 func renderChapter(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 	base map[string]any, item *chapterTree, previous, next *model.Chapter, isFirst bool) error {
 
@@ -356,9 +332,6 @@ func renderChapter(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 	data["chapter_title"] = displayName
 	data["title"] = title
 	data["path_to_root"] = fs.PathToRoot(ch.Path)
-	if section := ch.Number.String(); section != "" {
-		data["section"] = section
-	}
 	if previous != nil {
 		data["previous"] = map[string]any{
 			"title": previous.Name,
@@ -372,7 +345,7 @@ func renderChapter(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 		}
 	}
 
-	page, err := registry.Render("index", BuildRenderData(data, false))
+	page, err := registry.Render("index", BuildRenderData(data))
 	if err != nil {
 		return fmt.Errorf("render %s: %w", ch.Path, err)
 	}
@@ -384,7 +357,7 @@ func renderChapter(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 		data["path"] = "index.md"
 		data["path_to_root"] = ""
 		data["is_index"] = true
-		page, err := registry.Render("index", BuildRenderData(data, false))
+		page, err := registry.Render("index", BuildRenderData(data))
 		if err != nil {
 			return fmt.Errorf("render index.html: %w", err)
 		}
@@ -434,7 +407,7 @@ func render404(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 		data["title"] = "Page not found"
 	}
 
-	page, err := registry.Render("index", BuildRenderData(data, false))
+	page, err := registry.Render("index", BuildRenderData(data))
 	if err != nil {
 		return fmt.Errorf("render 404: %w", err)
 	}

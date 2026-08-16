@@ -42,12 +42,12 @@
             window.path_to_searchindex_js = "{{.Resource "searchindex.js"}}";
             {{end}}
         </script>
-        <script src="{{.Resource "toc.js"}}"></script>
         {{if eq .NavMode "vim"}}
         <script src="{{.Resource "nav-vim.js"}}"></script>
         {{else}}
         <script src="{{.Resource "nav-normal.js"}}"></script>
         {{end}}
+        <script src="{{.Resource "toc.js"}}"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -105,9 +105,6 @@
         </script>
         <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
-            <noscript>
-                <iframe class="sidebar-iframe-outer" src="{{.PathToRoot}}toc.html"></iframe>
-            </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>

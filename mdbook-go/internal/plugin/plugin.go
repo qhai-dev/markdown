@@ -9,7 +9,7 @@ import (
 // Implementations can be in-process (LinkPreprocessor, IndexPreprocessor) or
 // out-of-process command shells (CmdPreprocessor).
 type Preprocessor interface {
-	// Name returns the registered name as it appears in doclens.yaml.
+	// Name returns the registered name as it appears in devdoc.yaml.
 	Name() string
 
 	// Run transforms the book according to the preprocessor's semantics.

@@ -9,7 +9,7 @@
 //     (defined in helpers.go).
 //
 // The 5 .html files in internal/assets/templates/ (index, redirect,
-// toc.html, head, header) replaced the old theme/templates/*.hbs with these
+// head, header) replaced the old theme/templates/*.hbs with these
 // substitutions:
 //
 //	{{var}}        -> {{.Var}}
@@ -18,7 +18,6 @@
 //	{{#each X}}    -> {{range .X}}
 //	{{> partial}}  -> {{template "name" .}}
 //	{{helper …}}   -> registered via Env's FuncMap
-//	{{#toc}}       -> {{.TocHTML}}    (pre-computed by Env.TocHTML)
 //	{{#if (eq A B)}} -> {{if eq .A .B}}
 package html_template
 
@@ -112,12 +111,6 @@ func (r *Registry) LoadTemplates(fsys fs.FS, root string) error {
 			return err
 		}
 		name := strings.TrimSuffix(e.Name(), ".html")
-		if e.Name() == "toc.html" {
-			// The toc.html file is the template that renders the toc.html
-			// output page; its ".html" suffix is part of the name, not an
-			// extension to strip.
-			name = "toc.html"
-		}
 		if _, ok := r.templates[name]; ok {
 			continue
 		}
@@ -142,8 +135,8 @@ func (r *Registry) RegisterTemplate(name, src string) error {
 	return r.LoadTemplate(name, src)
 }
 
-// LoadProduction parses the five .html files in internal/assets/templates/
-// as top-level templates (index, redirect, toc.html, head, header). Call
+// LoadProduction parses the four .html files in internal/assets/templates/
+// as top-level templates (index, redirect, head, header). Call
 // after registering helpers and partials on r.
 func (r *Registry) LoadProduction() error {
 	return r.LoadTemplates(static.Templates(), "")

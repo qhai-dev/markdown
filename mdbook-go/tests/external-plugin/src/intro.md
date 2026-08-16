@@ -1,3 +1,7 @@
+---
+title: Introduction
+---
+
 # Introduction
 
 This fixture exercises an external preprocessor.

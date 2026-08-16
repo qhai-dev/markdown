@@ -1,3 +1,7 @@
+---
+title: Introduction
+---
+
 # Introduction
 
 This page is watched by `mdbook watch` / `mdbook serve`. Edit the file

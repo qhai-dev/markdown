@@ -9,11 +9,11 @@ import (
 )
 
 // Built-in preprocessor names that ship with mdBook. Users can disable them
-// by setting `build.use-default-preprocessors = false` in doclens.yaml.
+// by setting `build.use-default-preprocessors = false` in devdoc.yaml.
 var defaultPreprocessors = []string{"links", "index"}
 
 // PreprocessorConfigEntry captures the per-name knobs the user can set in
-// doclens.yaml under the preprocessor.<name> section.
+// devdoc.yaml under the preprocessor.<name> section.
 type PreprocessorConfigEntry struct {
 	Command   string
 	Before    []string

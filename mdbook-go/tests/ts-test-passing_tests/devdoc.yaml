@@ -1,0 +1,7 @@
+package:
+  title: passing_tests
+  root: src
+
+build:
+  build-dir: book
+

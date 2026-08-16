@@ -10,8 +10,7 @@ import (
 )
 
 // RenderData is the typed template data the production .html files consume.
-// It embeds Env so the {{.Resource}}, {{.TocHTML}} and {{.FA}} helpers are
-// available as promoted methods.
+// It embeds Env so the {{.Resource}} helper is available as a promoted method.
 //
 // Optional fields (LiveReloadEndpoint, etc.) are left at their zero value
 // when the corresponding legacy data-map key is absent; the .html files
@@ -34,16 +33,13 @@ type RenderData struct {
 	NavMode string
 
 	// Page flags.
-	IsIndex   bool
-	IsTocHTML bool
-	BaseURL   string
+	IsIndex bool
+	BaseURL string
 
 	// Optional features.
 	SearchEnabled  bool
 	SearchJS       bool
 	MathJaxSupport bool
-	FoldEnable     bool
-	FoldLevel      int
 
 	// Resources.
 	AdditionalCSS []string
@@ -103,9 +99,6 @@ func makeData(ctx *Context, cfg *model.HtmlConfig, th *Theme) map[string]any {
 	if len(cfg.AdditionalJS) > 0 {
 		data["additional_js"] = relativeToRoot(ctx.Root, cfg.AdditionalJS)
 	}
-	data["fold_enable"] = cfg.Fold.Enable
-	data["fold_level"] = int(cfg.Fold.Level)
-	data["sidebar_header_nav"] = cfg.SidebarHeaderNav
 	data["nav_mode"] = cfg.Mode
 
 	search := cfg.EffectiveSearch()
@@ -118,15 +111,16 @@ func makeData(ctx *Context, cfg *model.HtmlConfig, th *Theme) map[string]any {
 	data["git_repository_icon"] = cfg.GitRepositoryIconName()
 	data["git_repository_icon_class"] = cfg.GitRepositoryIconClass()
 
-	data["chapters"] = chapterSummaries(ctx.Book)
+	data["fold_enable"] = cfg.Fold.Enable
+	data["fold_level"] = int(cfg.Fold.Level)
+	data["chapters"] = ctx.Book.Items
 	return data
 }
 
 // BuildRenderData converts the loose data map into the typed RenderData
-// struct that the production .html files consume. The struct embeds
-// tplgotpl.Env so {{.Resource "x"}}, {{.TocHTML}} and {{.FA ...}} work as
-// promoted methods.
-func BuildRenderData(data map[string]any, noSectionLabel bool) RenderData {
+// struct that the production .html files consume. The struct embeds Env so
+// {{.Resource "x"}} works as a promoted method.
+func BuildRenderData(data map[string]any) RenderData {
 	out := RenderData{
 		Language:               asString(data, "language"),
 		Title:                  asString(data, "title"),
@@ -143,8 +137,6 @@ func BuildRenderData(data map[string]any, noSectionLabel bool) RenderData {
 		SearchJS:               asBool(data, "search_js"),
 		MathJaxSupport:         asBool(data, "mathjax_support"),
 		IsIndex:                asBool(data, "is_index"),
-		FoldLevel:              asInt(data, "fold_level"),
-		IsTocHTML:              asBool(data, "is_toc_html"),
 		GitRepositoryURL:       asString(data, "git_repository_url"),
 		GitRepositoryEditURL:   asString(data, "git_repository_edit_url"),
 		GitRepositoryIconClass: asString(data, "git_repository_icon_class"),
@@ -154,9 +146,7 @@ func BuildRenderData(data map[string]any, noSectionLabel bool) RenderData {
 	out.Env.Path = asString(data, "path")
 	out.Env.FoldEnable = asBool(data, "fold_enable")
 	out.Env.FoldLevel = asInt(data, "fold_level")
-	out.Env.IsTocHTML = asBool(data, "is_toc_html")
-	out.Env.NoSectionLabel = noSectionLabel
-	out.Env.SidebarHeaderNav = asBool(data, "sidebar_header_nav")
+	out.Env.NoSectionLabel = asBool(data, "no_section_label")
 	if v, ok := data["live_reload_endpoint"]; ok {
 		out.LiveReloadEndpoint = template.URL(asStringFromAny(v))
 	}
@@ -198,7 +188,7 @@ func BuildRenderData(data map[string]any, noSectionLabel bool) RenderData {
 		}
 	}
 	if v, ok := data["chapters"]; ok {
-		if s, ok := v.([]any); ok {
+		if s, ok := v.([]*model.Chapter); ok {
 			out.Env.Chapters = s
 		}
 	}
@@ -286,47 +276,6 @@ func asStringSlice(v any) []string {
 		return out
 	}
 	return nil
-}
-
-// chapterSummaries flattens the book into the list the sidebar helper walks.
-func chapterSummaries(b *model.Book) []any {
-	var out []any
-	var visit func(items []model.BookItem)
-	visit = func(items []model.BookItem) {
-		for _, item := range items {
-			switch {
-			case item.PartTitle != nil:
-				out = append(out, map[string]any{"part": item.PartTitle.Name})
-			case item.Separator != nil:
-				out = append(out, map[string]any{"spacer": "_spacer_"})
-			case item.Chapter != nil:
-				ch := item.Chapter
-				entry := map[string]any{
-					"name":          ch.Name,
-					"has_sub_items": boolString(len(ch.SubChapters()) > 0),
-				}
-				if section := ch.Number.String(); section != "" {
-					entry["section"] = section
-				}
-				if ch.Path != "" {
-					entry["path"] = ch.Path
-				}
-				out = append(out, entry)
-				visit(ch.SubItems)
-			}
-		}
-	}
-	visit(b.Items)
-	return out
-}
-
-// boolString renders a bool the way the Rust data map does: as a string, since
-// the sidebar helper parses it back out of a string map.
-func boolString(v bool) string {
-	if v {
-		return "true"
-	}
-	return "false"
 }
 
 // relativeToRoot strips the book root prefix from user-specified asset paths.

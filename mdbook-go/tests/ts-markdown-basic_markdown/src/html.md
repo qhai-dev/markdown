@@ -1,3 +1,7 @@
+---
+title: Inline HTML
+---
+
 # Inline HTML
 
 ## Comments

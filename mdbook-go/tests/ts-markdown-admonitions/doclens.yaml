@@ -1,9 +1,0 @@
-package:
-  root: src
-  build-dir: book
-  title: admonitions
-
-chapters:
-  numbered:
-    - name: Admonitions
-      path: admonitions.md

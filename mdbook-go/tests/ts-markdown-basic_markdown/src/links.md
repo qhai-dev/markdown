@@ -1,3 +1,7 @@
+---
+title: Links
+---
+
 # Links
 
 - [Inline](https://example.com/inline)

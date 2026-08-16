@@ -1,3 +1,7 @@
+---
+title: Code blocks
+---
+
 # Code blocks
 
 ```

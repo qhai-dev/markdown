@@ -1,3 +1,7 @@
+---
+title: Blockquotes
+---
+
 # Blockquotes
 
 Empty:

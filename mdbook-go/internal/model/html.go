@@ -50,7 +50,6 @@ func DefaultHTML() *HtmlConfig {
 		NoSectionLabel:   false,
 		Redirect:         map[string]string{},
 		HashFiles:        true,
-		SidebarHeaderNav: true,
 	}
 }
 

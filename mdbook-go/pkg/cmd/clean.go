@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewCleanCommand implements the `doclens clean` subcommand: remove the
+// NewCleanCommand implements the `devdoc clean` subcommand: remove the
 // book's build directory. It mirrors src/cmd/clean.rs, which is also a
 // single file holding both the command and the Clean summary type.
 func NewCleanCommand() *cobra.Command {
@@ -26,7 +26,7 @@ func NewCleanCommand() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&dir, "dir", ".", "book root")
-	cmd.Flags().StringVar(&dest, "dest-dir", "", "directory to remove (overrides doclens.yaml build-dir)")
+	cmd.Flags().StringVar(&dest, "dest-dir", "", "directory to remove (overrides devdoc.yaml build-dir)")
 
 	return cmd
 }

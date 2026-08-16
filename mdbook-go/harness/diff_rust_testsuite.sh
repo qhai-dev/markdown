@@ -22,7 +22,7 @@ GO_BIN="$ROOT/bin/mdbook-go"
 
 if [[ ! -x "$GO_BIN" ]]; then
   echo "building Go binary first" >&2
-  (cd "$ROOT" && go build -o "$GO_BIN" ./cmd/doclens)
+  (cd "$ROOT" && go build -o "$GO_BIN" ./cmd/devdoc)
 fi
 
 if [[ $# -gt 0 ]]; then

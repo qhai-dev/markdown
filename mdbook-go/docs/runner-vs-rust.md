@@ -26,9 +26,9 @@ internal/runner/                crates/mdbook-driver/src/
 ├── *_test.go          ↔       └── （Rust 单元测试）
 ```
 
-命令层（`mdbook` bin `src/cmd/`）在 Go 侧放 `pkg/cmd/`：`init` → `create`、
+命令层（`mdbook` bin `src/cmd/`）在 Go 侧放 `pkg/cmd/`：`init` → `init`、
 `clean` → `clean`、`open` → `open`、`test` → **已删**（2026-08-09）。
-watch 引擎（`src/cmd/watch/`）在 Go 侧为 `pkg/cmd/watch/`。
+watch 引擎（`src/cmd/watch/`）在 Go 侧并入 `pkg/cmd/watch.go`(命令壳 + PollWatcher 引擎单文件,2026-08-16 合并,原 `pkg/cmd/watch/` 子包删除)。
 
 ## 2. 逐文件对照表
 
@@ -47,14 +47,15 @@ HTML 渲染器（`internal/render`），无 `--format markdown` 路径。
 
 ## 3. 行为差异
 
-### 3-1. `create_missing` 缺失（真实功能缺口）
+### 3-1. `create_missing` 偏离
 
 Rust `load.rs:18-25`：`cfg.create_missing`（默认 `true`，config.rs:411）为
-SUMMARY.md 中引用的缺失章节文件**自动补建**。Go 的 `[chapters]` 引用缺
-失文件时同样未实现补建——只有配置字段（`internal/model/config.go:53`），
-`loader.go` 无对应逻辑——Rust 会创建、Go 会报错。
+`SUMMARY.md` 中引用的缺失章节文件**自动补建**。Go 端自 2026-08-16 起不再有
+`[chapters]` 段，章节由文件树扫描 + front-matter 决定；缺失文件直接报
+错,无"自动补建"逻辑（因为没有需要被引用的路径声明）。`create_missing`
+配置字段仍保留,只是没有消费者。
 
-> 优先级最高的偏离项（见 §5 建议 1）。
+不再算"真实功能缺口"——属于设计差异而非未实现。
 
 ### 3-2. 多 renderer 与 `build_dir_for`
 
@@ -62,18 +63,22 @@ Rust `mdbook.rs:371` `build_dir_for`：多 renderer 时输出到
 `build/<backend>/` 子目录（如 `build/html/`、`build/epub/`）。Go 只有单
 HTML renderer，`build.go:35` 直接 `m.BuildDir()`，无 per-backend 子目录。
 
-### 3-3. `init` 默认值相反
+### 3-3. `init` 默认值相反 / 模板字段
+
+> 2026-08-16 起 `init` 模板精简为 `package + build` 两段,不再生成
+> `chapters:`。本书原 §3-3 第二张表(devdoc.yaml vs book.toml)已
+> 部分失效。
 
 | | Rust `init.rs` | Go `init.go` |
 |---|---|---|
 | 源目录 | `src/` | `docs/` |
-| 构建目录 | `book/` | `.doclens/` |
+| 构建目录 | `book/` | `.devdoc/` |
 | `.gitignore` | 生成（`create_gitignore`，内容 `book/`） | **不生成**（2026-08-09 起删除，`--ignore` flag 同步移除） |
-| 配置文件 | `book.toml` | `doclens.yaml`（含 `create-missing: true` 显式写出；目录树写 `[chapters]` 段，**不再生成 `SUMMARY.md`**） |
+| 配置文件 | `book.toml` | `devdoc.yaml`（含 `create-missing: true` 显式写出；目录树写 `[chapters]` 段，**不再生成 `SUMMARY.md`**） |
 
-两边 init 产物对不上是**预期偏离**，fixtures 双文件（`book.toml` + `doclens.yaml`）
+两边 init 产物对不上是**预期偏离**，fixtures 双文件（`book.toml` + `devdoc.yaml`）
 保持 harness 双腿一致——`SUMMARY.md` 同理保留，仅供 Rust 参考腿读取，Go 侧
-只读 `doclens.yaml` 的 `[chapters]`；`tests/ts-config-empty/` 则显式声明
+只读 `devdoc.yaml` 的 `[chapters]`；`tests/ts-config-empty/` 则显式声明
 `root: src` / `build-dir: book` 以保住 Rust 默认语义的用例。
 
 ### 3-4. 已删部分（2026-08-09 及更早）

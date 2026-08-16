@@ -15,16 +15,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="stylesheet" href="css/variables-d34e1ada.css">
+        <link rel="stylesheet" href="css/variables-ec5823b8.css">
         <link rel="stylesheet" href="css/general-c87629ab.css">
-        <link rel="stylesheet" href="css/chrome-2b282e04.css">
+        <link rel="stylesheet" href="css/chrome-936f9d50.css">
         
-        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-7597ad33.css">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-d9373248.css">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-1b86a52b.css">
-        
-        <link rel="stylesheet" id="mdbook-github-markdown-light-css" href="css/github-markdown-light-797519c9.css">
-        <link rel="stylesheet" id="mdbook-github-markdown-dark-css" href="css/github-markdown-dark-30ff62d8.css" disabled>
+        <link rel="stylesheet" href="css/writer-b15f4754.css">
         
         
 
@@ -34,13 +29,13 @@
             const default_light_theme = "light";
             const default_dark_theme = "navy";
             
-            window.path_to_searchindex_js = "searchindex-88c0930f.js";
+            window.path_to_searchindex_js = "searchindex-163fb3b8.js";
             
         </script>
-        <script src="toc-6476c2e2.js"></script>
         
         <script src="nav-vim-90327dbf.js"></script>
         
+        <script src="toc-ba9ee632.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -98,9 +93,6 @@
         </script>
         <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
-            <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
-            </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
@@ -150,6 +142,16 @@
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
+                
+                <div class="rail-zone" id="rail-zone">
+                    <div class="rail-fade"></div>
+                    <div class="rail-trigger" id="rail-trigger">
+                        <nav class="rail-ticks" id="rail-ticks" aria-label="页面章节"></nav>
+                    </div>
+                    <div class="rail-popover" id="rail-popover" data-state="closed" hidden>
+                        <div class="rail-popover-list" id="rail-popover-list"></div>
+                    </div>
+                </div>
                 <div id="mdbook-content" class="content">
                     <main class="markdown-body">
                         <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
@@ -179,7 +181,8 @@
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.min.js"></script>
-        <script src="book-8fa2ce42.js"></script>
+        <script src="book-a295f4b2.js"></script>
+        <script src="outline-rail-d069693d.js"></script>
 
         
 
