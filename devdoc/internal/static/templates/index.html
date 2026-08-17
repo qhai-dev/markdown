@@ -18,13 +18,6 @@
         <link rel="stylesheet" href="{{.Resource "css/variables.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/general.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/chrome.css"}}">
-        <!-- Writer 观感样式：正文（.markdown-body）+ 语法高亮色板 + 右侧大纲栏。
-             替代原 github-markdown/hljs 主题；备份文件仍随构建输出，恢复旧观感只需
-             重新加上以下链接并去掉 writer.css：
-             css/github-markdown-light.css  css/github-markdown-dark.css
-             css/highlight.css  css/tomorrow-night.css  css/ayu-highlight.css
-             （同时还原 js/book.js 里 themes() 的样式表切换） -->
-        <link rel="stylesheet" href="{{.Resource "css/writer.css"}}">
         <!-- Custom theme stylesheets -->
         {{range .AdditionalCSS}}
         <link rel="stylesheet" href="{{$.Resource .}}">

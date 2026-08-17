@@ -28,17 +28,8 @@ type Theme struct {
 	NavVimJS    []byte
 	NavNormalJS []byte
 
-	// GitHubMarkdownCSS variants back the chapter body styling via .markdown-body
-	// (a separately generated stylesheet that replaces the legacy chrome CSS for
-	// the article region). Emitted unconditionally so the toggle works.
-	GitHubMarkdownLightCSS []byte
-	GitHubMarkdownDarkCSS  []byte
-
-	// WriterCSS / OutlineRailJS are the Go-only Writer front-end fork:
-	// css/writer.css replaces the github-markdown/hljs chapter-body styles, and
-	// outline-rail.js drives the right-hand heading rail. Neither has a Rust
+	// OutlineRailJS drives the right-hand heading rail. It has no Rust
 	// counterpart (see test-html-css/index.html for the reference demo).
-	WriterCSS    []byte
 	OutlineRailJS []byte
 }
 
@@ -70,9 +61,6 @@ func Default() *Theme {
 		ClipboardJS:            static.MustRead("js/clipboard.min.js"),
 		NavVimJS:               static.MustRead("js/nav-vim.js"),
 		NavNormalJS:            static.MustRead("js/nav-normal.js"),
-		GitHubMarkdownLightCSS: static.MustRead("css/github-markdown-light.css"),
-		GitHubMarkdownDarkCSS:  static.MustRead("css/github-markdown-dark.css"),
-		WriterCSS:              static.MustRead("css/writer.css"),
 		OutlineRailJS:          static.MustRead("js/outline-rail.js"),
 	}
 }
@@ -105,7 +93,6 @@ func NewTheme(themeDir string) *Theme {
 		{"highlight.css", &t.HighlightCSS},
 		{"tomorrow-night.css", &t.TomorrowNightCSS},
 		{"ayu-highlight.css", &t.AyuHighlightCSS},
-		{"css/writer.css", &t.WriterCSS},
 		{"outline-rail.js", &t.OutlineRailJS},
 	}
 	for _, o := range overrides {
@@ -142,7 +129,6 @@ func Copy(themeDir string) error {
 		{"css/general.css", static.MustRead("css/general.css")},
 		{"css/chrome.css", static.MustRead("css/chrome.css")},
 		{"css/variables.css", static.MustRead("css/variables.css")},
-		{"css/writer.css", static.MustRead("css/writer.css")},
 		{"outline-rail.js", static.MustRead("js/outline-rail.js")},
 	}
 

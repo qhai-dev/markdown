@@ -42,3 +42,7 @@ test:
 
 clean:
 	rm -f $(OUT)/$(BINARY)
+
+example:
+	make build
+	$(OUT)/$(BINARY) serve --dir examples/basic

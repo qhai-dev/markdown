@@ -31,3 +31,5 @@ mdbook-go/dist/
 tmp/
 .superpowers/
 .devdoc
+
+bin/
