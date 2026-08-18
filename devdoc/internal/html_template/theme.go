@@ -41,12 +41,6 @@ var (
 	ElasticlunrJS = static.MustRead("searcher/elasticlunr.min.js")
 )
 
-// NamedAsset is an output filename paired with its contents.
-type NamedAsset struct {
-	Name string
-	Data []byte
-}
-
 // Default returns the embedded theme with no user overrides applied.
 func Default() *Theme {
 	return &Theme{
@@ -110,32 +104,4 @@ func loadInto(path string, dest *[]byte) bool {
 	}
 	*dest = data
 	return true
-}
-
-// Copy writes the default theme files into themeDir, mirroring
-// Theme::copy_theme.
-func Copy(themeDir string) error {
-	write := func(rel string, data []byte) error {
-		path := filepath.Join(themeDir, filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-			return err
-		}
-		return os.WriteFile(path, data, 0o644)
-	}
-	files := []NamedAsset{
-		{"book.js", static.MustRead("js/book.js")},
-		{"highlight.css", static.MustRead("css/highlight.css")},
-		{"highlight.min.js", static.MustRead("js/highlight.min.js")},
-		{"css/general.css", static.MustRead("css/general.css")},
-		{"css/chrome.css", static.MustRead("css/chrome.css")},
-		{"css/variables.css", static.MustRead("css/variables.css")},
-		{"outline-rail.js", static.MustRead("js/outline-rail.js")},
-	}
-
-	for _, f := range files {
-		if err := write(f.Name, f.Data); err != nil {
-			return err
-		}
-	}
-	return nil
 }
