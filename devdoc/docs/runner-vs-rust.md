@@ -72,7 +72,7 @@ HTML renderer，`build.go:35` 直接 `m.BuildDir()`，无 per-backend 子目录�
 | | Rust `init.rs` | Go `init.go` |
 |---|---|---|
 | 源目录 | `src/` | `docs/` |
-| 构建目录 | `book/` | `.devdoc/` |
+| 构建目录 | `book/` | `.doc/` |
 | `.gitignore` | 生成（`create_gitignore`，内容 `book/`） | **不生成**（2026-08-09 起删除，`--ignore` flag 同步移除） |
 | 配置文件 | `book.toml` | `devdoc.yaml`（含 `create-missing: true` 显式写出；目录树写 `[chapters]` 段，**不再生成 `SUMMARY.md`**） |
 

@@ -126,7 +126,7 @@ type Config struct {
 }
 
 // New returns a Config populated with the devdoc defaults. These deviate
-// from mdbook-core: devdoc uses docs/ for sources and .devdoc/ for the
+// from mdbook-core: devdoc uses docs/ for sources and .doc/ for the
 // build output (Rust mdbook defaults to src/ and book/).
 func New() *Config {
 	return &Config{
@@ -134,7 +134,7 @@ func New() *Config {
 			Root: "docs",
 		},
 		Build: BuildConfig{
-			BuildDir:                ".devdoc",
+			BuildDir:                ".doc",
 			CreateMissing:           true,
 			UseDefaultPreprocessors: true,
 		},

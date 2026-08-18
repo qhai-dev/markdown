@@ -30,7 +30,7 @@ go run ./cmd/devdoc init --dir /tmp/mdbook-cli-init --theme
 diff -r /tmp/mdbook-cli-init tests/cli/expected/init
 ```
 
-Expected files: `devdoc.yaml` (with `root: docs`, `build-dir: .devdoc`
+Expected files: `devdoc.yaml` (with `root: docs`, `build-dir: .doc`
 and a `[chapters]` skeleton — no `SUMMARY.md`), `docs/intro.md`,
 `docs/chapter_1.md`, plus the embedded theme under `theme/`. No
 `.gitignore` is generated.

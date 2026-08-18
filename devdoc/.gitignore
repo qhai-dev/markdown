@@ -7,4 +7,4 @@ bin/
 .idea/
 
 # Ignore devdoc examples/* and tests/* devdoc
-.devdoc
+.doc

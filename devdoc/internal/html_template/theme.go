@@ -12,9 +12,10 @@ import (
 
 // Theme carries the resolved contents of every themeable asset.
 type Theme struct {
-	ChromeCSS    []byte
-	GeneralCSS   []byte
-	VariablesCSS []byte
+	ChromeCSS      []byte
+	GeneralCSS     []byte
+	VariablesCSS   []byte
+	MarkdownCSS    []byte
 
 	JS               []byte
 	HighlightCSS     []byte
@@ -42,6 +43,7 @@ func Default() *Theme {
 		ChromeCSS:              frontend.MustRead("assets/chrome.css"),
 		GeneralCSS:             frontend.MustRead("assets/general.css"),
 		VariablesCSS:           frontend.MustRead("assets/variables.css"),
+		MarkdownCSS:            frontend.MustRead("assets/github-markdown.css"),
 		JS:                     frontend.MustRead("assets/index.js"),
 		HighlightCSS:           frontend.MustRead("assets/highlight.css"),
 		TomorrowNightCSS:       frontend.MustRead("assets/tomorrow-night.css"),
@@ -75,6 +77,7 @@ func NewTheme(themeDir string) *Theme {
 		{"css/chrome.css", &t.ChromeCSS},
 		{"css/general.css", &t.GeneralCSS},
 		{"css/variables.css", &t.VariablesCSS},
+		{"css/github-markdown.css", &t.MarkdownCSS},
 		{"highlight.min.js", &t.HighlightJS},
 		{"clipboard.min.js", &t.ClipboardJS},
 		{"highlight.css", &t.HighlightCSS},

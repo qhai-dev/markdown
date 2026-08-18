@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{{.Resource "css/variables.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/general.css"}}">
         <link rel="stylesheet" href="{{.Resource "css/chrome.css"}}">
+        <link rel="stylesheet" href="{{.Resource "css/github-markdown.css"}}">
         <!-- Custom theme stylesheets -->
         {{range .AdditionalCSS}}
         <link rel="stylesheet" href="{{$.Resource .}}">
@@ -161,49 +162,20 @@
                     <main class="markdown-body">
                         {{.Content}}
                     </main>
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        {{if .Previous}}
-                            <a rel="prev" href="{{$.PathToRoot}}{{.Previous.Link}}" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                {{if eq $.TextDirection "rtl"}}
-                                ›
-                                {{else}}
-                                ‹
-                                {{end}}
-                            </a>
-                        {{end}}
-                        {{if .Next}}
-                            <a rel="next prefetch" href="{{$.PathToRoot}}{{.Next.Link}}" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                {{if eq $.TextDirection "rtl"}}
-                                ‹
-                                {{else}}
-                                ›
-                                {{end}}
-                            </a>
-                        {{end}}
-                        <div style="clear: both"></div>
-                    </nav>
                 </div>
+                <nav class="page-nav" aria-label="Page navigation">
+                    {{if .Previous}}
+                        <a rel="prev" href="{{$.PathToRoot}}{{.Previous.Link}}" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            {{if eq $.TextDirection "rtl"}}› {{$.Previous.Title}}{{else}}‹ {{$.Previous.Title}}{{end}}
+                        </a>
+                    {{end}}
+                    {{if .Next}}
+                        <a rel="next prefetch" href="{{$.PathToRoot}}{{.Next.Link}}" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            {{if eq $.TextDirection "rtl"}}{{$.Next.Title}} ‹{{else}}{{$.Next.Title}} ›{{end}}
+                        </a>
+                    {{end}}
+                </nav>
             </div>
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                {{if .Previous}}
-                    <a rel="prev" href="{{$.PathToRoot}}{{.Previous.Link}}" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        {{if eq $.TextDirection "rtl"}}
-                        ›
-                        {{else}}
-                        ‹
-                        {{end}}
-                    </a>
-                {{end}}
-                {{if .Next}}
-                    <a rel="next prefetch" href="{{$.PathToRoot}}{{.Next.Link}}" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        {{if eq $.TextDirection "rtl"}}
-                        ‹
-                        {{else}}
-                        ›
-                        {{end}}
-                    </a>
-                {{end}}
-            </nav>
         </div>
 
         {{if .LiveReloadEndpoint}}

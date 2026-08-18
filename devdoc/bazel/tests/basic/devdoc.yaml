@@ -3,7 +3,7 @@ package:
   language: en
 
 build:
-  build-dir: .devdoc
+  build-dir: .doc
 
 chapters:
   prefix:

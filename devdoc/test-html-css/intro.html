@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Introduction - My Book</title>
+
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffffff" />
+
+        <link
+            rel="stylesheet"
+            href="../examples/basic/.doc/css/variables-e18e3cd5.css"
+        />
+        <link
+            rel="stylesheet"
+            href="../examples/basic/.doc/css/general-3834cb52.css"
+        />
+        <link
+            rel="stylesheet"
+            href="../examples/basic/.doc/css/chrome-017a9f86.css"
+        />
+        <link
+            rel="stylesheet"
+            href="../examples/basic/.doc/css/github-markdown-98f20c97.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet" href="./style.css" />
+
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+
+            window.path_to_searchindex_js =
+                "../examples/basic/.doc/searchindex-847fcada.js";
+        </script>
+        <script src="../examples/basic/.doc/toc-63834cbe.js"></script>
+    </head>
+    <body>
+        <div id="mdbook-help-container">
+            <div id="mdbook-help-popup">
+                <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+                <div>
+                    <p>
+                        Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between
+                        chapters
+                    </p>
+
+                    <p>
+                        Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book
+                    </p>
+
+                    <p>Press <kbd>?</kbd> to show this help</p>
+                    <p>Press <kbd>Esc</kbd> to hide this help</p>
+                </div>
+            </div>
+        </div>
+        <div id="mdbook-body-container">
+            <script>
+                try {
+                    let theme = localStorage.getItem("mdbook-theme");
+                    let sidebar = localStorage.getItem("mdbook-sidebar");
+                    if (theme.startsWith('"') && theme.endsWith('"')) {
+                        localStorage.setItem(
+                            "mdbook-theme",
+                            theme.slice(1, theme.length - 1),
+                        );
+                    }
+                    if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                        localStorage.setItem(
+                            "mdbook-sidebar",
+                            sidebar.slice(1, sidebar.length - 1),
+                        );
+                    }
+                } catch (e) {}
+            </script>
+            <script>
+                const default_theme = window.matchMedia(
+                    "(prefers-color-scheme: dark)",
+                ).matches
+                    ? default_dark_theme
+                    : default_light_theme;
+                let theme;
+                try {
+                    theme = localStorage.getItem("mdbook-theme");
+                } catch (e) {}
+                if (theme === null || theme === undefined) {
+                    theme = default_theme;
+                }
+                const html = document.documentElement;
+                html.classList.remove("light");
+                html.classList.add(theme);
+                html.classList.add("js");
+            </script>
+            <input
+                type="checkbox"
+                id="mdbook-sidebar-toggle-anchor"
+                class="hidden"
+            />
+            <script>
+                let sidebar = null;
+                const sidebar_toggle = document.getElementById(
+                    "mdbook-sidebar-toggle-anchor",
+                );
+                if (document.body.clientWidth >= 1080) {
+                    try {
+                        sidebar = localStorage.getItem("mdbook-sidebar");
+                    } catch (e) {}
+                    sidebar = sidebar || "visible";
+                } else {
+                    sidebar = "hidden";
+                    sidebar_toggle.checked = false;
+                }
+                if (sidebar === "visible") {
+                    sidebar_toggle.checked = true;
+                } else {
+                    html.classList.remove("sidebar-visible");
+                }
+            </script>
+            <nav
+                id="mdbook-sidebar"
+                class="sidebar"
+                aria-label="Table of contents"
+            >
+                <mdbook-sidebar-scrollbox
+                    class="sidebar-scrollbox"
+                ></mdbook-sidebar-scrollbox>
+                <div
+                    id="mdbook-sidebar-resize-handle"
+                    class="sidebar-resize-handle"
+                >
+                    <div class="sidebar-resize-indicator"></div>
+                </div>
+            </nav>
+            <div id="mdbook-page-wrapper" class="page-wrapper">
+                <div class="page">
+                    <div id="mdbook-menu-bar-hover-placeholder"></div>
+                    <div id="mdbook-menu-bar" class="menu-bar sticky">
+                        <div class="left-buttons">
+                            <label
+                                id="mdbook-sidebar-toggle"
+                                style="background: red"
+                                class="icon-button"
+                                for="mdbook-sidebar-toggle-anchor"
+                                title="Toggle Table of Contents"
+                                aria-label="Toggle Table of Contents"
+                                aria-controls="mdbook-sidebar"
+                            >
+                            </label>
+                            <button
+                                id="mdbook-theme-toggle"
+                                class="icon-button"
+                                type="button"
+                                title="Change theme"
+                                aria-label="Change theme"
+                            ></button>
+
+                            <button
+                                id="mdbook-search-toggle"
+                                class="icon-button"
+                                type="button"
+                                title="Search (`/`)"
+                                aria-label="Toggle Searchbar"
+                                aria-expanded="false"
+                                aria-keyshortcuts="/ s"
+                                aria-controls="mdbook-searchbar"
+                            >
+                                搜索
+                            </button>
+                        </div>
+                        <h1 class="menu-title">My Book</h1>
+                        <div class="right-buttons"></div>
+                    </div>
+
+                    <div id="mdbook-search-wrapper" class="hidden">
+                        <form
+                            id="mdbook-searchbar-outer"
+                            class="searchbar-outer"
+                        >
+                            <div class="search-wrapper">
+                                <input
+                                    type="search"
+                                    id="mdbook-searchbar"
+                                    name="searchbar"
+                                    placeholder="Search this book ..."
+                                    aria-controls="mdbook-searchresults-outer"
+                                    aria-describedby="searchresults-header"
+                                />
+                                <div class="spinner-wrapper"></div>
+                            </div>
+                        </form>
+                        <div
+                            id="mdbook-searchresults-outer"
+                            class="searchresults-outer hidden"
+                        >
+                            <div
+                                id="mdbook-searchresults-header"
+                                class="searchresults-header"
+                            ></div>
+                            <ul id="mdbook-searchresults"></ul>
+                        </div>
+                    </div>
+
+                    <script>
+                        document
+                            .getElementById("mdbook-sidebar-toggle")
+                            .setAttribute(
+                                "aria-expanded",
+                                sidebar === "visible",
+                            );
+                        document
+                            .getElementById("mdbook-sidebar")
+                            .setAttribute("aria-hidden", sidebar !== "visible");
+                        Array.from(
+                            document.querySelectorAll("#mdbook-sidebar a"),
+                        ).forEach(function (link) {
+                            link.setAttribute(
+                                "tabIndex",
+                                sidebar === "visible" ? 0 : -1,
+                            );
+                        });
+                    </script>
+
+                    <div class="fixed inset-e-4 top-1/2 z-20 -translate-y-1/2">
+                        <div class="relative flex items-start">
+                            <div class="max-h-[50lvh] w-9 overflow-clip">
+                                <div
+                                    class="flex flex-col items-center gap-2 py-1"
+                                >
+                                    <button
+                                        type="button"
+                                        class="h-0.5 w-4.5 shrink-0 rounded-full transition-all bg-token-text-primary"
+                                        aria-label="Prompt 1"
+                                        data-toc-item-index="0"
+                                    ></button>
+                                    <button
+                                        type="button"
+                                        class="h-0.5 w-4.5 shrink-0 rounded-full transition-all bg-token-text-tertiary/60 hover:bg-token-text-secondary"
+                                        aria-label="Prompt 1"
+                                        data-toc-item-index="0"
+                                    ></button>
+                                </div>
+                            </div>
+
+                            <div
+                                aria-hidden="false"
+                                class="z-50 max-w-xs rounded-2xl popover bg-token-main-surface-primary dark:bg-[#353535] shadow-long py-1.5 select-none absolute top-1/2 z-10 max-w-85 min-w-60 -translate-y-1/2 not-motion-reduce:transition-[opacity,translate] not-motion-reduce:duration-[160ms] not-motion-reduce:ease-[cubic-bezier(0.33,1,0.68,1)] opacity-100 not-motion-reduce:translate-x-0 inset-e-0"
+                            >
+                                <ul
+                                    class="flex max-h-[50lvh] flex-col overflow-y-auto"
+                                    style="max-height: 455px"
+                                >
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    "common-components":
+                                                    "file:../../page-component-wzpc/com....
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    npm +本地link的方法
+                                                    因为历史原因 包里面配置文件
+                                                    我很多个项目都使用，在本地开发阶段
+                                                    会很麻烦
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    package.local.json
+                                                    这个支持吗
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    你给我一个脚本 我本地试一下
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    本地link的方式 package.json
+                                                    中是没有
+                                                    "common-components": "1.2.3"
+                                                    ...
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    这也不太行 其它同事
+                                                    commit的时候
+                                                    可能会把已经修改的过的
+                                                    package.json 推到远端仓库中
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                    title="不是我是希望 本地试一下 file:../这种方式，ci 还是使用 npm link的脚本。但是本地 file会修..."
+                                                >
+                                                    不是我是希望 本地试一下
+                                                    file:../这种方式，ci
+                                                    还是使用 npm
+                                                    link的脚本。但是本地
+                                                    file会修...
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                    title="方案三：实际上我更推荐「两个 package.json」 如何落地"
+                                                >
+                                                    方案三：实际上我更推荐「两个
+                                                    package.json」 如何落地
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    const localPackagePath =
+                                                    path.join(root,
+                                                    'package.local.j...
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            tabindex="0"
+                                            data-active=""
+                                            data-fill=""
+                                            class="group __menu-item hoverable w-full text-start"
+                                            data-toc-active=""
+                                        >
+                                            <div
+                                                class="flex min-w-0 grow items-center gap-2.5"
+                                            >
+                                                <div
+                                                    class="truncate [&amp;:has([data-marquee-text])]:min-w-0 [&amp;:has([data-marquee-text])]:flex-1 [&amp;:has([data-marquee-text])]:overflow-visible"
+                                                >
+                                                    const root =
+                                                    path.resolve(__dirname,
+                                                    '..');
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="rail-zone" id="rail-zone">
+                    <div class="rail-fade"></div>
+                    <div class="rail-trigger" id="rail-trigger">
+                        <nav class="rail-ticks" id="rail-ticks" aria-label="页面章节"></nav>
+                    </div>
+                    <div class="rail-popover" id="rail-popover" data-state="closed" hidden>
+                        <div class="rail-popover-list" id="rail-popover-list"></div>
+                    </div>
+                </div>-->
+
+                    <div id="mdbook-content" class="content">
+                        <main class="markdown-body">
+                            <div align="center">
+                                <h1>gRPC-Gateway</h1>
+
+                                <p>
+                                    gRPC to JSON proxy generator following the
+                                    gRPC HTTP spec
+                                </p>
+
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/actions/workflows/ci.yml"
+                                    ><img
+                                        src="https://img.shields.io/github/actions/workflow/status/grpc-ecosystem/grpc-gateway/ci.yml?color=379c9c&amp;label=build&amp;logo=github&amp;logoColor=ffffff&amp;style=flat-square"
+                                /></a>
+                                <a
+                                    href="https://app.slack.com/client/T029RQSE6/CBATURP1D"
+                                    ><img
+                                        src="https://img.shields.io/badge/slack-grpc--gateway-379c9c?logo=slack&amp;logoColor=ffffff&amp;style=flat-square"
+                                /></a>
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/blob/main/LICENSE"
+                                    ><img
+                                        src="https://img.shields.io/github/license/grpc-ecosystem/grpc-gateway?color=379c9c&amp;style=flat-square"
+                                /></a>
+                                <a
+                                    href="https://pkg.go.dev/github.com/grpc-ecosystem/grpc-gateway/v2"
+                                    ><img
+                                        src="https://img.shields.io/badge/godoc-reference-379c9c?style=flat-square&amp;logo=go&amp;logoColor=ffffff"
+                                /></a>
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/releases"
+                                    ><img
+                                        src="https://img.shields.io/github/v/release/grpc-ecosystem/grpc-gateway?color=379c9c&amp;logoColor=ffffff&amp;style=flat-square"
+                                /></a>
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/stargazers"
+                                    ><img
+                                        src="https://img.shields.io/github/stars/grpc-ecosystem/grpc-gateway?color=379c9c&amp;style=flat-square"
+                                /></a>
+                                <a
+                                    href="https://slsa.dev/images/gh-badge-level3.svg"
+                                    ><img
+                                        src="https://slsa.dev/images/gh-badge-level3.svg"
+                                /></a>
+                            </div>
+
+                            <h2 id="about">
+                                <a class="header" href="#about">About</a>
+                            </h2>
+                            <p>
+                                The gRPC-Gateway is a plugin of the Google
+                                protocol buffers compiler
+                                <a
+                                    href="https://github.com/protocolbuffers/protobuf"
+                                    >protoc</a
+                                >. It reads protobuf service definitions and
+                                generates a reverse-proxy server which
+                                translates a RESTful HTTP API into gRPC. This
+                                server is generated according to the
+                                <a
+                                    href="https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L46"
+                                    ><code>google.api.http</code></a
+                                >
+                                annotations in your service definitions.
+                            </p>
+                            <p>
+                                This helps you provide your APIs in both gRPC
+                                and RESTful style at the same time.
+                            </p>
+                            <div align="center">
+                                <img
+                                    src="docs/assets/images/architecture_introduction_diagram.svg"
+                                />
+                            </div>
+
+                            <h2 id="docs">
+                                <a class="header" href="#docs">Docs</a>
+                            </h2>
+                            <p>You can read our docs at:</p>
+                            <ul>
+                                <li>
+                                    https://grpc-ecosystem.github.io/grpc-gateway/
+                                </li>
+                            </ul>
+                            <h2 id="testimonials">
+                                <a class="header" href="#testimonials"
+                                    >Testimonials</a
+                                >
+                            </h2>
+                            <blockquote>
+                                <p>
+                                    We use the gRPC-Gateway to serve millions of
+                                    API requests per day, and have been since
+                                    2018 and through all of that, we have never
+                                    had any issues with it.
+                                </p>
+                                <p>
+                                    <em
+                                        >- William Mill,
+                                        <a href="http://adhocteam.us/"
+                                            >Ad Hoc</a
+                                        ></em
+                                    >
+                                </p>
+                            </blockquote>
+                            <h2 id="background">
+                                <a class="header" href="#background"
+                                    >Background</a
+                                >
+                            </h2>
+                            <p>
+                                gRPC is great – it generates API clients and
+                                server stubs in many programming languages, it
+                                is fast, easy-to-use, bandwidth-efficient and
+                                its design is combat-proven by Google. However,
+                                you might still want to provide a traditional
+                                RESTful JSON API as well. Reasons can range from
+                                maintaining backward-compatibility, supporting
+                                languages or clients that are not well supported
+                                by gRPC, to simply maintaining the aesthetics
+                                and tooling involved with a RESTful JSON
+                                architecture.
+                            </p>
+                            <p>
+                                This project aims to provide that HTTP+JSON
+                                interface to your gRPC service. A small amount
+                                of configuration in your service to attach HTTP
+                                semantics is all that’s needed to generate a
+                                reverse-proxy with this library.
+                            </p>
+                            <h2 id="installation">
+                                <a class="header" href="#installation"
+                                    >Installation</a
+                                >
+                            </h2>
+                            <h3 id="compile-from-source">
+                                <a class="header" href="#compile-from-source"
+                                    >Compile from source</a
+                                >
+                            </h3>
+                            <p>
+                                The following instructions assume you are using
+                                <a href="https://go.dev/wiki/Modules"
+                                    >Go Modules</a
+                                >
+                                for dependency management. Use a
+                                <a
+                                    href="https://go.dev/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module"
+                                    >tool dependency</a
+                                >
+                                to track the versions of the following
+                                executable packages:
+                            </p>
+                            <p>
+                                For Go 1.24 and later, prefer the
+                                <code>tool</code> directive in
+                                <code>go.mod</code> described in the “Tracking
+                                Tools in <code>go.mod</code>” section. The
+                                following blank-import pattern is mainly useful
+                                for projects that are not using Go 1.24 yet.
+                            </p>
+                            <pre><code class="language-go">// +build tools
+
+package tools
+
+import (
+    _ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway"
+    _ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2"
+    _ "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+    _ "google.golang.org/protobuf/cmd/protoc-gen-go"
+)
+</code></pre>
+                            <p>
+                                Run <code>go mod tidy</code> to resolve the
+                                versions. Install by running
+                            </p>
+                            <pre><code class="language-sh">go install \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
+</code></pre>
+                            <p>
+                                This will place four binaries in your
+                                <code>$GOBIN</code>;
+                            </p>
+                            <ul>
+                                <li><code>protoc-gen-grpc-gateway</code></li>
+                                <li><code>protoc-gen-openapiv2</code></li>
+                                <li><code>protoc-gen-go</code></li>
+                                <li><code>protoc-gen-go-grpc</code></li>
+                            </ul>
+                            <p>
+                                Make sure that your <code>$GOBIN</code> is in
+                                your <code>$PATH</code>.
+                            </p>
+                            <p>
+                                If you want to emit OpenAPI 3.1 instead of (or
+                                in addition to) Swagger 2.0, install
+                                <code>protoc-gen-openapiv3</code> as well:
+                            </p>
+                            <pre><code class="language-sh">go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv3
+</code></pre>
+                            <blockquote>
+                                <p>
+                                    ⚠️ <strong>Alpha.</strong>
+                                    <code>protoc-gen-openapiv3</code> is new and
+                                    its output is not yet stable — the emitted
+                                    JSON shape for oneofs, wrappers, enums, and
+                                    similar constructs may change in response to
+                                    real-world feedback before the plugin
+                                    graduates. Don’t rely on the exact spec
+                                    bytes being stable across minor releases;
+                                    the proto-to-OpenAPI mapping rules are
+                                    likely to tighten, and tooling-compatibility
+                                    compromises (documented in the generator
+                                    source) may be revisited as consumer OpenAPI
+                                    3.1 support matures.
+                                    <code>protoc-gen-openapiv2</code> is the
+                                    production-stable option.
+                                </p>
+                            </blockquote>
+                            <p>
+                                See
+                                <a
+                                    href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/openapi_v3/"
+                                    >OpenAPI 3.1 Output</a
+                                >
+                                for what it supports and how it differs from
+                                <code>protoc-gen-openapiv2</code>.
+                            </p>
+                            <h3 id="using-the-tool-directive-in-go-124">
+                                <a
+                                    class="header"
+                                    href="#using-the-tool-directive-in-go-124"
+                                    ><strong
+                                        >Using the <code>tool</code> Directive
+                                        in Go 1.24</strong
+                                    ></a
+                                >
+                            </h3>
+                            <p>
+                                Starting from Go 1.24, the
+                                <code>tool</code> directive in
+                                <code>go.mod</code> provides a structured way to
+                                track and manage executable dependencies. This
+                                replaces the previous workaround of using a
+                                separate <code>tools.go</code> file with blank
+                                imports.
+                            </p>
+                            <h4 id="tracking-tools-in-gomod">
+                                <a
+                                    class="header"
+                                    href="#tracking-tools-in-gomod"
+                                    ><strong
+                                        >Tracking Tools in
+                                        <code>go.mod</code></strong
+                                    ></a
+                                >
+                            </h4>
+                            <p>
+                                Instead of manually importing tool dependencies
+                                in a Go source file, you can now use the
+                                <code>tool</code> directive in
+                                <code>go.mod</code> to declare the tools your
+                                project depends on. For example:
+                            </p>
+                            <pre><code class="language-go">module tools
+
+go 1.24
+
+tool (
+	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	google.golang.org/protobuf/cmd/protoc-gen-go
+)
+</code></pre>
+                            <h4 id="managing-tool-dependencies">
+                                <a
+                                    class="header"
+                                    href="#managing-tool-dependencies"
+                                    ><strong
+                                        >Managing Tool Dependencies</strong
+                                    ></a
+                                >
+                            </h4>
+                            <p>
+                                To add tools to your module, use the
+                                <code>-tool</code> flag with
+                                <code>go get</code>:
+                            </p>
+                            <pre><code class="language-sh">go get -tool github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+go get -tool github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+go get -tool google.golang.org/protobuf/cmd/protoc-gen-go
+go get -tool google.golang.org/grpc/cmd/protoc-gen-go-grpc
+</code></pre>
+                            <p>
+                                This automatically updates <code>go.mod</code>,
+                                adding the tools under the
+                                <code>tool</code> directive along with
+                                <code>require</code> statements to ensure
+                                version tracking.
+                            </p>
+                            <h3 id="install-tools">
+                                <a class="header" href="#install-tools"
+                                    >Install Tools</a
+                                >
+                            </h3>
+                            <p>
+                                Once the tool dependencies are properly recorded
+                                in the <code>go.mod</code> file, simply execute
+                                the following command in the root directory of
+                                your project:
+                            </p>
+                            <pre><code class="language-sh">go install tool
+</code></pre>
+                            <p>
+                                This will place four binaries in your
+                                <code>$GOBIN</code>;
+                            </p>
+                            <ul>
+                                <li><code>protoc-gen-grpc-gateway</code></li>
+                                <li><code>protoc-gen-openapiv2</code></li>
+                                <li><code>protoc-gen-go</code></li>
+                                <li><code>protoc-gen-go-grpc</code></li>
+                            </ul>
+                            <p>
+                                Make sure that your <code>$GOBIN</code> is in
+                                your <code>$PATH</code>.
+                            </p>
+                            <h3 id="download-the-binaries">
+                                <a class="header" href="#download-the-binaries"
+                                    >Download the binaries</a
+                                >
+                            </h3>
+                            <p>
+                                You may alternatively download the binaries from
+                                the
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/releases/latest"
+                                    >GitHub releases page</a
+                                >. We generate
+                                <a href="https://slsa.dev">SLSA3 signatures</a>
+                                using the OpenSSF’s
+                                <a
+                                    href="https://github.com/slsa-framework/slsa-github-generator"
+                                    >slsa-framework/slsa-github-generator</a
+                                >
+                                during the release process. To verify a release
+                                binary:
+                            </p>
+                            <ol>
+                                <li>
+                                    Install the verification tool from
+                                    <a
+                                        href="https://github.com/slsa-framework/slsa-verifier#installation"
+                                        >slsa-framework/slsa-verifier#installation</a
+                                    >.
+                                </li>
+                                <li>
+                                    Download the provenance file
+                                    <code>attestation.intoto.jsonl</code> from
+                                    the
+                                    <a
+                                        href="https://github.com/grpc-ecosystem/grpc-gateway/releases/latest"
+                                        >GitHub releases page</a
+                                    >.
+                                </li>
+                                <li>Run the verifier:</li>
+                            </ol>
+                            <pre><code class="language-shell">slsa-verifier -artifact-path &lt;the-binary&gt; -provenance attestation.intoto.jsonl -source github.com/grpc-ecosystem/grpc-gateway -tag &lt;the-tag&gt;
+</code></pre>
+                            <p>
+                                Alternatively, see the section on remotely
+                                managed plugin versions below.
+                            </p>
+                            <h2 id="usage">
+                                <a class="header" href="#usage">Usage</a>
+                            </h2>
+                            <h3
+                                id="1define-your-grpc-service-using-protocol-buffers"
+                            >
+                                <a
+                                    class="header"
+                                    href="#1define-your-grpc-service-using-protocol-buffers"
+                                    >1.Define your
+                                    <a href="https://grpc.io/docs/">gRPC</a>
+                                    service using protocol buffers</a
+                                >
+                            </h3>
+                            <p><code>your_service.proto</code>:</p>
+                            <pre><code class="language-protobuf"> syntax = "proto3";
+ package your.service.v1;
+ option go_package = "github.com/yourorg/yourprotos/gen/go/your/service/v1";
+
+ message StringMessage {
+   string value = 1;
+ }
+
+ service YourService {
+   rpc Echo(StringMessage) returns (StringMessage) {}
+ }
+</code></pre>
+                            <h3 id="2-generate-grpc-stubs">
+                                <a class="header" href="#2-generate-grpc-stubs"
+                                    >2. Generate gRPC stubs</a
+                                >
+                            </h3>
+                            <p>
+                                This step generates the gRPC stubs that you can
+                                use to implement the service and consume from
+                                clients:
+                            </p>
+                            <p>
+                                Here’s an example <code>buf.gen.yaml</code> you
+                                can use to generate the stubs with
+                                <a href="https://github.com/bufbuild/buf">buf</a
+                                >:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+</code></pre>
+                            <p>
+                                With this file in place, you can generate your
+                                files using <code>buf generate</code>.
+                            </p>
+                            <blockquote>
+                                <p>
+                                    For a complete example of using
+                                    <code>buf generate</code> to generate
+                                    protobuf stubs, see
+                                    <a
+                                        href="https://github.com/johanbrandhorst/grpc-gateway-boilerplate"
+                                        >the boilerplate repo</a
+                                    >. For more information on generating the
+                                    stubs with buf, see
+                                    <a
+                                        href="https://docs.buf.build/generate-usage"
+                                        >the official documentation</a
+                                    >.
+                                </p>
+                            </blockquote>
+                            <p>
+                                If you are using <code>protoc</code> to generate
+                                stubs, here’s an example of what a command might
+                                look like:
+                            </p>
+                            <pre><code class="language-sh">protoc -I . \
+    --go_out ./gen/go/ --go_opt paths=source_relative \
+    --go-grpc_out ./gen/go/ --go-grpc_opt paths=source_relative \
+    your/service/v1/your_service.proto
+</code></pre>
+                            <h3 id="3-implement-your-service-in-grpc-as-usual">
+                                <a
+                                    class="header"
+                                    href="#3-implement-your-service-in-grpc-as-usual"
+                                    >3. Implement your service in gRPC as
+                                    usual.</a
+                                >
+                            </h3>
+                            <h3
+                                id="4-generate-reverse-proxy-using-protoc-gen-grpc-gateway"
+                            >
+                                <a
+                                    class="header"
+                                    href="#4-generate-reverse-proxy-using-protoc-gen-grpc-gateway"
+                                    >4. Generate reverse-proxy using
+                                    <code>protoc-gen-grpc-gateway</code></a
+                                >
+                            </h3>
+                            <p>At this point, you have 3 options:</p>
+                            <ul>
+                                <li>
+                                    no further modifications, use the default
+                                    mapping to HTTP semantics (method, path,
+                                    etc.)
+                                    <ul>
+                                        <li>
+                                            this will work on any
+                                            <code>.proto</code> file, but will
+                                            not allow setting HTTP paths,
+                                            request parameters or similar
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    additional <code>.proto</code> modifications
+                                    to use a custom mapping
+                                    <ul>
+                                        <li>
+                                            relies on parameters in the
+                                            <code>.proto</code> file to set
+                                            custom HTTP mappings
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    no <code>.proto</code> modifications, but
+                                    use an external configuration file
+                                    <ul>
+                                        <li>
+                                            relies on an external configuration
+                                            file to set custom HTTP mappings
+                                        </li>
+                                        <li>
+                                            mostly useful when the source proto
+                                            file isn’t under your control
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <h4 id="1-using-the-default-mapping">
+                                <a
+                                    class="header"
+                                    href="#1-using-the-default-mapping"
+                                    >1. Using the default mapping</a
+                                >
+                            </h4>
+                            <p>
+                                This requires no additional modification to the
+                                <code>.proto</code> file but does require
+                                enabling a specific option when executing the
+                                plugin. The
+                                <code>generate_unbound_methods</code> should be
+                                enabled.
+                            </p>
+                            <p>
+                                Here’s what a <code>buf.gen.yaml</code> file
+                                might look like with this option enabled:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+</code></pre>
+                            <p>
+                                With <code>protoc</code> (just the grpc-gateway
+                                stubs):
+                            </p>
+                            <pre><code class="language-sh">protoc -I . --grpc-gateway_out ./gen/go \
+    --grpc-gateway_opt paths=source_relative \
+    --grpc-gateway_opt generate_unbound_methods=true \
+    your/service/v1/your_service.proto
+</code></pre>
+                            <h4 id="2-with-custom-annotations">
+                                <a
+                                    class="header"
+                                    href="#2-with-custom-annotations"
+                                    >2. With custom annotations</a
+                                >
+                            </h4>
+                            <p>
+                                Add a
+                                <a
+                                    href="https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L46"
+                                    ><code>google.api.http</code></a
+                                >
+                                annotation to your .proto file
+                            </p>
+                            <p><code>your_service.proto</code>:</p>
+                            <pre><code class="language-diff"> syntax = "proto3";
+ package your.service.v1;
+ option go_package = "github.com/yourorg/yourprotos/gen/go/your/service/v1";
++
++import "google/api/annotations.proto";
++
+ message StringMessage {
+   string value = 1;
+ }
+
+ service YourService {
+-  rpc Echo(StringMessage) returns (StringMessage) {}
++  rpc Echo(StringMessage) returns (StringMessage) {
++    option (google.api.http) = {
++      post: "/v1/example/echo"
++      body: "*"
++    };
++  }
+ }
+</code></pre>
+                            <blockquote>
+                                <p>
+                                    You will need to provide the required third
+                                    party protobuf files to the protobuf
+                                    compiler. If you are using
+                                    <a href="https://github.com/bufbuild/buf"
+                                        >buf</a
+                                    >, this dependency can be added to the
+                                    <code>deps</code> array in your
+                                    <code>buf.yaml</code> under the name
+                                    <code>buf.build/googleapis/googleapis</code
+                                    >:
+                                </p>
+                                <pre><code class="language-yaml">version: v2
+name: buf.build/yourorg/myprotos
+deps:
+  - buf.build/googleapis/googleapis
+</code></pre>
+                                <p>
+                                    Always run <code>buf dep update</code> after
+                                    adding a dependency to your
+                                    <code>buf.yaml</code>.
+                                </p>
+                            </blockquote>
+                            <p>
+                                See
+                                <a
+                                    href="examples/internal/proto/examplepb/a_bit_of_everything.proto"
+                                    >a_bit_of_everything.proto</a
+                                >
+                                for examples of more annotations you can add to
+                                customize gateway behavior and generated OpenAPI
+                                output.
+                            </p>
+                            <p>
+                                Here’s what a <code>buf.gen.yaml</code> file
+                                might look like:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+</code></pre>
+                            <p>
+                                If you are using <code>protoc</code> to generate
+                                stubs, you need to ensure the required
+                                dependencies are available to the compiler at
+                                compile time. These can be found by manually
+                                cloning and copying the relevant files from the
+                                <a
+                                    href="https://github.com/googleapis/googleapis"
+                                    >googleapis repository</a
+                                >, and providing them to
+                                <code>protoc</code> when running. The files you
+                                will need are:
+                            </p>
+                            <pre><code>google/api/annotations.proto
+google/api/field_behavior.proto
+google/api/http.proto
+google/api/httpbody.proto
+</code></pre>
+                            <p>
+                                Here’s what a <code>protoc</code> execution
+                                might look like:
+                            </p>
+                            <pre><code class="language-sh">protoc -I . --grpc-gateway_out ./gen/go \
+    --grpc-gateway_opt paths=source_relative \
+    your/service/v1/your_service.proto
+</code></pre>
+                            <h4 id="3-external-configuration">
+                                <a
+                                    class="header"
+                                    href="#3-external-configuration"
+                                    >3. External configuration</a
+                                >
+                            </h4>
+                            <p>
+                                If you do not want to (or cannot) modify the
+                                proto file for use with gRPC-Gateway you can
+                                alternatively use an external
+                                <a
+                                    href="https://cloud.google.com/endpoints/docs/grpc/grpc-service-config"
+                                    >gRPC Service Configuration</a
+                                >
+                                file.
+                                <a
+                                    href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/"
+                                    >Check our documentation</a
+                                >
+                                for more information. This is best combined with
+                                the <code>standalone=true</code> option to
+                                generate a file that can live in its own
+                                package, separate from the files generated by
+                                the source protobuf file.
+                            </p>
+                            <p>
+                                Here’s what a <code>buf.gen.yaml</code> file
+                                might look like with this option enabled:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - grpc_api_configuration=path/to/config.yaml
+      - standalone=true
+</code></pre>
+                            <p>
+                                With <code>protoc</code> (just the grpc-gateway
+                                stubs):
+                            </p>
+                            <pre><code class="language-sh">protoc -I . --grpc-gateway_out ./gen/go \
+    --grpc-gateway_opt paths=source_relative \
+    --grpc-gateway_opt grpc_api_configuration=path/to/config.yaml \
+    --grpc-gateway_opt standalone=true \
+    your/service/v1/your_service.proto
+</code></pre>
+                            <h3
+                                id="5-write-an-entrypoint-for-the-http-reverse-proxy-server"
+                            >
+                                <a
+                                    class="header"
+                                    href="#5-write-an-entrypoint-for-the-http-reverse-proxy-server"
+                                    >5. Write an entrypoint for the HTTP
+                                    reverse-proxy server</a
+                                >
+                            </h3>
+                            <pre><code class="language-go">package main
+
+import (
+  "context"
+  "flag"
+  "net/http"
+
+  "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+  "google.golang.org/grpc"
+  "google.golang.org/grpc/credentials/insecure"
+  "google.golang.org/grpc/grpclog"
+
+  gw "github.com/yourorg/yourrepo/proto/gen/go/your/service/v1/your_service"  // Update
+)
+
+var (
+  // command-line options:
+  // gRPC server endpoint
+  grpcServerEndpoint = flag.String("grpc-server-endpoint",  "localhost:9090", "gRPC server endpoint")
+)
+
+func run() error {
+  ctx := context.Background()
+  ctx, cancel := context.WithCancel(ctx)
+  defer cancel()
+
+  // Register gRPC server endpoint
+  // Note: Make sure the gRPC server is running properly and accessible
+  mux := runtime.NewServeMux()
+  opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+  err := gw.RegisterYourServiceHandlerFromEndpoint(ctx, mux,  *grpcServerEndpoint, opts)
+  if err != nil {
+    return err
+  }
+
+  // Start HTTP server (and proxy calls to gRPC server endpoint)
+  return http.ListenAndServe(":8081", mux)
+}
+
+func main() {
+  flag.Parse()
+
+  if err := run(); err != nil {
+    grpclog.Fatal(err)
+  }
+}
+</code></pre>
+                            <h3
+                                id="6-optional-generate-openapi-definitions-using-protoc-gen-openapiv2"
+                            >
+                                <a
+                                    class="header"
+                                    href="#6-optional-generate-openapi-definitions-using-protoc-gen-openapiv2"
+                                    >6. (Optional) Generate OpenAPI definitions
+                                    using <code>protoc-gen-openapiv2</code></a
+                                >
+                            </h3>
+                            <p>
+                                Here’s what a <code>buf.gen.yaml</code> file
+                                might look like:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+  - local: protoc-gen-openapiv2
+    out: gen/go
+</code></pre>
+                            <p>
+                                To use the custom protobuf annotations supported
+                                by <code>protoc-gen-openapiv2</code>, we need
+                                another dependency added to our protobuf
+                                generation step. If you are using
+                                <code>buf</code>, you can add the
+                                <code
+                                    >buf.build/grpc-ecosystem/grpc-gateway</code
+                                >
+                                dependency to your <code>deps</code> array:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+name: buf.build/yourorg/myprotos
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+</code></pre>
+                            <p>
+                                With <code>protoc</code> (just the swagger
+                                file):
+                            </p>
+                            <pre><code class="language-sh">protoc -I . --openapiv2_out ./gen/openapiv2 \
+    your/service/v1/your_service.proto
+</code></pre>
+                            <p>
+                                If you are using <code>protoc</code> to generate
+                                stubs, you will need to copy the protobuf files
+                                from the
+                                <code>protoc-gen-openapiv2/options</code>
+                                directory of this repository, and providing them
+                                to <code>protoc</code> when running.
+                            </p>
+                            <p>
+                                Note that this plugin also supports generating
+                                OpenAPI definitions for unannotated methods; use
+                                the <code>generate_unbound_methods</code> option
+                                to enable this.
+                            </p>
+                            <p>
+                                It is possible with the HTTP mapping for a gRPC
+                                service method to create duplicate mappings with
+                                the only difference being constraints on the
+                                path parameter.
+                            </p>
+                            <p>
+                                <code>/v1/{name=projects/*}</code> and
+                                <code>/v1/{name=organizations/*}</code> both
+                                become <code>/v1/{name}</code>. When this occurs
+                                the plugin will rename the path parameter with a
+                                “_1” (or “_2” etc) suffix to differentiate the
+                                different operations. So in the above example,
+                                the 2nd path would become
+                                <code>/v1/{name_1=organizations/*}</code>. This
+                                can also cause OpenAPI clients to URL encode the
+                                “/” that is part of the path parameter as that
+                                is what OpenAPI defines in the specification. To
+                                allow gRPC gateway to accept the URL encoded
+                                slash and still route the request, use the
+                                UnescapingModeAllCharacters or
+                                UnescapingModeLegacy (which is the default
+                                currently though may change in future versions).
+                                See
+                                <a
+                                    href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/customizing_your_gateway/"
+                                    >Customizing Your Gateway</a
+                                >
+                                for more information.
+                            </p>
+                            <h4
+                                id="alternative-openapi-31-with-protoc-gen-openapiv3"
+                            >
+                                <a
+                                    class="header"
+                                    href="#alternative-openapi-31-with-protoc-gen-openapiv3"
+                                    >Alternative: OpenAPI 3.1 with
+                                    <code>protoc-gen-openapiv3</code></a
+                                >
+                            </h4>
+                            <blockquote>
+                                <p>
+                                    ⚠️ <strong>Alpha.</strong>
+                                    <code>protoc-gen-openapiv3</code> is new and
+                                    its output is not yet stable. Expect
+                                    breaking changes to the emitted JSON shape
+                                    (oneof encodings, wrapper types, enum form,
+                                    path-template expansion, etc.) between minor
+                                    releases while the mapping rules settle in
+                                    response to real-world feedback. Use it if
+                                    you want to follow that evolution; otherwise
+                                    <code>protoc-gen-openapiv2</code> remains
+                                    the stable choice.
+                                </p>
+                            </blockquote>
+                            <p>
+                                <code>protoc-gen-openapiv3</code> is a separate
+                                generator that emits OpenAPI
+                                <strong>3.1.0</strong> JSON directly from
+                                <code>google.api.http</code> annotations. It’s a
+                                good choice when your downstream tooling
+                                requires 3.1, when you want the richer JSON
+                                Schema 2020-12 constructs (proper
+                                <code>oneOf</code> encoding for proto oneofs,
+                                spec-accurate literal expansion of constrained
+                                path templates like
+                                <code>{name=shelves/*/books/*}</code>, etc.).
+                            </p>
+                            <p>
+                                Add it to your
+                                <code>buf.gen.yaml</code> alongside (or instead
+                                of) <code>protoc-gen-openapiv2</code>:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-openapiv3
+    out: gen/openapiv3
+</code></pre>
+                            <p>
+                                Or invoke it directly with <code>protoc</code>:
+                            </p>
+                            <pre><code class="language-sh">protoc -I. --openapiv3_out=./gen/openapiv3 your/service/v1/your_service.proto
+</code></pre>
+                            <p>
+                                A <code>.openapi.json</code> file appears next
+                                to each proto file that declares HTTP bindings;
+                                files with no HTTP-bound services produce no
+                                output. See
+                                <a
+                                    href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/openapi_v3/"
+                                    >OpenAPI 3.1 Output</a
+                                >
+                                for more information about the capabilities of
+                                protoc-gen-openapiv3.
+                            </p>
+                            <h2 id="usage-with-remote-plugins">
+                                <a
+                                    class="header"
+                                    href="#usage-with-remote-plugins"
+                                    >Usage with remote plugins</a
+                                >
+                            </h2>
+                            <p>
+                                As an alternative to all of the above, you can
+                                use <code>buf</code> with
+                                <a
+                                    href="https://buf.build/docs/bsr/remote-plugins/usage"
+                                    >remote plugins</a
+                                >
+                                to manage plugin versions and generation. An
+                                example <code>buf.gen.yaml</code> using remote
+                                plugin generation looks like this:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.31.0
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/grpc/go:v1.3.0
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/grpc-ecosystem/gateway:v2.16.2
+    out: gen/go
+    opt:
+      - paths=source_relative
+  - remote: buf.build/grpc-ecosystem/openapiv2:v2.16.2
+    out: gen/openapiv2
+</code></pre>
+                            <p>
+                                This requires no local installation of any
+                                plugins. Be careful to use the same version of
+                                the generator as the runtime library, i.e. if
+                                using <code>v2.16.2</code>, run
+                            </p>
+                            <pre><code class="language-shell">$ go get github.com/grpc-ecosystem/grpc-gateway/v2@v2.16.2
+</code></pre>
+                            <p>
+                                To get the same version of the runtime in your
+                                <code>go.mod</code>.
+                            </p>
+                            <p>
+                                Note that usage of remote plugins is
+                                incompatible with usage of external
+                                configuration files like
+                                <a
+                                    href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/#using-an-external-configuration-file"
+                                    >grpc_api_configuration</a
+                                >.
+                            </p>
+                            <h2 id="video-intro">
+                                <a class="header" href="#video-intro"
+                                    >Video intro</a
+                                >
+                            </h2>
+                            <p>
+                                This GopherCon UK 2019 presentation from our
+                                maintainer
+                                <a href="https://github.com/johanbrandhorst"
+                                    >@JohanBrandhorst</a
+                                >
+                                provides a good intro to using the gRPC-Gateway.
+                                It uses the following boilerplate repo as a
+                                base:
+                                https://github.com/johanbrandhorst/grpc-gateway-boilerplate.
+                            </p>
+                            <div align="center">
+                                <a
+                                    href="https://www.youtube.com/watch?v=Pq1paKC-fXk"
+                                >
+                                    <img
+                                        src="https://img.youtube.com/vi/Pq1paKC-fXk/0.jpg"
+                                    />
+                                </a>
+                            </div>
+
+                            <h2 id="parameters-and-flags">
+                                <a class="header" href="#parameters-and-flags"
+                                    >Parameters and flags</a
+                                >
+                            </h2>
+                            <p>
+                                When using <code>buf</code> to generate stubs,
+                                flags and parameters are passed through the
+                                <code>opt</code> field in your
+                                <code>buf.gen.yaml</code> file, for example:
+                            </p>
+                            <pre><code class="language-yaml">version: v2
+plugins:
+  - local: protoc-gen-grpc-gateway
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - grpc_api_configuration=path/to/config.yaml
+      - standalone=true
+</code></pre>
+                            <p>
+                                During code generation with <code>protoc</code>,
+                                flags to gRPC-Gateway tools must be passed
+                                through <code>protoc</code> using one of 2
+                                patterns:
+                            </p>
+                            <ul>
+                                <li>
+                                    as part of the
+                                    <code>--&lt;tool_suffix&gt;_out</code>
+                                    <code>protoc</code> parameter:
+                                    <code
+                                        >--&lt;tool_suffix&gt;_out=&lt;flags&gt;:&lt;path&gt;</code
+                                    >
+                                </li>
+                            </ul>
+                            <pre><code class="language-sh">--grpc-gateway_out=repeated_path_param_separator=ssv:.
+--openapiv2_out=repeated_path_param_separator=ssv:.
+</code></pre>
+                            <ul>
+                                <li>
+                                    using additional
+                                    <code>--&lt;tool_suffix&gt;_opt</code>
+                                    parameters:
+                                    <code
+                                        >--&lt;tool_suffix&gt;_opt=&lt;flag&gt;[,&lt;flag&gt;]*</code
+                                    >
+                                </li>
+                            </ul>
+                            <pre><code class="language-sh">--grpc-gateway_opt repeated_path_param_separator=ssv
+--openapiv2_opt repeated_path_param_separator=ssv
+</code></pre>
+                            <h2 id="more-examples">
+                                <a class="header" href="#more-examples"
+                                    >More examples</a
+                                >
+                            </h2>
+                            <p>
+                                More examples are available under the
+                                <code>examples</code> directory.
+                            </p>
+                            <ul>
+                                <li>
+                                    <code
+                                        >proto/examplepb/echo_service.proto</code
+                                    >,
+                                    <code
+                                        >proto/examplepb/a_bit_of_everything.proto</code
+                                    >,
+                                    <code
+                                        >proto/examplepb/unannotated_echo_service.proto</code
+                                    >: service definition
+                                    <ul>
+                                        <li>
+                                            <code
+                                                >proto/examplepb/echo_service.pb.go</code
+                                            >,
+                                            <code
+                                                >proto/examplepb/a_bit_of_everything.pb.go</code
+                                            >,
+                                            <code
+                                                >proto/examplepb/unannotated_echo_service.pb.go</code
+                                            >: [generated] stub of the service
+                                        </li>
+                                        <li>
+                                            <code
+                                                >proto/examplepb/echo_service.pb.gw.go</code
+                                            >,
+                                            <code
+                                                >proto/examplepb/a_bit_of_everything.pb.gw.go</code
+                                            >,
+                                            <code
+                                                >proto/examplepb/uannotated_echo_service.pb.gw.go</code
+                                            >: [generated] reverse proxy for the
+                                            service
+                                        </li>
+                                        <li>
+                                            <code
+                                                >proto/examplepb/unannotated_echo_service.yaml</code
+                                            >: gRPC API Configuration for
+                                            <code
+                                                >unannotated_echo_service.proto</code
+                                            >
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <code>server/main.go</code>: service
+                                    implementation
+                                </li>
+                                <li>
+                                    <code>main.go</code>: entrypoint of the
+                                    generated reverse proxy
+                                </li>
+                            </ul>
+                            <p>
+                                To use the same port for custom HTTP handlers
+                                (e.g. serving <code>swagger.json</code>),
+                                gRPC-Gateway, and a gRPC server, see
+                                <a
+                                    href="https://github.com/philips/grpc-gateway-example/blob/master/cmd/serve.go"
+                                    >this example by CoreOS</a
+                                >
+                                (and its accompanying
+                                <a
+                                    href="https://web.archive.org/web/20201112010739/https://coreos.com/blog/grpc-protobufs-swagger.html"
+                                    >blog post</a
+                                >).
+                            </p>
+                            <p>
+                                <a
+                                    href="https://github.com/mynalabsai/grpc_gateway_media_example"
+                                    >This example by neiro.ai</a
+                                >
+                                (and its accompanying
+                                <a
+                                    href="https://medium.com/neiro-ai/grpc-gateway-for-media-api-by-neiro-9033caab12c8"
+                                    >blog post</a
+                                >) shows how mediafiles using
+                                <code>multipart/form-data</code> can be
+                                integrated into rpc messages using a middleware.
+                            </p>
+                            <h2 id="features">
+                                <a class="header" href="#features">Features</a>
+                            </h2>
+                            <h3 id="supported">
+                                <a class="header" href="#supported"
+                                    >Supported</a
+                                >
+                            </h3>
+                            <ul>
+                                <li>Generating JSON API handlers.</li>
+                                <li>Method parameters in the request body.</li>
+                                <li>Method parameters in the request path.</li>
+                                <li>Method parameters in the query string.</li>
+                                <li>
+                                    Enum fields in the path parameter (including
+                                    repeated enum fields).
+                                </li>
+                                <li>
+                                    Mapping streaming APIs to newline-delimited
+                                    JSON streams.
+                                </li>
+                                <li>
+                                    Mapping HTTP headers with
+                                    <code>Grpc-Metadata-</code> prefix to gRPC
+                                    metadata (prefixed with
+                                    <code>grpcgateway-</code>)
+                                </li>
+                                <li>
+                                    Optionally emitting API definitions for
+                                    <a
+                                        href="https://swagger.io/docs/specification/2-0/basic-structure/"
+                                        >OpenAPI (Swagger) v2</a
+                                    >.
+                                </li>
+                                <li>
+                                    Setting
+                                    <a
+                                        href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md#requests"
+                                        >gRPC timeouts</a
+                                    >
+                                    through inbound HTTP
+                                    <code>Grpc-Timeout</code> header.
+                                </li>
+                                <li>
+                                    Partial support for
+                                    <a
+                                        href="https://cloud.google.com/endpoints/docs/grpc/grpc-service-config"
+                                        >gRPC API Configuration</a
+                                    >
+                                    files as an alternative to annotation.
+                                </li>
+                                <li>
+                                    Automatically translating PATCH requests
+                                    into Field Mask gRPC requests. See
+                                    <a
+                                        href="https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/patch_feature/"
+                                        >the docs</a
+                                    >
+                                    for more information.
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://protobuf.dev/editions/overview/"
+                                        >Protobuf Editions</a
+                                    >
+                                    support (edition 2023).
+                                </li>
+                                <li>
+                                    Go
+                                    <a
+                                        href="https://go.dev/blog/protobuf-opaque"
+                                        >Opaque API</a
+                                    >
+                                    support.
+                                </li>
+                            </ul>
+                            <h3 id="no-plan-to-support">
+                                <a class="header" href="#no-plan-to-support"
+                                    >No plan to support</a
+                                >
+                            </h3>
+                            <p>But patches are welcome.</p>
+                            <ul>
+                                <li>Method parameters in HTTP headers.</li>
+                                <li>Handling trailer metadata.</li>
+                                <li>Encoding request/response body in XML.</li>
+                                <li>True bi-directional streaming.</li>
+                            </ul>
+                            <h2 id="mapping-grpc-to-http">
+                                <a class="header" href="#mapping-grpc-to-http"
+                                    >Mapping gRPC to HTTP</a
+                                >
+                            </h2>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://github.com/grpc-ecosystem/grpc-gateway/blob/main/runtime/errors.go#L15"
+                                        >How gRPC error codes map to HTTP status
+                                        codes in the response</a
+                                    >.
+                                </li>
+                                <li>
+                                    HTTP request source IP is added as
+                                    <code>X-Forwarded-For</code> gRPC request
+                                    header.
+                                </li>
+                                <li>
+                                    HTTP request host is added as
+                                    <code>X-Forwarded-Host</code> gRPC request
+                                    header.
+                                </li>
+                                <li>
+                                    HTTP <code>Authorization</code> header is
+                                    added as <code>authorization</code> gRPC
+                                    request header.
+                                </li>
+                                <li>
+                                    Remaining Permanent HTTP header keys (as
+                                    specified by the IANA
+                                    <a
+                                        href="http://www.iana.org/assignments/message-headers/message-headers.xhtml"
+                                        >here</a
+                                    >) are prefixed with
+                                    <code>grpcgateway-</code> and added with
+                                    their values to gRPC request header.
+                                </li>
+                                <li>
+                                    HTTP headers that start with
+                                    ‘Grpc-Metadata-’ are mapped to gRPC metadata
+                                    (prefixed with <code>grpcgateway-</code>).
+                                </li>
+                                <li>
+                                    While configurable, the default
+                                    {un,}marshaling uses
+                                    <a
+                                        href="https://pkg.go.dev/google.golang.org/protobuf/encoding/protojson"
+                                        >protojson</a
+                                    >.
+                                </li>
+                                <li>
+                                    The path template used to map gRPC service
+                                    methods to HTTP endpoints supports the
+                                    <a
+                                        href="https://github.com/googleapis/googleapis/blob/master/google/api/http.proto"
+                                        >google.api.http</a
+                                    >
+                                    path template syntax. For example,
+                                    <code
+                                        >/api/v1/{name=projects/*/topics/*}</code
+                                    >
+                                    or
+                                    <code>/prefix/{path=organizations/**}</code
+                                    >.
+                                </li>
+                            </ul>
+                            <h2 id="contribution">
+                                <a class="header" href="#contribution"
+                                    >Contribution</a
+                                >
+                            </h2>
+                            <p>
+                                See
+                                <a
+                                    href="http://github.com/grpc-ecosystem/grpc-gateway/blob/main/CONTRIBUTING.md"
+                                    >CONTRIBUTING.md</a
+                                >.
+                            </p>
+                            <h2 id="license">
+                                <a class="header" href="#license">License</a>
+                            </h2>
+                            <p>
+                                gRPC-Gateway is licensed under the BSD 3-Clause
+                                License. See
+                                <a
+                                    href="https://github.com/grpc-ecosystem/grpc-gateway/blob/main/LICENSE"
+                                    >LICENSE</a
+                                >
+                                for more details.
+                            </p>
+                        </main>
+                    </div>
+                    <nav class="page-nav" aria-label="Page navigation">
+                        <a
+                            rel="prev"
+                            href="chapter_1.html"
+                            class="nav-chapters previous"
+                            title="Previous chapter"
+                            aria-label="Previous chapter"
+                            aria-keyshortcuts="Left"
+                        >
+                            ‹ Chapter 1
+                        </a>
+
+                        <a
+                            rel="next prefetch"
+                            href="test/index.html"
+                            class="nav-chapters next"
+                            title="Next chapter"
+                            aria-label="Next chapter"
+                            aria-keyshortcuts="Right"
+                        >
+                            Test Chapter ›
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <script src="../examples/basic/.doc/elasticlunr-0961ccdd.min.js"></script>
+            <script src="../examples/basic/.doc/mark-8ff17bcf.min.js"></script>
+            <script src="../examples/basic/.doc/searcher-b2468945.js"></script>
+
+            <script src="../examples/basic/.doc/clipboard-c168d3a0.min.js"></script>
+            <script src="../examples/basic/.doc/highlight-b4ce0524.min.js"></script>
+            <script src="../examples/basic/.doc/index-909d4ef3.js"></script>
+            <script src="../examples/basic/.doc/outline-rail-28df40c3.js"></script>
+        </div>
+    </body>
+</html>

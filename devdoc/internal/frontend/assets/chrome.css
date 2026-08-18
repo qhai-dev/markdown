@@ -112,8 +112,6 @@ html:not(.js) .left-buttons button {
 .menu-bar:visited,
 .nav-chapters,
 .nav-chapters:visited,
-.mobile-nav-chapters,
-.mobile-nav-chapters:visited,
 .menu-bar .icon-button {
     color: var(--icons);
 }
@@ -123,77 +121,45 @@ html:not(.js) .left-buttons button {
     color: var(--icons-hover);
 }
 
-/* Nav Icons */
+/* Nav buttons (Previous / Next) — single inline row under the .page
+   element. The .nav-chapters class is kept as the contract for
+   index.js (keyboard navigation looks up .nav-chapters.next / .previous). */
+
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 2rem var(--page-padding);
+    border-top: 1px solid var(--table-border-color);
+    margin-top: 2rem;
+}
 
 .nav-chapters {
-    font-size: 2.5em;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.6em 1em;
+    border-radius: 6px;
+    border: 1px solid var(--table-border-color);
+    background-color: var(--sidebar-bg);
     text-decoration: none;
-
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-    max-width: 150px;
-    min-width: 90px;
-
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-
-    transition: color 0.5s, background-color 0.5s;
+    color: var(--fg);
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .nav-chapters:hover {
     text-decoration: none;
     background-color: var(--theme-hover);
-    transition: background-color 0.15s, color 0.15s;
+    border-color: var(--icons-hover);
+    color: var(--icons-hover);
 }
 
 .nav-chapters.previous {
-    /* Ensure that the previous arrow does not overlap the resize indicator. */
-    margin-inline-start: var(--sidebar-resize-indicator-width);
+    margin-inline-start: 0;
 }
 
-.nav-wrapper {
-    margin-block-start: 50px;
-    display: none;
-}
-
-.mobile-nav-chapters {
-    font-size: 2.5em;
-    text-align: center;
-    text-decoration: none;
-    width: 90px;
-    border-radius: 5px;
-    background-color: var(--sidebar-bg);
-}
-
-/* Only Firefox supports flow-relative values */
-.previous { float: left; }
-[dir=rtl] .previous { float: right; }
-
-/* Only Firefox supports flow-relative values */
-.next {
-    float: right;
-    right: var(--page-padding);
-}
-[dir=rtl] .next {
-    float: left;
-    right: unset;
-    left: var(--page-padding);
-}
-
-@media only screen and (max-width: 1080px) {
-    .nav-wide-wrapper { display: none; }
-    .nav-wrapper { display: block; }
-}
-
-/* sidebar-visible */
-@media only screen and (max-width: 1380px) {
-    #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper .nav-wide-wrapper { display: none; }
-    #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper .nav-wrapper { display: block; }
+.nav-chapters.next {
+    margin-inline-end: 0;
 }
 
 /* Inline code */

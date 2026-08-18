@@ -41,11 +41,11 @@ def _devdoc_impl(ctx):
     plugin_path = _plugin_path(plugins, is_windows)
 
     # Mirror rules_rust_mdbook's process_wrapper pattern: run devdoc
-    # with default build-dir (writes to <book_dir>/.devdoc/), then
+    # with default build-dir (writes to <book_dir>/.doc/), then
     # copy the result into bazel's declared output. Passing --dest-dir
     # directly fails because devdoc writes to a sandbox-local path that
     # bazel discards once the action exits.
-    cmd = "set -euo pipefail; '{devdoc}' build --dir '{bookdir}' && rm -rf '{output}' && mkdir -p '{output}' && cp -R '{bookdir}/.devdoc/.' '{output}/'".format(
+    cmd = "set -euo pipefail; '{devdoc}' build --dir '{bookdir}' && rm -rf '{output}' && mkdir -p '{output}' && cp -R '{bookdir}/.doc/.' '{output}/'".format(
         devdoc = devdoc_bin.path,
         bookdir = book.dirname,
         output = output.path,

@@ -7,7 +7,7 @@
 
 **结论先行**：`devdoc.yaml` 是 `book.toml`（TOML）的 Go 端等价物，键名一致，
 但格式为 YAML。默认值大部分与 Rust 基线一致，**刻意偏离**的有三处：
-`package.root` 默认 `docs`（Rust 为 `src`）、`build.build-dir` 默认 `.devdoc`
+`package.root` 默认 `docs`（Rust 为 `src`）、`build.build-dir` 默认 `.doc`
 （Rust 为 `book`），以及 Go 端新增的若干字段（`build.pre-render`、
 `output.html.mode`）。
 `output.html.playground` / `output.html.print` 与 `[rust]` 相关配置已被硬删除，写了会被忽略。
@@ -39,7 +39,7 @@
 
 | 字段 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
-| `build-dir` | string | `.devdoc` | ⚠️ **与 Rust 基线不同**（Rust 默认 `book`） |
+| `build-dir` | string | `.doc` | ⚠️ **与 Rust 基线不同**（Rust 默认 `book`） |
 | `extra-watch-dirs` | string[] | `[]` | watch/serve 时额外触发重建的目录 |
 | `create-missing` | bool | `true` | 此字段保留对 Rust 配置的兼容性；Go 端不走 [chapters]，没有"缺失章节文件"的概念 |
 | `pre-render` | string[] | `[]` | Go 端特有字段 |
@@ -100,7 +100,7 @@ package:
   root: src
 
 build:
-  build-dir: .devdoc
+  build-dir: .doc
   create-missing: true
 ```
 

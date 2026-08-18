@@ -11,7 +11,7 @@
 | Go internal 包 | Rust 对应（crate::module） | 对应源文件 | 对齐度 |
 |---|---|---|---|
 | `book` | `mdbook-core::book` | `book.rs` | ✅ 1:1 |
-| `config` | `mdbook-core::config` | `config.rs`, `html.rs` | ⚠️ 键语义 1:1，文件格式偏离：Go 侧 `devdoc.yaml`（YAML），Rust 侧 `book.toml`（TOML），无 `MDBOOK_*` env 覆盖；默认值也偏离：Go 侧 `src: docs` + `build-dir: .devdoc`，Rust 侧默认 `src` + `book`（见 tests/README.md） |
+| `config` | `mdbook-core::config` | `config.rs`, `html.rs` | ⚠️ 键语义 1:1，文件格式偏离：Go 侧 `devdoc.yaml`（YAML），Rust 侧 `book.toml`（TOML），无 `MDBOOK_*` env 覆盖；默认值也偏离：Go 侧 `src: docs` + `build-dir: .doc`，Rust 侧默认 `src` + `book`（见 tests/README.md） |
 | `utils` | `mdbook-core::utils` + `mdbook-html::utils` | `fs.rs`, `html.rs`, `utils.rs` | ✅ 1:1（跨两个 crate 的同名模块） |
 | `summary` | `mdbook-summary` | `lib.rs` | ❌ 已删(2026-08-09 初并入 `runner/loader.go`,2026-08-16 彻底移除):`SUMMARY.md` + `[chapters]` 均不再读;章节列表改由 `internal/runner/walk.go` 文件树扫描 + 每文件 YAML front-matter 驱动 |
 | `serve`（已并入 pkg/cli，2026-08-09；2026-08-18 由 pkg/cmd 改名 pkg/cli） | `mdbook` bin: `src/cmd/serve.rs` | `serve.rs` | ✅ 1:1（现位于 `pkg/cli/serve/serve.go`，命令+服务器+reload 单文件，同 Rust） |

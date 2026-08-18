@@ -25,7 +25,7 @@ type InitOptions struct {
 // Init creates a fresh book skeleton at root. It mirrors
 // `crates/mdbook/src/cmd/init.rs::execute` end-to-end (with devdoc
 // deviations: sources go to docs/ instead of src/, no .gitignore, and
-// the build directory default is .devdoc/):
+// the build directory default is .doc/):
 //
 //   - <root>/docs/                directory
 //   - <root>/devdoc.yaml         minimal config (with the chosen title and a
@@ -41,7 +41,7 @@ func Init(root string, opts InitOptions) error {
 		title = "My Book"
 	}
 	devdocYAML := fmt.Sprintf(
-		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .devdoc\n  create-missing: true\n",
+		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .doc\n  create-missing: true\n",
 		title,
 	)
 	if err := os.WriteFile(filepath.Join(root, model.ConfigFileName), []byte(devdocYAML), 0o644); err != nil {

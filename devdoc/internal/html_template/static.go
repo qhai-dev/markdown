@@ -62,6 +62,7 @@ func NewStaticFiles(t *Theme, cfg *model.HtmlConfig, root string) (*Files, error
 	f.AddBuiltin("css/general.css", t.GeneralCSS)
 	f.AddBuiltin("css/chrome.css", t.ChromeCSS)
 	f.AddBuiltin("css/variables.css", t.VariablesCSS)
+	f.AddBuiltin("css/github-markdown.css", t.MarkdownCSS)
 	f.AddBuiltin("highlight.css", t.HighlightCSS)
 	f.AddBuiltin("tomorrow-night.css", t.TomorrowNightCSS)
 	f.AddBuiltin("ayu-highlight.css", t.AyuHighlightCSS)
