@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	htmltpl "mdbook-go/internal/html_template"
-	"mdbook-go/internal/model"
+	htmltpl "github.com/qhai-dev/devdoc/internal/html_template"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // InitOptions configures a single Init call. It is the Go analogue of the

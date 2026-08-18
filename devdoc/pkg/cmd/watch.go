@@ -17,8 +17,8 @@ import (
 	"syscall"
 	"time"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/runner"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/runner"
 
 	"github.com/spf13/cobra"
 )

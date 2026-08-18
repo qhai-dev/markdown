@@ -14,7 +14,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REPO_ROOT="$(cd "$ROOT/.." && pwd)"
 RUST_BIN="${MDBOOK_RUST_BIN:-$REPO_ROOT/target/debug/mdbook}"
-GO_BIN="$ROOT/bin/mdbook-go"
+case "$OSTYPE" in
+	msys|win32|cygwin) GO_BIN="$ROOT/bin/devdoc.exe" ;;
+	*)                  GO_BIN="$ROOT/bin/devdoc" ;;
+esac
 
 # Fixtures expected to differ, as "name # reason".
 # - external-plugin: M3 外部插件链路已冻结（见 internal/plugin/cmd.go 顶部注释与

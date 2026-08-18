@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"mdbook-go/internal/runner"
+	"github.com/qhai-dev/devdoc/internal/runner"
 
 	"github.com/spf13/cobra"
 )

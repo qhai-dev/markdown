@@ -1,6 +1,6 @@
 # Local dev/test Makefile for devdoc (mdbook-go).
 #
-#   make build               build bin/devdoc with version injected
+#   make build               build bin/devdoc (or bin/devdoc.exe on Windows) with version injected
 #   make build VERSION=v1.0.0   override the injected version
 #   make version             build and print version (verify -X works)
 #   make serve               build + serve the test book
@@ -9,10 +9,15 @@
 #   make test                run Go tests
 #   make clean               remove the binary
 
-BINARY  := devdoc
+EXE_EXT :=
+ifeq ($(OS),Windows_NT)
+	EXE_EXT := .exe
+endif
+
+BINARY  := devdoc$(EXE_EXT)
 OUT     := bin
-PKG     := mdbook-go/cmd/devdoc
-VER_PKG := mdbook-go/pkg/cmd/version
+PKG     := github.com/qhai-dev/devdoc/cmd/devdoc
+VER_PKG := github.com/qhai-dev/devdoc/pkg/cmd/version
 
 VERSION ?= 0.1.0
 BOOK    ?= tests/basic

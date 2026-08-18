@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // MDBook is the central handle for a loaded book.

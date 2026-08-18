@@ -3,8 +3,8 @@ package runner
 import (
 	"testing"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 func preprocessorNames(pre []plugin.Preprocessor) []string {

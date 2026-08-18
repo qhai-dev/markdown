@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	static "mdbook-go/internal/static"
+	static "github.com/qhai-dev/devdoc/internal/static"
 )
 
 // Theme carries the resolved contents of every themeable asset.

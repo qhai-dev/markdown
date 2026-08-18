@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // renderTocSidebar computes the sidebar HTML for use via `{{.TocHTML}}`.

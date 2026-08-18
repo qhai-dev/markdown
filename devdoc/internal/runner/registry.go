@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 // Built-in preprocessor names that ship with mdBook. Users can disable them

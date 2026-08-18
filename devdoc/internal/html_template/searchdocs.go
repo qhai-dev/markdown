@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"mdbook-go/internal/html"
-	"mdbook-go/internal/model"
-	"mdbook-go/pkg/fs"
+	"github.com/qhai-dev/devdoc/internal/html"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/pkg/fs"
 )
 
 // collapseWhitespace squeezes runs of two or more whitespace characters into a

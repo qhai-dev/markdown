@@ -3,9 +3,9 @@ package runner
 import (
 	"fmt"
 
-	htmltpl "mdbook-go/internal/html_template"
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	htmltpl "github.com/qhai-dev/devdoc/internal/html_template"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 // BuildPreprocessors and RunPreprocessors live in registry.go; the

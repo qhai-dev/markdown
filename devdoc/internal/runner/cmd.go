@@ -23,8 +23,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 // CmdPreprocessor shells out to an external executable that follows the

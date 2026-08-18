@@ -12,7 +12,7 @@
 package plugin
 
 import (
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // WireBook is the externally visible form of a book. It is serialised as

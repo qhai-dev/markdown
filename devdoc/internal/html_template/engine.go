@@ -30,7 +30,7 @@ import (
 	"strings"
 	"sync"
 
-	static "mdbook-go/internal/static"
+	static "github.com/qhai-dev/devdoc/internal/static"
 )
 
 // Registry wraps a set of html/template.Template instances keyed by name.

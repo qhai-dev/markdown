@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // Env carries the per-build state that the template helpers need.

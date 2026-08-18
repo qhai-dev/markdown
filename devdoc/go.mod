@@ -1,4 +1,4 @@
-module mdbook-go
+module github.com/qhai-dev/devdoc
 
 go 1.26.4
 

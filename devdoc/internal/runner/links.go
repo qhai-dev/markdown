@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 // LinkPreprocessor expands a small set of helper directives inside chapter

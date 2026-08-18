@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/pkg/fs"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/pkg/fs"
 )
 
 // RenderData is the typed template data the production .html files consume.

@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/pkg/fs"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/pkg/fs"
 )
 
 // resourcePattern matches the `{{ resource "name" }}` placeholders that appear

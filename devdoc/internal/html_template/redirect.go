@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"mdbook-go/pkg/fs"
+	"github.com/qhai-dev/devdoc/pkg/fs"
 )
 
 // emitRedirects writes one small HTML page per configured redirect.

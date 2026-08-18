@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"mdbook-go/pkg/cmd"
+	"github.com/qhai-dev/devdoc/pkg/cmd"
 )
 
 // exitCode is the universal exit code for any error path, matching Rust

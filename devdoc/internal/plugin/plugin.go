@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // Preprocessor mirrors crates/mdbook-preprocessor/src/lib.rs::Preprocessor.

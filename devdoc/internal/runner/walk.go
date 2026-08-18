@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"mdbook-go/internal/model"
+	"github.com/qhai-dev/devdoc/internal/model"
 )
 
 // walkSourceDir scans srcDir and returns the book tree. Each directory

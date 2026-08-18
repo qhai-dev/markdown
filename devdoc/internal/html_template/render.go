@@ -18,9 +18,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"mdbook-go/internal/html"
-	"mdbook-go/internal/model"
-	"mdbook-go/pkg/fs"
+	"github.com/qhai-dev/devdoc/internal/html"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/pkg/fs"
 )
 
 // Context carries everything the HTML backend needs for one build.

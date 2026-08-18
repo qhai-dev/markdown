@@ -37,7 +37,7 @@ import (
 	"syscall"
 	"time"
 
-	"mdbook-go/internal/runner"
+	"github.com/qhai-dev/devdoc/internal/runner"
 
 	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"

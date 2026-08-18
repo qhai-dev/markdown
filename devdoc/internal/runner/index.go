@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"mdbook-go/internal/model"
-	"mdbook-go/internal/plugin"
+	"github.com/qhai-dev/devdoc/internal/model"
+	"github.com/qhai-dev/devdoc/internal/plugin"
 )
 
 // IndexPreprocessor rewrites chapters whose source file is named `README.md`
