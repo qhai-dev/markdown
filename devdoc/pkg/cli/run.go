@@ -1,21 +1,3 @@
-// The `devdoc run` subcommand (also exposed as `serve` for backwards
-// compatibility): build the book, serve it over HTTP and
-// live-reload on rebuild. Like Rust's src/cmd/serve.rs, the whole server
-// lives in this one file: the HTTP listener and static file handler
-// below, plus the WebSocket ReloadHub that broadcasts a "reload" message
-// to connected pages after every rebuild. Two endpoints are served from
-// the build directory:
-//
-//   - /<LiveReloadEndpoint>  WebSocket; sends a "reload" message on every
-//     build, so the page can refresh itself.
-//   - <everything else>      static file from the build directory, with a
-//     404 fallback to <build>/<404 file>.
-//
-// Note: the static handler is hand-rolled rather than using
-// http.FileServer, because Go stdlib's FileServer hard-codes a 301
-// redirect for any URL ending in `/index.html`. That conflicts with
-// mdBook's chapter URLs (which may literally end in `index.html`), and
-// the Rust port does not exhibit the issue. See staticHandler below.
 package cmd
 
 import (
@@ -43,16 +25,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewRunCommand implements the `devdoc run` subcommand (`serve` is kept
-// as an alias for backwards compatibility).
-func NewRunCommand() *cobra.Command {
+func newRunCommand() *cobra.Command {
 	var dir, dest string
 	var hostname, port string
 
 	cmd := &cobra.Command{
-		Use:   "run",
+		Use:     "run",
 		Aliases: []string{"serve"},
-		Short: "build the book, serve it, and live-reload on rebuild",
+		Short:   "build the book, serve it, and live-reload on rebuild",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runServe(dir, dest, hostname, port)
 		},
@@ -137,7 +117,7 @@ func runServe(dir, dest, hostname, port string) error {
 
 // LiveReloadEndpoint is the path under which the WebSocket is served. The
 // Rust CLI hard-codes the same value in src/cmd/serve.rs::LIVE_RELOAD_ENDPOINT;
-// the book.js bundled in the default theme expects this exact path.
+// the index.js bundled in the default theme expects this exact path.
 const LiveReloadEndpoint = "__livereload"
 
 // Options configures a single Serve call.
@@ -201,7 +181,8 @@ func (s *Server) Start(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("serve: listen %s: %w", s.opts.Addr, err)
 	}
-	s.logger.Printf("Serving on: http://%s", ln.Addr().String())
+
+	s.logger.Printf("Network: http://%s", ln.Addr().String())
 
 	// Bind the resolved address back so HTTP server picks it up. This is
 	// the only way to honour an OS-assigned port while keeping
@@ -333,10 +314,10 @@ func serveNotFound(w http.ResponseWriter, absRoot, notFoundPath string, logger *
 	_, _ = w.Write(body)
 }
 
-// reloadMessage is the literal payload the front-end book.js expects. The
+// reloadMessage is the literal payload the front-end index.js expects. The
 // Rust implementation sends the same string over a tokio broadcast
 // channel; we hard-code it here to keep the contract obvious. Changing
-// it would require a matching change in the theme's book.js.
+// it would require a matching change in the theme's index.js.
 const reloadMessage = "reload"
 
 // upgrader configures the WebSocket handshake. We allow any origin

@@ -29,9 +29,6 @@ type RenderData struct {
 	TextDirection      string
 	PathToRoot         string
 
-	// NavMode selects the keyboard navigation script ("vim" or "normal").
-	NavMode string
-
 	// Page flags.
 	IsIndex bool
 	BaseURL string
@@ -47,9 +44,6 @@ type RenderData struct {
 
 	// Live reload (template.URL so html/template treats it as URL-safe).
 	LiveReloadEndpoint template.URL
-
-	// Fragment map (template.JS so JS string escapes correctly).
-	FragmentMap template.JS
 
 	// Chapter navigation.
 	Previous *Nav
@@ -99,7 +93,6 @@ func makeData(ctx *Context, cfg *model.HtmlConfig, th *Theme) map[string]any {
 	if len(cfg.AdditionalJS) > 0 {
 		data["additional_js"] = relativeToRoot(ctx.Root, cfg.AdditionalJS)
 	}
-	data["nav_mode"] = cfg.Mode
 
 	search := cfg.EffectiveSearch()
 	data["search_enabled"] = search.Enable
@@ -131,7 +124,6 @@ func BuildRenderData(data map[string]any) RenderData {
 		PreferredDarkTheme:     asString(data, "preferred_dark_theme"),
 		TextDirection:          asString(data, "text_direction"),
 		PathToRoot:             asString(data, "path_to_root"),
-		NavMode:                asString(data, "nav_mode"),
 		BaseURL:                asString(data, "base_url"),
 		SearchEnabled:          asBool(data, "search_enabled"),
 		SearchJS:               asBool(data, "search_js"),
@@ -149,9 +141,6 @@ func BuildRenderData(data map[string]any) RenderData {
 	out.Env.NoSectionLabel = asBool(data, "no_section_label")
 	if v, ok := data["live_reload_endpoint"]; ok {
 		out.LiveReloadEndpoint = template.URL(asStringFromAny(v))
-	}
-	if v, ok := data["fragment_map"]; ok {
-		out.FragmentMap = template.JS(asStringFromAny(v))
 	}
 	if v, ok := data["content"]; ok {
 		if h, ok := v.(template.HTML); ok {

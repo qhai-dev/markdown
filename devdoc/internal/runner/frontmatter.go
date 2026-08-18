@@ -22,7 +22,9 @@ type FrontMatter struct {
 
 // frontMatterDelim matches a single `---` line at the start of the file.
 // We accept both the leading `---\n` opener and the matching `---\n`
-// closer; everything in between is YAML.
+// closer; everything in between is YAML. Callers normalise CRLF to LF
+// before parsing so Windows-edited files (saved with CRLF) work the same
+// as Unix files.
 var frontMatterDelim = []byte("---\n")
 
 // parseFrontMatter inspects content; if it begins with a `---\n` YAML

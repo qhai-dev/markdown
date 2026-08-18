@@ -1,8 +1,13 @@
 # Rust html_handlebars → Go 版分布盘点（聚合准备 + 历史归档）
 
 > ⚠️ 已执行（2026-08-09）：本文描述的 7 包分散状态已被聚合为
-> `internal/html_template` 单包（render/data/redirect/searchdocs/engine/
-> helpers/static/theme/search/index/pipeline/stemmer + templates/ 4 个 .gohtml）。
+> `internal/html_template` 单包（render/data/searchdocs/engine/
+> helpers/static/theme/search/index/pipeline/stemmer + templates/）。
+>
+> ⚠️ 后续清理（2026-08-18）：移除 `[output.html.redirect]` 配置支持——
+> `redirect.go` 整文件、`templates/redirect.html`、`Env.FragmentMap` 字段、
+> `tests/ts-redirects-redirects_are_emitted_correctly/` 套件、`ts-redirects` 在
+> `tests/nested/devdoc.yaml` 的用法均已删除。本文档下表中相关条目现已过期。
 >
 > ⚠️ 部分删除（2026-08-15）：章节列表 sidebar 渲染的"in-page 大纲 + noscript
 > iframe 兜底"被删 —— `SidebarHeaderNavSource` IIFE、`toc.html` 模板、
@@ -24,7 +29,7 @@
 |---|---|
 | `internal/render`（5 文件） | hbs_renderer.rs 本体 + 部分 search.rs + 模板注册 |
 | `internal/tplgotpl`（4 文件 + prod/5 模板） | handlebars 引擎替代 + helpers 逻辑 + 模板文件 |
-| `internal/static`（1 文件） | static_files.rs |
+| `internal/frontend`（1 文件） | static_files.rs |
 | `internal/search`（4 文件） | search.rs 的索引构建半 |
 | `internal/theme`（1 文件） | theme/mod.rs 的资产解析半（模板不归它） |
 | `internal/model`（html.go 一小块） | make_data 的 GitRepositoryIconClass |
@@ -40,12 +45,9 @@
 | `render_chapter` | `render/render.go:332` `renderChapter` | |
 | `render_404` | `render/render.go:402` `render404` | |
 | `render_print_page` | — | print 功能已删 |
-| 模板注册（index/redirect/head/header/toc_js/toc_html） | `render/render.go:156` `newRegistry` + `tplgotpl.LoadProduction` | handlebars.register_template_string → tplgotpl |
+| 模板注册（index） | `render/render.go:156` `newRegistry` + `tplgotpl.LoadProduction` | handlebars.register_template_string → tplgotpl（redirect/head/header/toc_html 已删） |
 | `register_hbs_helpers` | tplgotpl 的 Env 方法（TocHTML + Resource 等）；fa helper 已删 | |
 | render "toc_js" 模板 | `render/render.go:182` `buildTocJS` + 3 个 JS 常量（含 `MDBookSidebarScrollbox` 注入章节列表 sidebar） | Rust 里是 theme/toc.hbs 模板，Go 硬编码。SidebarHeaderNavSource 已删（只保留章节列表 splice） |
-| `emit_redirects` / `emit_redirect` | `render/redirect.go:17` `emitRedirects` | |
-| `combine_fragment_redirects` | `render/redirect.go:54` `combineFragmentRedirects` | |
-| `collect_redirects_for_path` | **缺失** | 每章 fragment_map 注入没移植（见 §4） |
 | `make_data` | `render/data.go:85` `makeData`；另 `config/html.go:172` `GitRepositoryIconClass` | Go 另有 RenderData/BuildRenderData（类型化层，Go 独有） |
 | `RenderChapterContext` | `render/render.go:27` `Context` + `renderChapter` 参数 | |
 
@@ -65,7 +67,7 @@
 | `index_chapter`（章节树 → 搜索文档） | `render/searchdocs.go:54` `indexChapter` |
 | elasticlunr 索引构建（porter stemmer 等） | `search/index.go`、`pipeline.go`、`stemmer.go`、`search.go` |
 
-### D. static_files.rs（320 行）→ internal/static（较完整）
+### D. static_files.rs（320 行）→ internal/frontend（较完整；2026-08-18 由 internal/static 改名并去掉连字符）
 
 | Rust | Go 位置 |
 |---|---|
@@ -79,20 +81,20 @@
 | Rust | Go |
 |---|---|
 | handlebars crate（**外部依赖**） | html/template（标准库）+ `tplgotpl` 薄封装（Registry/Env） |
-| theme/*.hbs 模板（index/redirect/head/header/toc_js；toc_html 已删） | `tplgotpl/prod/` 4 个 .gohtml（index/redirect/head/header；toc.html 已删） |
+| theme/*.hbs 模板（index/redirect/head/header/toc_js；toc_html 已删） | `tplgotpl/prod/` 1 个 .gohtml（index；2026-08-18 后 redirect/head/header 亦删） |
 
 ### F. 周边被拉动的
 
 - `runner/build.go:29` `Build()` —— Rust 的 `impl Renderer for HtmlHandlebars` 本在
   hbs_renderer.rs 里，Go 直接由 runner 调 `render.Render`，没有 Renderer 接口对象
 - `theme.go` —— Rust 的 Theme 结构有 **6 个模板字段**（index/head/redirect/
-  header/toc_js/toc_html），Go 的 Theme 只有 css/js + 4 个 gohtml 模板字段
-  （index/redirect/head/header；2026-08-15 起 toc.html 已删，toc.js 改由
-  render.go 直接生成并 AddBuiltin）
+  header/toc_js/toc_html），Go 的 Theme 只有 assets/（CSS+JS）+ 1 个 gohtml
+  模板字段（index；toc.js 改由 render.go 直接生成并 AddBuiltin）
 
 ## 3. 散落问题清单（聚合的动机）
 
-1. **一个渲染器 = 7 个包**，且 `render` 包内部还混着编排/数据/重定向/搜索/JS 资产 5 件事
+1. **一个渲染器 = 7 个包**，且 `render` 包内部还混着编排/数据/搜索/JS 资产 4 件事
+   （redirect 链路于 2026-08-18 整体移除）
 2. **toc helper 拆 3 处**（算法/toc_render.go、方法/helpers.go、拼接/render.go；
    2026-08-15 后 in-page outline 那条拆点已删）
 3. **resource helper 拆 3 处**（方法在 tplgotpl、数据在 render、产物在 static）
@@ -101,15 +103,8 @@
 5. **toc.js 的 3 段 JS 常量**在 render.go 里（Rust 是 theme 模板）
 6. **模板（tplgotpl/prod/）与渲染器（render/）分离**——Rust 里模板是 theme 字段、
    渲染器注册，一个 crate 内的事
-7. **`collect_redirects_for_path` 缺失**（真实功能缺口，见 §4）
 
-## 4. 顺带发现的缺口：collect_redirects_for_path
-
-Rust `hbs_renderer.rs:93-99` + `:674-696`：`render_chapter` 为**已有章节页面**收集
-`#fragment` 重定向，插入 `fragment_map`（页内 JS 做片段级跳转）。Go 的
-`renderChapter` 完全没有这段逻辑（grep 无结果），只有独立的 redirect 页面发射
-（`emitRedirects`）。聚合时值得补上——但**这是行为差异，需单独确认**（fixtures
-里可能没有覆盖 fragment 重定向的用例）。
+## 4. ~~顺带发现的缺口：collect_redirects_for_path~~（已随 redirect 移除而作废，见顶部 2026-08-18 说明）
 
 ## 5. 聚合目标形态（建议，待确认）
 
@@ -118,13 +113,13 @@ Rust `hbs_renderer.rs:93-99` + `:674-696`：`render_chapter` 为**已有章节�
 ```
 internal/html/
 ├── …现有 markdown 管线 10 文件（不动）
-├── render.go      # hbs_renderer.rs：Render / renderChapter / render404 / redirects + buildTocJS + tocJSPrefix/Middle/AfterClass
+├── render.go      # hbs_renderer.rs：Render / renderChapter / render404 + buildTocJS + tocJSPrefix/Middle/AfterClass
 ├── data.go        # RenderData + makeData + chapterSummaries
 ├── search.go      # index_chapter / create_files（从 render/searchdocs.go 迁入）
-├── static.go      # StaticFiles（从 internal/static 迁入）
+├── static.go      # StaticFiles（从 internal/frontend 迁入；2026-08-18 改名）
 ├── helpers.go     # Env / Resource / TocHTML（从 tplgotpl 迁入）
 ├── toc_render.go  # renderTocSidebar(算法,从 toc.rs::RenderToc 移植)
-└── templates/     # prod/*.gohtml index/redirect/head/header
+└── templates/     # prod/*.gohtml index
 ```
 
 未决问题：
@@ -132,6 +127,5 @@ internal/html/
    html（它其实是仓库内的 handlebars 替代品，并入后聚合才完整）？
 2. **internal/search 去留**：并入 html（search.rs 本来就在 mdbook-html crate 内），
    还是保持独立包但被 html 调用？
-3. **collect_redirects_for_path** 是否在聚合时补上？
-4. **config 的 GitRepositoryIconClass**（make_data 拆出的小块）是否回迁？
-5. **theme 的模板字段**是否回归（Rust Theme 有 6 个模板字段，Go 目前不归 theme）？
+3. **config 的 GitRepositoryIconClass**（make_data 拆出的小块）是否回迁？
+4. **theme 的模板字段**是否回归（Rust Theme 有 6 个模板字段，Go 目前不归 theme）？

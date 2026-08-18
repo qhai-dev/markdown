@@ -11,7 +11,7 @@
      css/highlight.css  css/tomorrow-night.css  css/ayu-highlight.css
 
    与 demo 的差异（静态书 vs 单页 demo）：
-   - 主题从 <html> 的 class（.ayu/.coal/.light/.navy/.rust，book.js 切换）
+   - 主题从 <html> 的 class（.ayu/.coal/.light/.navy/.rust，index.js 切换）
      推导，不再用 [data-theme] 属性；dark = ayu/coal/navy，light = light/rust
    - .prose 换成 .markdown-body（模板正文容器）
    - --bg-base/--fg-base 加 --writer- 前缀，避免与 variables.css 的

@@ -70,5 +70,5 @@ go run ./cmd/devdoc serve --dir fixtures/serve --open
   on `basic` is fixed; this fixture exists for the post-fix re-run.
 * The `__livereload` endpoint constant is the same in
   `internal/serve/serve.go` and the Rust CLI
-  (`src/cmd/serve.rs::LIVE_RELOAD_ENDPOINT`); the bundled book.js
+  (`src/cmd/serve.rs::LIVE_RELOAD_ENDPOINT`); the bundled index.js
   connects there directly.

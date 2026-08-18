@@ -9,7 +9,6 @@
         {{end}}
 
         <!-- Custom HTML head -->
-        {{template "head" .}}
 
         <meta name="description" content="{{.Description}}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,11 +34,6 @@
             window.path_to_searchindex_js = "{{.Resource "searchindex.js"}}";
             {{end}}
         </script>
-        {{if eq .NavMode "vim"}}
-        <script src="{{.Resource "nav-vim.js"}}"></script>
-        {{else}}
-        <script src="{{.Resource "nav-normal.js"}}"></script>
-        {{end}}
         <script src="{{.Resource "toc.js"}}"></script>
     </head>
     <body>
@@ -104,7 +98,6 @@
         </nav>
         <div id="mdbook-page-wrapper" class="page-wrapper">
             <div class="page">
-                {{template "header" .}}
                 <div id="mdbook-menu-bar-hover-placeholder"></div>
                 <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
@@ -238,26 +231,11 @@
 
         <script src="{{.Resource "clipboard.min.js"}}"></script>
         <script src="{{.Resource "highlight.min.js"}}"></script>
-        <script src="{{.Resource "book.js"}}"></script>
+        <script src="{{.Resource "index.js"}}"></script>
         <script src="{{.Resource "outline-rail.js"}}"></script>
 
         {{range .AdditionalJS}}
         <script src="{{$.Resource .}}"></script>
-        {{end}}
-
-        {{if .FragmentMap}}
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const fragmentMap =
-                    {{.FragmentMap}}
-                ;
-                const target = fragmentMap[window.location.hash];
-                if (target) {
-                    let url = new URL(target, window.location.href);
-                    window.location.replace(url.href);
-                }
-            });
-        </script>
         {{end}}
     </div>
     </body>

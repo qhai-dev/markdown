@@ -17,8 +17,4 @@ output:
     fold:
       enable: true
       level: 1
-    redirect:
-      "/old-guide.html": guide/intro.html
-      "/moved.html": reference.html
-      "/moved.html#anchor": guide/advanced/deep.html#deep-dive
 

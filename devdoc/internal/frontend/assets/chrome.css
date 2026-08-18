@@ -668,7 +668,7 @@ html:not(.js) .sidebar-resize-handle {
     left: 0;
     right: 0;
     bottom: 0;
-    /* This uses flex layout (which is set in book.js), and centers the popup
+    /* This uses flex layout (which is set in index.js), and centers the popup
        in the window.*/
     display: none;
     align-items: center;

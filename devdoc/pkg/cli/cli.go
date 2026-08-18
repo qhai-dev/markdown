@@ -11,15 +11,15 @@ func New() *cobra.Command {
 		Long:          "A lightweight local markdown documentation preview tool",
 		SilenceErrors: true,
 		SilenceUsage:  true,
-		Version:       Version,
+		Version:       versionString(),
 	}
 
-	cmd.AddCommand(NewBuildCommand())
-	cmd.AddCommand(NewCleanCommand())
-	cmd.AddCommand(NewInitCommand())
-	cmd.AddCommand(NewRunCommand())
-	cmd.AddCommand(NewVersionCommand())
-	cmd.AddCommand(NewWatchCommand())
+	cmd.AddCommand(newBuildCommand())
+	cmd.AddCommand(newCleanCommand())
+	cmd.AddCommand(newInitCommand())
+	cmd.AddCommand(newRunCommand())
+	cmd.AddCommand(newVersionCommand())
+	cmd.AddCommand(newWatchCommand())
 
 	return cmd
 }

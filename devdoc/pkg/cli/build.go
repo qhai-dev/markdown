@@ -6,9 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewBuildCommand implements the `devdoc build` subcommand: render the
+// newBuildCommand implements the `devdoc build` subcommand: render the
 // book into its build directory. It mirrors src/cmd/build.rs.
-func NewBuildCommand() *cobra.Command {
+func newBuildCommand() *cobra.Command {
 	var dir, dest string
 
 	cmd := &cobra.Command{

@@ -131,10 +131,6 @@ func Render(ctx *Context) error {
 		}
 	}
 
-	if err := emitRedirects(ctx.Destination, registry, htmlCfg.Redirect); err != nil {
-		return fmt.Errorf("unable to emit redirects: %w", err)
-	}
-
 	return fs.CopyFilesExceptExt(srcDir, ctx.Destination, true, buildDir, []string{"md"})
 }
 

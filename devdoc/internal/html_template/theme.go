@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	static "github.com/qhai-dev/devdoc/internal/static"
+	"github.com/qhai-dev/devdoc/internal/frontend"
 )
 
 // Theme carries the resolved contents of every themeable asset.
@@ -23,11 +23,6 @@ type Theme struct {
 	HighlightJS      []byte
 	ClipboardJS      []byte
 
-	// NavVimJS / NavNormalJS are the keyboard navigation variants selected by
-	// [output.html.mode]: nav-vim.js adds h/l chapter navigation.
-	NavVimJS    []byte
-	NavNormalJS []byte
-
 	// OutlineRailJS drives the right-hand heading rail. It has no Rust
 	// counterpart (see test-html-css/index.html for the reference demo).
 	OutlineRailJS []byte
@@ -36,26 +31,24 @@ type Theme struct {
 // Bundled front-end static.
 var (
 	// SearcherJS, MarkJS and ElasticlunrJS back the search UI.
-	SearcherJS    = static.MustRead("searcher/searcher.js")
-	MarkJS        = static.MustRead("searcher/mark.min.js")
-	ElasticlunrJS = static.MustRead("searcher/elasticlunr.min.js")
+	SearcherJS    = frontend.MustRead("assets/searcher.js")
+	MarkJS        = frontend.MustRead("assets/mark.min.js")
+	ElasticlunrJS = frontend.MustRead("assets/elasticlunr.min.js")
 )
 
 // Default returns the embedded theme with no user overrides applied.
 func Default() *Theme {
 	return &Theme{
-		ChromeCSS:              static.MustRead("css/chrome.css"),
-		GeneralCSS:             static.MustRead("css/general.css"),
-		VariablesCSS:           static.MustRead("css/variables.css"),
-		JS:                     static.MustRead("js/book.js"),
-		HighlightCSS:           static.MustRead("css/highlight.css"),
-		TomorrowNightCSS:       static.MustRead("css/tomorrow-night.css"),
-		AyuHighlightCSS:        static.MustRead("css/ayu-highlight.css"),
-		HighlightJS:            static.MustRead("js/highlight.min.js"),
-		ClipboardJS:            static.MustRead("js/clipboard.min.js"),
-		NavVimJS:               static.MustRead("js/nav-vim.js"),
-		NavNormalJS:            static.MustRead("js/nav-normal.js"),
-		OutlineRailJS:          static.MustRead("js/outline-rail.js"),
+		ChromeCSS:              frontend.MustRead("assets/chrome.css"),
+		GeneralCSS:             frontend.MustRead("assets/general.css"),
+		VariablesCSS:           frontend.MustRead("assets/variables.css"),
+		JS:                     frontend.MustRead("assets/index.js"),
+		HighlightCSS:           frontend.MustRead("assets/highlight.css"),
+		TomorrowNightCSS:       frontend.MustRead("assets/tomorrow-night.css"),
+		AyuHighlightCSS:        frontend.MustRead("assets/ayu-highlight.css"),
+		HighlightJS:            frontend.MustRead("assets/highlight.min.js"),
+		ClipboardJS:            frontend.MustRead("assets/clipboard.min.js"),
+		OutlineRailJS:          frontend.MustRead("assets/outline-rail.js"),
 	}
 }
 
@@ -78,7 +71,7 @@ func NewTheme(themeDir string) *Theme {
 		rel  string
 		dest *[]byte
 	}{
-		{"book.js", &t.JS},
+		{"index.js", &t.JS},
 		{"css/chrome.css", &t.ChromeCSS},
 		{"css/general.css", &t.GeneralCSS},
 		{"css/variables.css", &t.VariablesCSS},

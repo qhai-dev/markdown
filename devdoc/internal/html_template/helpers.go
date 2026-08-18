@@ -28,8 +28,6 @@ type Env struct {
 	// LiveReloadEndpoint is the URL fragment the live-reload WebSocket
 	// connects to.
 	LiveReloadEndpoint template.URL
-	// FragmentMap is the redirect-fragment map for this page.
-	FragmentMap template.JS
 }
 
 // Resource implements `{{resource "name"}}`.

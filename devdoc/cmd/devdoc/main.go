@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/qhai-dev/devdoc/pkg/cmd"
+	"github.com/qhai-dev/devdoc/pkg/cli"
 )
 
 // exitCode is the universal exit code for any error path, matching Rust

@@ -14,7 +14,7 @@
  * Every `.hljs-*` selector here is a token class set by highlight.js.
  * Nothing here touches the sidebar / menu / search / fonts / theme colors.
  *
- * Toggled by theme/js/book.js set_theme():
+ * Toggled by theme/js/index.js set_theme():
  *   light / rust / default → ENABLED
  *   coal  / navy  / ayu    → disabled (the matching dark stylesheet is on)
  *

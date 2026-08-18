@@ -90,8 +90,7 @@ type HtmlConfig struct {
 	// LiveReloadEndpoint is set by `serve`, never read from devdoc.yaml.
 	LiveReloadEndpoint string `yaml:"-"`
 
-	Redirect  map[string]string `yaml:"redirect"`
-	HashFiles bool              `yaml:"hash-files"`
+	HashFiles bool `yaml:"hash-files"`
 }
 
 // SearchChapter is a per-chapter search override in [output.html.search.chapter].
@@ -149,13 +148,9 @@ func (c *Config) SetRoot(root string) {
 	if c.Package.Root == "" {
 		c.Package.Root = "docs"
 	}
-	if !filepathIsAbs(c.Package.Root) {
+	if !filepath.IsAbs(c.Package.Root) {
 		c.Package.Root = joinPath(root, c.Package.Root)
 	}
-}
-
-func filepathIsAbs(p string) bool {
-	return len(p) > 0 && p[0] == '/'
 }
 
 func joinPath(a, b string) string {

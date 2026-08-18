@@ -8,9 +8,8 @@
 //   - Env:          per-build state threaded into template helpers
 //     (defined in helpers.go).
 //
-// The 5 .html files in internal/assets/templates/ (index, redirect,
-// head, header) replaced the old theme/templates/*.hbs with these
-// substitutions:
+// The .html file in internal/frontend/ (index) replaced
+// the old theme/templates/*.hbs with these substitutions:
 //
 //	{{var}}        -> {{.Var}}
 //	{{{raw}}}      -> {{.Raw}}        (with Raw typed template.HTML/JS/URL)
@@ -30,7 +29,7 @@ import (
 	"strings"
 	"sync"
 
-	static "github.com/qhai-dev/devdoc/internal/static"
+	"github.com/qhai-dev/devdoc/internal/frontend"
 )
 
 // Registry wraps a set of html/template.Template instances keyed by name.
@@ -81,7 +80,7 @@ func (r *Registry) RegisterFunc(name string, fn any) {
 // it as a top-level template keyed by its base name (without extension).
 func (r *Registry) LoadTemplates(fsys fs.FS, root string) error {
 	// fs.ReadDir/ReadFile reject "" (fs.ValidPath); normalize to "." so the
-	// sub-FS from static.Templates() (an fs.Sub result) works.
+	// embedded FS root can be walked directly.
 	if root == "" {
 		root = "."
 	}
@@ -135,11 +134,10 @@ func (r *Registry) RegisterTemplate(name, src string) error {
 	return r.LoadTemplate(name, src)
 }
 
-// LoadProduction parses the four .html files in internal/assets/templates/
-// as top-level templates (index, redirect, head, header). Call
-// after registering helpers and partials on r.
+// LoadProduction parses the .html file in internal/frontend/ (index) as
+// a top-level template. Call after registering helpers and partials on r.
 func (r *Registry) LoadProduction() error {
-	return r.LoadTemplates(static.Templates(), "")
+	return r.LoadTemplates(frontend.FS(), "")
 }
 
 // parseLocked parses src as a top-level template named name, attaching every

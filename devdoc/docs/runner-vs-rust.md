@@ -26,9 +26,9 @@ internal/runner/                crates/mdbook-driver/src/
 ├── *_test.go          ↔       └── （Rust 单元测试）
 ```
 
-命令层（`mdbook` bin `src/cmd/`）在 Go 侧放 `pkg/cmd/`：`init` → `init`、
+命令层（`mdbook` bin `src/cmd/`）在 Go 侧放 `pkg/cli/`：`init` → `init`、
 `clean` → `clean`、`open` → `open`、`test` → **已删**（2026-08-09）。
-watch 引擎（`src/cmd/watch/`）在 Go 侧并入 `pkg/cmd/watch.go`(命令壳 + PollWatcher 引擎单文件,2026-08-16 合并,原 `pkg/cmd/watch/` 子包删除)。
+watch 引擎（`src/cmd/watch/`）在 Go 侧并入 `pkg/cli/watch.go`(命令壳 + PollWatcher 引擎单文件,2026-08-16 合并,原 `pkg/cli/watch/` 子包删除；2026-08-18 由 `pkg/cmd` 改名为 `pkg/cli`)。
 
 ## 2. 逐文件对照表
 
@@ -94,7 +94,7 @@ HTML renderer，`build.go:35` 直接 `m.BuildDir()`，无 per-backend 子目录�
 ### 3-5. 风格差异
 
 Rust 用 anyhow + env_logger（日志可见）；Go 用 `fmt.Errorf` 包装 + 静默
-（错误走 `pkg/cmd` 的 `formatError` + exit 101）。
+（错误走 `pkg/cli` 的 `formatError` + exit 101）。
 
 ## 4. 命名：为什么叫 runner
 
@@ -110,6 +110,6 @@ Rust 用 "driver" 源于 **rustc_driver 惯例**（编译器生态中 "driver" =
 |---|---|---|
 | 1 | **create_missing 缺口**（§3-1） | 在 `loader.go` 实现 `create_missing`（对齐 load.rs:25-54），或至少在文档/错误信息中声明偏离 |
 | 2 | 多 renderer / `build_dir_for`（§3-2） | 低优先：Go 单渲染器，无现实需求；如未来加 markdown renderer 再补 |
-| 3 | `test` 命令（§3-4） | 低优先：Go 无测试执行需求；如对齐可加 `pkg/cmd/test.go` |
+| 3 | `test` 命令（§3-4） | 低优先：Go 无测试执行需求；如对齐可加 `pkg/cli/test.go` |
 | 4 | `init` 交互 prompt（`init.rs` 有交互，Go `Force` 是空壳 flag） | 低优先：Go 全自动无 prompt 是刻意选择 |
 | 5 | 日志可见性（§3-5） | 中优先：`env_logger` 式的 `--verbose` 输出对调试 harness 差异有用 |

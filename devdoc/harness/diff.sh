@@ -32,7 +32,7 @@ SKIP=(
 
 # Front-end fork (Writer 观感, 2026-08-09): 模板与前端有意与 Rust 端分叉
 # —— writer.css 替代 github-markdown/hljs 主题、新增右侧大纲栏
-# （outline-rail.js + rail-zone 标记）、book.js 删掉样式表切换。
+# （outline-rail.js + rail-zone 标记）、index.js 删掉样式表切换。
 # 所有 fixture 的 html 输出因此都不再逐字节可比，逐字节 diff 失去意义；
 # 内容级回归由 `go test ./...` 的 markdown golden tests 承担。
 # 恢复逐字节比较：MDBOOK_NO_FRONTEND_DIFF=0 ./harness/diff.sh

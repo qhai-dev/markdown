@@ -23,8 +23,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewWatchCommand implements the `devdoc watch` subcommand.
-func NewWatchCommand() *cobra.Command {
+// newWatchCommand implements the `devdoc watch` subcommand.
+func newWatchCommand() *cobra.Command {
 	var dir, dest string
 
 	cmd := &cobra.Command{

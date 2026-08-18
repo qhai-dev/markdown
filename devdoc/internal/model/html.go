@@ -48,7 +48,6 @@ func DefaultHTML() *HtmlConfig {
 		Fold:             Fold{},
 		Code:             Code{HideLines: map[string]string{}},
 		NoSectionLabel:   false,
-		Redirect:         map[string]string{},
 		HashFiles:        true,
 	}
 }

@@ -14,7 +14,7 @@ close.
 ## Front-end fork vs. historical baseline
 
 All fixtures use Go-only front-end assets shipped under
-`internal/static/`. These replace the historical CSS/JS theme stack
+`internal/frontend/`. These replace the historical CSS/JS theme stack
 (fontAwesome / github-markdown-css / etc.). When generated outputs are
 re-captured by running `devdoc build`, the `book/` is byte-stable
 for the new stack.

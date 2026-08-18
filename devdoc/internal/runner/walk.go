@@ -36,6 +36,18 @@ func walkSourceDir(srcDir string) ([]*model.Chapter, error) {
 	return children, nil
 }
 
+// normalizeNewlines replaces every CRLF with LF so byte-level checks (the
+// `---` front-matter delimiter, line counts in includes) work uniformly on
+// files edited on either Unix or Windows. The body and YAML payload stay
+// byte-identical except for the dropped CRs, which neither goldmark nor
+// yaml-v3 care about.
+func normalizeNewlines(b []byte) []byte {
+	if !bytes.Contains(b, []byte("\r\n")) {
+		return b
+	}
+	return bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n"))
+}
+
 // walkDir reads srcDir and returns a sorted slice of Chapters — one for
 // each .md file, plus one container-Chapter for each non-empty
 // subdirectory. dirRel is the path relative to the source root, used
@@ -43,7 +55,7 @@ func walkSourceDir(srcDir string) ([]*model.Chapter, error) {
 func walkDir(srcDir, dirRel string) ([]*model.Chapter, error) {
 	entries, err := os.ReadDir(srcDir)
 	if err != nil {
-		return nil, fmt.Errorf("walk %s: %w", srcDir, err)
+		return nil, err
 	}
 	type entry struct {
 		chapter  *model.Chapter
@@ -79,8 +91,9 @@ func walkDir(srcDir, dirRel string) ([]*model.Chapter, error) {
 		}
 		data, err := os.ReadFile(full)
 		if err != nil {
-			return nil, fmt.Errorf("read %s: %w", full, err)
+			return nil, err
 		}
+		data = normalizeNewlines(data)
 		fm, body, err := parseFrontMatter(data)
 		if err != nil {
 			return nil, fmt.Errorf("%s: %w", childRel, err)

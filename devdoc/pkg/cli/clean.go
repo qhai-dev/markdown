@@ -11,10 +11,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewCleanCommand implements the `devdoc clean` subcommand: remove the
+// newCleanCommand implements the `devdoc clean` subcommand: remove the
 // book's build directory. It mirrors src/cmd/clean.rs, which is also a
 // single file holding both the command and the Clean summary type.
-func NewCleanCommand() *cobra.Command {
+func newCleanCommand() *cobra.Command {
 	var dir, dest string
 
 	cmd := &cobra.Command{

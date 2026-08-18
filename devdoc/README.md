@@ -28,7 +28,7 @@ mdbook-go/
 │   ├── model/         book model + config (devdoc.yaml loading, html config)
 │   ├── runner/        MDBook orchestrator: loader, build, init + builtin
 │   │                  preprocessors (links/index/cmd) + preprocessor registry
-│   ├── static/        go:embed default frontend assets (原 theme)
+│   ├── frontend/      go:embed default frontend assets: assets/ (CSS+JS) + index.html (原 theme，2026-08-18 由 static/ 改名)
 │   ├── hbs/           Handlebars subset engine (standalone whitespace, helpers)
 │   ├── html/          goldmark → mdBook node tree → HTML serialization
 │   ├── html_template/ static asset hashing + {{ resource }} rewrite, theme engine

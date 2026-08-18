@@ -17,7 +17,7 @@ endif
 BINARY  := devdoc$(EXE_EXT)
 OUT     := bin
 PKG     := github.com/qhai-dev/devdoc/cmd/devdoc
-VER_PKG := github.com/qhai-dev/devdoc/pkg/cmd/version
+VER_PKG := github.com/qhai-dev/devdoc/pkg/cli/version
 
 VERSION ?= 0.1.0
 BOOK    ?= tests/basic

@@ -6,9 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// NewInitCommand implements the `devdoc init` subcommand: create a
+// newInitCommand implements the `devdoc init` subcommand: create a
 // new book skeleton. It mirrors src/cmd/init.rs.
-func NewInitCommand() *cobra.Command {
+func newInitCommand() *cobra.Command {
 	var dir string
 	var title string
 

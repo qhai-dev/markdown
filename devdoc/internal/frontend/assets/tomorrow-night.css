@@ -12,7 +12,7 @@
  *   </code></pre>
  * Nothing here touches the sidebar / menu / search / fonts / theme colors.
  *
- * Toggled by theme/js/book.js set_theme():
+ * Toggled by theme/js/index.js set_theme():
  *   coal / navy           → ENABLED
  *   light / rust / default → disabled (highlight.css is on)
  *   ayu                   → disabled (ayu-highlight.css is on)
