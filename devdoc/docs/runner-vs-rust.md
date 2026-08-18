@@ -76,10 +76,12 @@ HTML renderer，`build.go:35` 直接 `m.BuildDir()`，无 per-backend 子目录�
 | `.gitignore` | 生成（`create_gitignore`，内容 `book/`） | **不生成**（2026-08-09 起删除，`--ignore` flag 同步移除） |
 | 配置文件 | `book.toml` | `devdoc.yaml`（含 `create-missing: true` 显式写出；目录树写 `[chapters]` 段，**不再生成 `SUMMARY.md`**） |
 
-两边 init 产物对不上是**预期偏离**，fixtures 双文件（`book.toml` + `devdoc.yaml`）
-保持 harness 双腿一致——`SUMMARY.md` 同理保留，仅供 Rust 参考腿读取，Go 侧
-只读 `devdoc.yaml` 的 `[chapters]`；`tests/ts-config-empty/` 则显式声明
-`root: src` / `build-dir: book` 以保住 Rust 默认语义的用例。
+两边 init 产物对不上是**预期偏离**。`harness/diff.sh` 双腿对比
+（Rust `mdbook` vs Go `devdoc`）因前端分叉（见 §3-1）和 Rust 源码
+于 2026-08-16 移除而事实上不再运行；fixtures 现仅保留 `devdoc.yaml`，
+不再保留 `book.toml` / `SUMMARY.md` 双文件。`tests/ts-config-empty/`
+显式声明 `root: src` / `build-dir: book` 是为了保留 Rust 默认语义的
+回归用例，不依赖 Rust 端实际存在。
 
 ### 3-4. 已删部分（2026-08-09 及更早）
 

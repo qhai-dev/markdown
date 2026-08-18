@@ -15,10 +15,8 @@ minimal: one book chapter plus an `examples/` directory registered via
 ```
 serve/
 ├── README.md
-├── book.toml          # Rust-side config (harness); kept in sync with devdoc.yaml
 ├── devdoc.yaml
 ├── src/
-│   ├── SUMMARY.md      # 仅供 harness 的 Rust 参考腿；Go 侧读 devdoc.yaml [chapters]
 │   └── intro.md
 └── examples/
     └── snippet.md

@@ -10,7 +10,6 @@ a long-running build.
 ```
 cli/
 ├── README.md          # this file
-├── book.toml          # Rust-side config (harness); kept in sync with devdoc.yaml
 ├── devdoc.yaml       # minimal valid book config (used by clean/build)
 ├── docs/
 │   └── intro.md       # chapter file; the table of contents lives in devdoc.yaml [chapters]
