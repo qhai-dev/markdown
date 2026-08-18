@@ -11,7 +11,7 @@ import (
 var Version = "0.1.0"
 
 func GetVersion() string {
-	return "devdoc version " + Version + " " + runtime.GOOS + "/" + runtime.GOARCH
+	return "devdoc version" + " " + Version + " " + runtime.GOOS + "/" + runtime.GOARCH
 }
 
 func NewVersionCommand() *cobra.Command {
