@@ -1,0 +1,232 @@
+/* =========================================================================
+ * tailwind-replaced.css
+ *
+ * Plain-CSS rewrite of the Tailwind utility classes used in the
+ * ChatGPT-style prompt popover / nav-rail snippet in intro.html.
+ *
+ * Values mirror ChatGPT's Tailwind v4 build (style.css): utility classes
+ * that are present in style.css use the same selectors and CSS-variable
+ * references so the visual output matches.
+ *
+ * Drop this in place of the @tailwindcss/browser@4 script. Original
+ * class names are preserved so the HTML does not need to change.
+ *
+ * Naming conventions:
+ *   - `inset-e-*` uses logical `inset-inline-end` (right in LTR, left in RTL).
+ *   - Sizes use `calc(var(--spacing) * N)` so a single spacing token
+ *     drives the whole scale (Tailwind v4 default: 0.25rem).
+ *   - `not-motion-reduce:*` arbitrary variants live inside
+ *     `@media (prefers-reduced-motion: no-preference)`.
+ *   - `[&:has([data-marquee-text])]:*` arbitrary variants become plain
+ *     `:has()` selectors on `.truncate`.
+ * ========================================================================= */
+
+/* ---- Spacing & color tokens (light defaults; .dark overrides below) ---- */
+:root {
+    /* Tailwind v4 default — kept here so utilities can reference it. */
+    --spacing: 0.25rem;
+
+    /* ChatGPT palette (light mode). Dark values are flipped under .dark. */
+    --text-primary: var(--gray-950, #0d0d0d);
+    --text-secondary: #5d5d5d;
+    --text-tertiary: #8f8f8f;
+    --main-surface-primary: var(--gray-25, #fcfcfc);
+    --menu-item-highlighted: #0000000a;
+    --menu-item-height: calc(var(--spacing) * 9);
+
+    --text-sm: 0.875rem;
+    --radius-2xl: 1rem;
+}
+
+.dark {
+    --text-primary: #ffffff;
+    --text-secondary: #cdcdcd;
+    --text-tertiary: #5d5d5d;
+    --main-surface-primary: #000000;
+}
+
+/* ---- Positioning ------------------------------------------------------- */
+.fixed { position: fixed; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+
+.inset-e-4 { inset-inline-end: calc(var(--spacing) * 4); }
+.inset-e-0 { inset-inline-end: 0; }
+
+.top-1\/2 { top: 50%; }
+
+/* In Tailwind v4 the translate utility sets --tw-translate-x/y and uses
+   the `translate` property. We mirror that so transforms compose. */
+.-translate-y-1\/2 {
+    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+.translate-x-0 {
+    --tw-translate-x: 0;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-50 { z-index: 50; }
+
+/* ---- Flexbox ----------------------------------------------------------- */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.gap-2 { gap: calc(var(--spacing) * 2); }
+/*.gap-2.5 { gap: calc(var(--spacing) * 2.5); }*/
+.grow { flex-grow: 1; }
+.shrink-0 { flex-shrink: 0; }
+.w-full { width: 100%; }
+
+/* ---- Sizing ------------------------------------------------------------ */
+.w-9 { width: calc(var(--spacing) * 9); }
+.w-4\.5 { width: calc(var(--spacing) * 4.5); }
+.h-0\.5 { height: calc(var(--spacing) * 0.5); }
+
+.min-w-0 { min-width: 0; }
+.min-w-60 { min-width: calc(var(--spacing) * 60); }
+
+.max-w-xs { max-width: 20rem; }
+.max-w-85 { max-width: calc(var(--spacing) * 85); }
+.max-h-\[50lvh\] { max-height: 50lvh; }
+
+/* ---- Overflow --------------------------------------------------------- */
+.overflow-clip { overflow: clip; }
+.overflow-y-auto { overflow-y: auto; }
+
+/* ---- Borders ---------------------------------------------------------- */
+.rounded-full { border-radius: 3.40282e38px; }
+.rounded-2xl { border-radius: var(--radius-2xl); }
+
+/* ---- Padding ---------------------------------------------------------- */
+.py-1 { padding-block: calc(var(--spacing) * 1); }
+.py-1\.5 { padding-block: calc(var(--spacing) * 1.5); }
+
+/* ---- Backgrounds (token-driven) --------------------------------------- */
+.bg-token-text-primary { background-color: var(--text-primary); }
+.bg-token-text-secondary { background-color: var(--text-secondary); }
+.bg-token-text-tertiary { background-color: var(--text-tertiary); }
+.bg-token-text-tertiary\/60 {
+    background-color: var(--text-tertiary);
+    opacity: 0.6;
+}
+/* ChatGPT's build prefers color-mix where supported; fall back to opacity. */
+@supports (color: color-mix(in oklab, red, red)) {
+    .bg-token-text-tertiary\/60 {
+        background-color: color-mix(in oklab, var(--text-tertiary) 60%, transparent);
+        opacity: 1;
+    }
+}
+.bg-token-main-surface-primary { background-color: var(--main-surface-primary); }
+
+.hover\:bg-token-text-secondary:hover { background-color: var(--text-secondary); }
+
+/* Tailwind dark: variant: only applies when an ancestor has .dark. */
+.dark .dark\:bg-\[#353535\] { background-color: #353535; }
+
+/* ---- Shadow (mirrors .shadow-long from style.css) --------------------- */
+.shadow-long {
+    --tw-shadow:
+        0px 8px 12px 0px var(--tw-shadow-color, #00000014),
+        0px 0px 1px 0px var(--tw-shadow-color, #0000009e);
+    box-shadow:
+        var(--tw-inset-shadow, 0 0 transparent),
+        var(--tw-inset-ring-shadow, 0 0 transparent),
+        var(--tw-ring-offset-shadow, 0 0 transparent),
+        var(--tw-ring-shadow, 0 0 transparent),
+        var(--tw-shadow);
+}
+
+/* ---- Transitions ------------------------------------------------------ */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: var(--default-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--default-transition-duration, 150ms);
+}
+
+.transition-\[opacity\,translate\] {
+    transition-property: opacity, translate;
+    transition-timing-function: var(--default-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--default-transition-duration, 150ms);
+}
+
+.duration-\[160ms\] { transition-duration: 160ms; }
+.ease-\[cubic-bezier\(0\.33\,1\,0\.68\,1\)\] {
+    transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* not-motion-reduce: only apply motion-related styles when the user has
+   NOT requested reduced motion (inverse of `motion-reduce:`). */
+@media (prefers-reduced-motion: no-preference) {
+    .not-motion-reduce\:transition-\[opacity\,translate\] {
+        transition-property: opacity, translate;
+    }
+    .not-motion-reduce\:duration-\[160ms\] {
+        transition-duration: 160ms;
+    }
+    .not-motion-reduce\:ease-\[cubic-bezier\(0\.33\,1\,0\.68\,1\)\] {
+        transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    .not-motion-reduce\:translate-x-0 {
+        --tw-translate-x: 0;
+        translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+}
+
+/* ---- Misc utilities ---------------------------------------------------- */
+.opacity-100 { opacity: 1; }
+.select-none {
+    -webkit-user-select: none;
+    user-select: none;
+}
+.text-start { text-align: start; }
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Tailwind's [&:has(...)]:* arbitrary variants become plain :has(). */
+.truncate:has([data-marquee-text]) {
+    min-width: 0;
+    flex: 1;
+    overflow: visible;
+}
+
+/* ---- Custom semantic classes used in the snippet ---------------------- */
+/* .group is a Tailwind marker (no own styles), but children react to it. */
+.hoverable {
+    transition: background-color 120ms ease-out;
+}
+.hoverable:not([data-active]):hover {
+    background-color: var(--menu-item-highlighted);
+}
+
+.__menu-item {
+    min-height: var(--menu-item-height);
+    width: auto;
+    scroll-margin: calc(var(--spacing) * 1.5);
+    padding-inline: calc(var(--spacing) * 2.5);
+    padding-block: calc(var(--spacing) * 1.5);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height, 1.25);
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+* {
+    margin: 0;
+}
+/* .popover in dark mode swaps to the dark surface palette (same trick as
+    ChatGPT's `.popover,.dark.popover` rule). */
+/*.popover,*/
+/*.dark .popover {*/
+    /*--main-surface-primary: var(--gray-750, #1f1f1f);*/
+    /*--main-surface-secondary: var(--gray-700, #2a2a2a);*/
+    /*--main-surface-tertiary: var(--gray-600, #3a3a3a);*/
+/*}*/

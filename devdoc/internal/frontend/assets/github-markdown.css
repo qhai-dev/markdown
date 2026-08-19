@@ -1245,3 +1245,8 @@
 .markdown-body .highlight pre:has(+.zeroclipboard-container) {
   min-height: 52px;
 }
+
+[data-a11y-link-underlines=true] .markdown-body :is(h1,h2,h3,h4,h5,h6,.tasklist-issue-content) a,
+[data-a11y-link-underlines=true] .markdown-body :is(h1,h2,h3,h4,h5,h6) a:hover {
+  text-decoration: none;
+}

@@ -89,23 +89,23 @@ dt:target::before {
     background-color: var(--bg);
 }
 html:not(.js) .page-wrapper,
-.js:not(.sidebar-resizing) .page-wrapper {
+.js .page-wrapper {
     transition: margin-left 0.3s ease, transform 0.3s ease; /* Animation: slide away */
 }
 [dir=rtl]:not(.js) .page-wrapper,
-[dir=rtl].js:not(.sidebar-resizing) .page-wrapper {
+[dir=rtl].js .page-wrapper {
     transition: margin-right 0.3s ease, transform 0.3s ease; /* Animation: slide away */
 }
 
-.content {
+/*.content {
     overflow-y: auto;
     padding: 0 5px 50px 5px;
-}
-.content main {
+}*/
+/*.content main {
     margin-inline-start: auto;
     margin-inline-end: auto;
     max-width: var(--content-max-width);
-}
+}*/
 .content p { line-height: 1.45em; }
 .content ol { line-height: 1.45em; }
 .content ul { line-height: 1.45em; }

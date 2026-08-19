@@ -246,10 +246,6 @@ pre > .buttons button.clip-button:hover::before {
         /* On mobile, make it easier to tap buttons. */
         padding: 0.3rem 1rem;
     }
-    .sidebar-resize-indicator {
-        /* Hide resize indicator on devices with limited accuracy */
-        display: none;
-    }
 }
 pre > code {
     display: block;
@@ -412,15 +408,6 @@ ul#mdbook-searchresults span.teaser em {
     color: var(--sidebar-fg);
 }
 [dir=rtl] .sidebar { left: unset; right: 0; }
-.sidebar-resizing {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-html:not(.sidebar-resizing) .sidebar {
-    transition: transform 0.3s; /* Animation: slide away */
-}
 .sidebar code {
     line-height: 2em;
 }
@@ -433,45 +420,13 @@ html:not(.sidebar-resizing) .sidebar {
     right: 0;
     padding: 10px 10px;
 }
-.sidebar .sidebar-resize-handle {
-    position: absolute;
-    cursor: col-resize;
-    width: 0;
-    right: calc(var(--sidebar-resize-indicator-width) * -1);
-    top: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar-resize-handle .sidebar-resize-indicator {
-    width: 100%;
-    height: 16px;
-    color: var(--icons);
-    margin-inline-start: var(--sidebar-resize-indicator-space);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-[dir=rtl] .sidebar .sidebar-resize-handle {
-    left: calc(var(--sidebar-resize-indicator-width) * -1);
-    right: unset;
-}
-.js .sidebar .sidebar-resize-handle {
-    cursor: col-resize;
-    width: calc(var(--sidebar-resize-indicator-width) - var(--sidebar-resize-indicator-space));
-}
-
-html:not(.js) .sidebar-resize-handle {
-    display: none;
-}
 
 /* sidebar-hidden */
 #mdbook-sidebar-toggle-anchor:not(:checked) ~ .sidebar {
-    transform: translateX(calc(0px - var(--sidebar-width) - var(--sidebar-resize-indicator-width)));
+    transform: translateX(calc(0px - var(--sidebar-width)));
 }
 [dir=rtl] #mdbook-sidebar-toggle-anchor:not(:checked) ~ .sidebar {
-    transform: translateX(calc(var(--sidebar-width) + var(--sidebar-resize-indicator-width)));
+    transform: translateX(var(--sidebar-width));
 }
 .sidebar::-webkit-scrollbar {
     background: var(--sidebar-bg);
@@ -482,15 +437,15 @@ html:not(.js) .sidebar-resize-handle {
 
 /* sidebar-visible */
 #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
-    transform: translateX(calc(var(--sidebar-width) + var(--sidebar-resize-indicator-width)));
+    transform: translateX(var(--sidebar-width));
 }
 [dir=rtl] #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
-    transform: translateX(calc(0px - var(--sidebar-width) - var(--sidebar-resize-indicator-width)));
+    transform: translateX(calc(0px - var(--sidebar-width)));
 }
 @media only screen and (min-width: 620px) {
     #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
         transform: none;
-        margin-inline-start: calc(var(--sidebar-width) + var(--sidebar-resize-indicator-width));
+        margin-inline-start: var(--sidebar-width);
     }
     [dir=rtl] #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
         transform: none;

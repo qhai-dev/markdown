@@ -13,7 +13,7 @@
 > iframe 兜底"被删 —— `SidebarHeaderNavSource` IIFE、`toc.html` 模板、
 > `Env.SidebarHeaderNav*` 字段、`index.html` 的 `<noscript><iframe>` 块。
 > 仍然保留：`renderTocSidebar`、`Env.TocHTML`、`buildTocJS`、
-> `MDBookSidebarScrollbox`、`<nav id="mdbook-sidebar">` 容器 + JS 注入
+> `SidebarScrollbox`、`<nav id="mdbook-sidebar">` 容器 + JS 注入
 > 章节列表、`chapterSummaries`、`[output.html].fold.*` / `no-section-label` 配置。
 > 见 `/Users/qhai-dev/.claude/plans/quirky-hopping-koala.md`。
 >
@@ -47,7 +47,7 @@
 | `render_print_page` | — | print 功能已删 |
 | 模板注册（index） | `render/render.go:156` `newRegistry` + `tplgotpl.LoadProduction` | handlebars.register_template_string → tplgotpl（redirect/head/header/toc_html 已删） |
 | `register_hbs_helpers` | tplgotpl 的 Env 方法（TocHTML + Resource 等）；fa helper 已删 | |
-| render "toc_js" 模板 | `render/render.go:182` `buildTocJS` + 3 个 JS 常量（含 `MDBookSidebarScrollbox` 注入章节列表 sidebar） | Rust 里是 theme/toc.hbs 模板，Go 硬编码。SidebarHeaderNavSource 已删（只保留章节列表 splice） |
+| render "toc_js" 模板 | `render/render.go:182` `buildTocJS` + 3 个 JS 常量（含 `SidebarScrollbox` 注入章节列表 sidebar） | Rust 里是 theme/toc.hbs 模板，Go 硬编码。SidebarHeaderNavSource 已删（只保留章节列表 splice） |
 | `make_data` | `render/data.go:85` `makeData`；另 `config/html.go:172` `GitRepositoryIconClass` | Go 另有 RenderData/BuildRenderData（类型化层，Go 独有） |
 | `RenderChapterContext` | `render/render.go:27` `Context` + `renderChapter` 参数 | |
 

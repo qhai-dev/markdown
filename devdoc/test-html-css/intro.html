@@ -24,8 +24,9 @@
             rel="stylesheet"
             href="../examples/basic/.doc/css/github-markdown-98f20c97.css"
         />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <link rel="stylesheet" href="./style.css" />
+        <!-- Tailwind CDN replaced by a hand-written utility-CSS file. -->
+        <link rel="stylesheet" href="./tailwind-replaced.css" />
+        <!--<link rel="stylesheet" href="./style.css" />-->
 
         <script>
             const path_to_root = "";
@@ -126,16 +127,10 @@
                 <mdbook-sidebar-scrollbox
                     class="sidebar-scrollbox"
                 ></mdbook-sidebar-scrollbox>
-                <div
-                    id="mdbook-sidebar-resize-handle"
-                    class="sidebar-resize-handle"
-                >
-                    <div class="sidebar-resize-indicator"></div>
-                </div>
             </nav>
             <div id="mdbook-page-wrapper" class="page-wrapper">
                 <div class="page">
-                    <div id="mdbook-menu-bar-hover-placeholder"></div>
+                    <!--<div id="mdbook-menu-bar-hover-placeholder"></div>-->
                     <div id="mdbook-menu-bar" class="menu-bar sticky">
                         <div class="left-buttons">
                             <label
@@ -225,9 +220,7 @@
                     <div class="fixed inset-e-4 top-1/2 z-20 -translate-y-1/2">
                         <div class="relative flex items-start">
                             <div class="max-h-[50lvh] w-9 overflow-clip">
-                                <div
-                                    class="flex flex-col items-center gap-2 py-1"
-                                >
+                                <div class="flex flex-col items-center gap-2 py-1">
                                     <button
                                         type="button"
                                         class="h-0.5 w-4.5 shrink-0 rounded-full transition-all bg-token-text-primary"
@@ -243,14 +236,11 @@
                                 </div>
                             </div>
 
-                            <div
+                            <!--<div
                                 aria-hidden="false"
                                 class="z-50 max-w-xs rounded-2xl popover bg-token-main-surface-primary dark:bg-[#353535] shadow-long py-1.5 select-none absolute top-1/2 z-10 max-w-85 min-w-60 -translate-y-1/2 not-motion-reduce:transition-[opacity,translate] not-motion-reduce:duration-[160ms] not-motion-reduce:ease-[cubic-bezier(0.33,1,0.68,1)] opacity-100 not-motion-reduce:translate-x-0 inset-e-0"
                             >
-                                <ul
-                                    class="flex max-h-[50lvh] flex-col overflow-y-auto"
-                                    style="max-height: 455px"
-                                >
+                                <ul class="flex max-h-[50lvh] flex-col overflow-y-auto" style="max-height: 455px">
                                     <li>
                                         <button
                                             tabindex="0"
@@ -446,7 +436,7 @@
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
 

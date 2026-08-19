@@ -211,7 +211,7 @@ const tocJSPrefix = `// Populate the sidebar
 // This is a script, and not included directly in the page, to control the total size of the book.
 // The TOC contains an entry for each page, so if each page includes a copy of the TOC,
 // the total size of the page becomes O(n**2).
-class MDBookSidebarScrollbox extends HTMLElement {
+class SidebarScrollbox extends HTMLElement {
     constructor() {
         super();
     }
@@ -285,7 +285,7 @@ const tocJSAfterClass = `
         });
     }
 }
-window.customElements.define('mdbook-sidebar-scrollbox', MDBookSidebarScrollbox);`
+window.customElements.define('mdbook-sidebar-scrollbox', SidebarScrollbox);`
 
 // escapeForJSSingleQuoted escapes s for use inside a JS single-quoted string
 // literal. We need to escape `\` and `'` and replace newlines with `\n` (so
