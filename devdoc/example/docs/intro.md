@@ -29,7 +29,7 @@ annotations in your service definitions.
 This helps you provide your APIs in both gRPC and RESTful style at the same time.
 
 <div align="center">
-<img src="docs/assets/images/architecture_introduction_diagram.svg" />
+<img src="assets/images/architecture_introduction_diagram.svg" />
 </div>
 
 ## Docs

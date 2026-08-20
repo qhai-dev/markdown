@@ -390,11 +390,6 @@ func render404(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 	}
 
 	data := cloneData(base)
-	baseURL := "/"
-	if cfg.SiteURL != "" {
-		baseURL = cfg.SiteURL
-	}
-	data["base_url"] = baseURL
 	data["path"] = "404.md"
 	data["content"] = template.HTML(content)
 	if ctx.Config.Package.Title != "" {
@@ -427,9 +422,6 @@ func addSearchFiles(files *Files, cfg model.Search, trees []*chapterTree) error 
 			return err
 		}
 		files.AddBuiltin("searchindex.js", []byte(index))
-		files.AddBuiltin("searcher.js", SearcherJS)
-		files.AddBuiltin("mark.min.js", MarkJS)
-		files.AddBuiltin("elasticlunr.min.js", ElasticlunrJS)
 	}
 	return nil
 }

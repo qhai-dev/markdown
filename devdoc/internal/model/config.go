@@ -134,7 +134,7 @@ func New() *Config {
 			Root: "docs",
 		},
 		Build: BuildConfig{
-			BuildDir:                ".doc",
+			BuildDir:                ".devdoc",
 			CreateMissing:           true,
 			UseDefaultPreprocessors: true,
 		},

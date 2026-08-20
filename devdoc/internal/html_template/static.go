@@ -64,13 +64,6 @@ func NewStaticFiles(t *Theme, cfg *model.HtmlConfig, root string) (*Files, error
 	f.AddBuiltin("css/variables.css", t.VariablesCSS)
 	f.AddBuiltin("css/github-markdown.css", t.MarkdownCSS)
 	f.AddBuiltin("highlight.css", t.HighlightCSS)
-	f.AddBuiltin("tomorrow-night.css", t.TomorrowNightCSS)
-	f.AddBuiltin("ayu-highlight.css", t.AyuHighlightCSS)
-	f.AddBuiltin("highlight.min.js", t.HighlightJS)
-	f.AddBuiltin("clipboard.min.js", t.ClipboardJS)
-	// Go-only front-end fork (no Rust counterpart): right-hand heading rail
-	// driven by outline-rail.js.
-	f.AddBuiltin("outline-rail.js", t.OutlineRailJS)
 
 	for _, custom := range append(append([]string{}, cfg.AdditionalCSS...), cfg.AdditionalJS...) {
 		f.addAdditional(custom, filepath.Join(root, filepath.FromSlash(custom)))

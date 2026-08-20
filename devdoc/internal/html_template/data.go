@@ -84,6 +84,14 @@ func makeData(ctx *Context, cfg *model.HtmlConfig, th *Theme) map[string]any {
 	}
 	data["default_theme"] = cfg.DefaultThemeName()
 	data["preferred_dark_theme"] = cfg.PreferredDarkThemeName()
+
+	// site-url / base-url: lets the book deploy under a non-root prefix
+	// (e.g. https://example.com/docs/v1/). Default is "/".
+	data["base_url"] = "/"
+	if cfg.SiteURL != "" {
+		data["base_url"] = cfg.SiteURL
+	}
+
 	if cfg.MathJaxSupport {
 		data["mathjax_support"] = true
 	}

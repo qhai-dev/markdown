@@ -19,23 +19,12 @@ type Theme struct {
 
 	JS               []byte
 	HighlightCSS     []byte
-	TomorrowNightCSS []byte
-	AyuHighlightCSS  []byte
-	HighlightJS      []byte
-	ClipboardJS      []byte
-
-	// OutlineRailJS drives the right-hand heading rail. It has no Rust
-	// counterpart (see test-html-css/index.html for the reference demo).
-	OutlineRailJS []byte
 }
 
 // Bundled front-end static.
-var (
-	// SearcherJS, MarkJS and ElasticlunrJS back the search UI.
-	SearcherJS    = frontend.MustRead("assets/searcher.js")
-	MarkJS        = frontend.MustRead("assets/mark.min.js")
-	ElasticlunrJS = frontend.MustRead("assets/elasticlunr.min.js")
-)
+//
+// elasticlunr, mark.js and highlight.js are loaded from a CDN by
+// templates/index.html; they are no longer bundled here.
 
 // Default returns the embedded theme with no user overrides applied.
 func Default() *Theme {
@@ -46,11 +35,6 @@ func Default() *Theme {
 		MarkdownCSS:            frontend.MustRead("assets/github-markdown.css"),
 		JS:                     frontend.MustRead("assets/index.js"),
 		HighlightCSS:           frontend.MustRead("assets/highlight.css"),
-		TomorrowNightCSS:       frontend.MustRead("assets/tomorrow-night.css"),
-		AyuHighlightCSS:        frontend.MustRead("assets/ayu-highlight.css"),
-		HighlightJS:            frontend.MustRead("assets/highlight.min.js"),
-		ClipboardJS:            frontend.MustRead("assets/clipboard.min.js"),
-		OutlineRailJS:          frontend.MustRead("assets/outline-rail.js"),
 	}
 }
 
@@ -78,12 +62,7 @@ func NewTheme(themeDir string) *Theme {
 		{"css/general.css", &t.GeneralCSS},
 		{"css/variables.css", &t.VariablesCSS},
 		{"css/github-markdown.css", &t.MarkdownCSS},
-		{"highlight.min.js", &t.HighlightJS},
-		{"clipboard.min.js", &t.ClipboardJS},
 		{"highlight.css", &t.HighlightCSS},
-		{"tomorrow-night.css", &t.TomorrowNightCSS},
-		{"ayu-highlight.css", &t.AyuHighlightCSS},
-		{"outline-rail.js", &t.OutlineRailJS},
 	}
 	for _, o := range overrides {
 		loadInto(filepath.Join(themeDir, filepath.FromSlash(o.rel)), o.dest)

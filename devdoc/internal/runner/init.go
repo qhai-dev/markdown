@@ -41,7 +41,7 @@ func Init(root string, opts InitOptions) error {
 		title = "My Book"
 	}
 	devdocYAML := fmt.Sprintf(
-		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .doc\n  create-missing: true\n",
+		"package:\n  title: %q\n  language: en\n  root: docs\n\nbuild:\n  build-dir: .devdoc\n  create-missing: true\n",
 		title,
 	)
 	if err := os.WriteFile(filepath.Join(root, model.ConfigFileName), []byte(devdocYAML), 0o644); err != nil {
