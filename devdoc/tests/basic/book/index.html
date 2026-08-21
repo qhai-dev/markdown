@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Chapter 1 - Basic Fixture</title>
         
-        <base href="/">
+        <base href="%7b0x12b98896b1f0%20en%20Chapter%201%20-%20Basic%20Fixture%20Chapter%201%20Basic%20Fixture%20%20light%20navy%20ltr%20%20true%20/%20true%20true%20false%20%20%3cnil%3e%200x12b988b66e00%20%3ch1%20id=%22generate-github-markdown-css%22%3e%3ca%20class=%22header%22%20href=%22#generate-github-markdown-css%22%3egenerate-github-markdown-css%3c/a%3e%3c/h1%3e%0a%3cblockquote%3e%0a%3cp%3eGenerate%20the%20CSS%20for%20%3ca%20href=%22https://github.com/sindresorhus/github-markdown-css%22%3e%3ccode%3egithub-markdown-css%3c/code%3e%3c/a%3e%3c/p%3e%0a%3c/blockquote%3e%0a%3ch2%20id=%22get-the-css%22%3e%3ca%20class=%22header%22%20href=%22#get-the-css%22%3eGet%20the%20CSS%3c/a%3e%3c/h2%3e%0a%3cp%3eSee%20%3ca%20href=%22https://github.com/sindresorhus/github-markdown-css%22%3e%3ccode%3egithub-markdown-css%3c/code%3e%3c/a%3e%3c/p%3e%0a%3ch2%20id=%22how%22%3e%3ca%20class=%22header%22%20href=%22#how%22%3eHow%3c/a%3e%3c/h2%3e%0a%3cp%3eFirst%20the%20GitHub.com%20CSS%20is%20fetched.%20Then%20we%20walk%20through%20all%20rules%20that%20could%20take%20effect%20in%20Markdown%20content,%20and%20then%20do%20a%20custom%20cleanup.%20A%20%3ca%20href=%22fixture.html%22%3erendered%20Markdown%3c/a%3e%20with%20all%20possible%20syntax%20is%20fetched%20from%20GitHub%20to%20check%20if%20we%e2%80%99ve%20done%20right.%3c/p%3e%0a%3ch2%20id=%22api%22%3e%3ca%20class=%22header%22%20href=%22#api%22%3eAPI%3c/a%3e%3c/h2%3e%0a%3cpre%3e%3ccode%20class=%22language-js%22%3eimport%20githubMarkdownCss%20from%20%27generate-github-markdown-css%27;%0a%0a/*%0aIf%20the%20%60light%60%20and%20%60dark%60%20themes%20are%20different%20the%20CSS%20returned%20will%20include%20%60prefers-color-scheme%60%20blocks%20for%20light%20and%20dark%20that%20match%20the%20specified%20%60light%60%20and%20%60dark%60%20themes%20%28considered%20%22auto%22%20mode%29.%20This%20mode%20will%20always%20%60preserveVars%60%20as%20they%20are%20necessary%20for%20the%20%60prefers-color-scheme%60%20blocks%0a%0aIf%20the%20%60light%60%20and%20%60dark%60%20themes%20are%20equal%20the%20output%20will%20only%20contain%20one%20theme%20%28considered%20%22single%22%20mode%29%0a%0aIn%20%22single%22%20mode%20the%20output%20will%20apply%20the%20values%20of%20all%20variables%20to%20the%20rules%20themselves.The%20output%20will%20not%20contain%20any%20%60var%28--variable%29%60%20statements.%20You%20can%20disable%20this%20by%20setting%20%60preserveVariables%60%20to%20true%0a*/%0a%0aconsole.log%28await%20githubMarkdownCss%28%7b%0a%09%09//%20The%20theme%20to%20use%20for%20light%20theme.%0a%09%09light:%20%27light%27,%0a%09%09//%20The%20theme%20to%20use%20for%20dark%20theme.%0a%09%09dark:%20%27dark%27,%0a%09%09//%20If%20%60true%60,%20will%20return%20a%20list%20of%20available%20themes%20instead%20of%20the%20CSS.%0a%09%09list:%20false,%0a%09%09//%20If%20%60true%60,%20will%20preserve%20the%20block%20of%20variables%20for%20a%20given%20theme%20even%20if%0a%09%09//%20only%20exporting%20one%20theme.%20By%20default,%20variables%20are%20applied%20to%20the%20rules%0a%09%09//%20themselves%20and%20the%20resulting%20CSS%20will%20not%20contain%20any%20%60var%28--variable%29%60.%0a%09%09preserveVariables:%20false,%0a%09%09//%20Only%20output%20the%20color%20variables%20part%20of%20the%20CSS.%20Forces%0a%09%09//%20%60preserveVariables%60%20to%20be%20%60true%60.%0a%09%09onlyVariables:%20false,%0a%09%09//%20Only%20output%20the%20style%20part%20of%20the%20CSS%20without%20any%20variables.%20Forces%0a%09%09//%20%60preserveVariables%60%20to%20be%20%60true%60%20and%20ignores%20the%20theme%20values.%0a%09%09//%20Useful%20to%20get%20the%20base%20styles%20to%20use%20multiple%20themes.%0a%09%09onlyStyles:%20false,%0a%09%09//%20Include%20extra%20styles%20from%20GitHub%20Flavored%20Markdown,%20like%20code%20snippets.%0a%09%09useFixture:%20true,%0a%09%09//%20Set%20the%20root%20selector%20of%20the%20rendered%20Markdown%20body%20as%20it%20should%20appear%0a%09%09//%20in%20the%20output%20CSS.%20Defaults%20to%20%60.markdown-body%60.%0a%09%09rootSelector:%20%27.markdown-body%27,%0a%09%09//%20Make%20the%20background%20transparent%20instead%20of%20white/black.%20Useful%20when%0a%09%09//%20embedding%20the%20Markdown%20content%20in%20a%20page%20with%20a%20custom%20background.%0a%09%09transparentBackground:%20false,%0a%09%7d%0a%29%29;%0a//=&amp;gt;%20%27.markdown-body%20%7b%20%e2%80%a6%27%0a%3c/code%3e%3c/pre%3e%0a%3ch2%20id=%22cli%22%3e%3ca%20class=%22header%22%20href=%22#cli%22%3eCLI%3c/a%3e%3c/h2%3e%0a%3cpre%3e%3ccode%20class=%22language-sh%22%3enpm%20install%20--global%20generate-github-markdown-css%0a%3c/code%3e%3c/pre%3e%0a%3cpre%3e%3ccode%3e$%20github-markdown-css%20--help%0a%0a%20%20Usage%0a%20%20%20%20github-markdown-css%20&amp;gt;%20&amp;lt;filename&amp;gt;%0a%0a%20%20Options%0a%20%20%20%20--list%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20List%20available%20themes%0a%0a%20%20%20%20Set%20theme:%0a%20%20%20%20--light%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Light%20theme%20name%20from%20--list%20values%0a%20%20%20%20--dark%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Dark%20theme%20name%20from%20--list%20values%0a%20%20%20%20--theme%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Theme%20name:%20%27auto%27,%20light%27,%20%27dark%27,%20or%20another%20from%20--list%20values.%0a%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%27auto%27%20means%20using%20the%20media%20query%20%28prefers-color-scheme%29%0a%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20to%20switch%20between%20the%20%27light%27%20and%20%27dark%27%20theme.%0a%0a%20%20%20%20Output%20options:%0a%20%20%20%20--preserve-variables%20%20%20%20%20%20%20Preserve%20variables%20in%20the%20output.%20Only%20applies%20if%20light%0a%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20and%20dark%20themes%20match%20or%20if%20type%20is%20not%20%27auto%27%0a%20%20%20%20--only-style%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Only%20output%20the%20styles,%20forces%20--preserve-variables%20on%0a%20%20%20%20--only-variables%20%20%20%20%20%20%20%20%20%20%20Only%20output%20the%20variables%20for%20the%20specified%20themes%0a%20%20%20%20--no-use-fixture%20%20%20%20%20%20%20%20%20%20%20Exclude%20generated%20classes%20that%20come%20from%20GitHub%20Markdown%20API%20rendered%20fixture.md%0a%20%20%20%20--root-selector%20%20%20%20%20%20%20%20%20%20%20%20Specify%20the%20root%20selector%20when%20outputting%20styles,%20default%20%27.markdown-body%27%0a%20%20%20%20--transparent-background%20%20%20Make%20the%20background%20transparent%20instead%20of%20white/black%0a%0a%20%20Examples%0a%20%20%20%20$%20github-markdown-css%20--list%0a%20%20%20%20light%0a%20%20%20%20dark%0a%20%20%20%20dark_dimmed%0a%20%20%20%20dark_high_contrast%0a%20%20%20%20dark_colorblind%0a%20%20%20%20light_colorblind%0a%0a%20%20%20%20$%20github-markdown-css%20--light=light%20--dark=dark%0a%20%20%20%20[CSS%20with%20variable%20blocks%20for%20%27light%27%20and%20%27dark%27%20themes]%0a%0a%20%20%20%20$%20github-markdown-css%20--theme=dark_dimmed%20--only-variables%0a%20%20%20%20[CSS%20with%20single%20variable%20block%20for%20%27dark_dimmed%27%20theme%20with%20no%20element%20styles]%0a%0a%20%20%20%20$%20github-markdown-css%20--only-style%0a%20%20%20%20[CSS%20with%20only%20element%20styles%20using%20variables%20but%20no%20variables%20set.%0a%20%20%20%20%20%20Use%20in%20combination%20with%20output%20from%20setting%20--only-variables]%0a%3c/code%3e%3c/pre%3e%0a%7d">
         
 
         <meta name="description" content="">
@@ -12,11 +12,9 @@
 
         <link rel="stylesheet" href="css/variables-58e33eee.css">
         <link rel="stylesheet" href="css/general-89657a21.css">
-        <link rel="stylesheet" href="css/chrome-0d4ffddd.css">
-        <link rel="stylesheet" href="css/github-markdown-004c593c.css">
+        <link rel="stylesheet" href="css/chrome-44177400.css">
+        <link rel="stylesheet" href="css/github-markdown-83d9ab9a.css">
         <link rel="stylesheet" href="highlight-ff8825f1.css">
-
-        
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
@@ -38,18 +36,6 @@
     <body>
     <div id="mdbook-body-container">
         <script>
-            try {
-                let theme = localStorage.getItem('mdbook-theme');
-                let sidebar = localStorage.getItem('mdbook-sidebar');
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-        <script>
             const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
             let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
@@ -59,20 +45,28 @@
             html.classList.add(theme);
             html.classList.add("js");
         </script>
-        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
-                sidebar_toggle.checked = false;
             }
             if (sidebar === 'visible') {
-                sidebar_toggle.checked = true;
+                document.documentElement.dataset.sidebar = 'visible';
+            } else {
+                delete document.documentElement.dataset.sidebar;
             }
+            document.getElementById('mdbook-sidebar-toggle').addEventListener('click', () => {
+                const next = document.documentElement.dataset.sidebar === 'visible' ? 'hidden' : 'visible';
+                try { localStorage.setItem('mdbook-sidebar', next); } catch(e) { }
+                if (next === 'visible') {
+                    document.documentElement.dataset.sidebar = 'visible';
+                } else {
+                    delete document.documentElement.dataset.sidebar;
+                }
+            });
         </script>
         <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
@@ -82,8 +76,8 @@
                 <div id="mdbook-menu-bar-hover-placeholder"></div>
                 <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
-                        </label>
+                        <button id="mdbook-sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                        </button>
                         <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme">
                         </button>
                         
@@ -92,12 +86,7 @@
                         </button>
                         
                     </div>
-                    <h1 class="menu-title">Basic Fixture</h1>
-                    <div class="right-buttons">
-                        
-                        
-                    </div>
-                </div>
+                                    </div>
                 
                 <div id="mdbook-search-wrapper" class="hidden">
                     <form id="mdbook-searchbar-outer" class="searchbar-outer">
@@ -236,7 +225,6 @@ console.log(await githubMarkdownCss({
 
         <script src="index-4ef60286.js"></script>
 
-        
     </div>
     </body>
 </html>

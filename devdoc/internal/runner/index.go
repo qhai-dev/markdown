@@ -42,8 +42,8 @@ func (p IndexPreprocessor) Run(ctx *plugin.PreprocessorContext, b *model.Book) (
 				filepath.Base(ch.Path), filepath.Dir(ch.Path), filepath.Base(ch.Path))
 		}
 		ch.Path = indexPath
-		// SourcePath intentionally preserved — the edit URL and `git_repository_edit_url`
-		// template need the original README.md filename, not the rewritten index.md.
+		// SourcePath intentionally preserved — the original README.md filename
+		// remains useful for downstream tooling that may inspect it later.
 		return true
 	})
 	return b, nil

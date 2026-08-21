@@ -210,7 +210,7 @@ func NewPollWatcher(bookRoot string) *PollWatcher {
 // SetRoots configures the paths the watcher will poll on each tick.
 // This is called from Watch() once the book has been loaded so the
 // watcher's roots stay in sync with the source dir, theme dir,
-// additional-css/js, devdoc.yaml, and [build] extra-watch-dirs.
+// devdoc.yaml, and [build] extra-watch-dirs.
 //
 // Each root carries an optional Extensions filter so, for example, the
 // source dir can be limited to .md changes only while other roots
@@ -330,13 +330,13 @@ const PollTick = time.Second
 // has one important refinement: the source dir is restricted to `.md`
 // changes only — random non-md files in `docs/` (images, scratch notes,
 // stray binaries) no longer trigger rebuilds. Theme / config /
-// additional-css / additional-js / extra-watch-dirs are all left with
+// extra-watch-dirs are all left with
 // a nil filter and accept every file change.
 //
-// HTML() can fail (e.g. malformed [output.html] table); on error we
-// fall back to an empty additional-css/js list and let the render path
-// surface the error later. The watcher itself doesn't need the config
-// to be perfectly valid — it just needs enough to know what to scan.
+// HTML() can fail (e.g. malformed [output.html] table); we fall back
+// to a minimal root set and let the render path surface the error
+// later. The watcher itself doesn't need the config to be perfectly
+// valid — it just needs enough to know what to scan.
 func CollectWatchRoots(m *runner.MDBook) []WatchRoot {
 	mdOnly := map[string]bool{".md": true}
 	roots := []WatchRoot{
@@ -345,12 +345,6 @@ func CollectWatchRoots(m *runner.MDBook) []WatchRoot {
 	}
 	if htmlCfg, err := m.Config.HTML(); err == nil {
 		roots = append(roots, WatchRoot{Path: htmlCfg.ThemeDir(m.Root)})
-		for _, css := range htmlCfg.AdditionalCSS {
-			roots = append(roots, WatchRoot{Path: filepath.Join(m.Root, css)})
-		}
-		for _, js := range htmlCfg.AdditionalJS {
-			roots = append(roots, WatchRoot{Path: filepath.Join(m.Root, js)})
-		}
 	}
 	for _, dir := range m.Config.Build.ExtraWatchDirs {
 		roots = append(roots, WatchRoot{Path: filepath.Join(m.Root, dir)})

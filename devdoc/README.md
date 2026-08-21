@@ -50,7 +50,7 @@ Verified:
 - `tests/basic` — 40 files byte-identical to the Rust build.
 - `tests/nested` — 48 files byte-identical to the Rust build
   (multi-level nesting, tables, footnotes, admonitions, task lists,
-  `additional-css`, `fold`, draft chapters, part titles, separators,
+  `fold`, draft chapters, part titles, separators,
   prefix / numbered / suffix zones, redirects).
 - `internal/html` golden tests pass against the Rust test suite fixtures.
 

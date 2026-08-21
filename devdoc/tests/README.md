@@ -12,9 +12,9 @@ the `harness/diff.sh` regression script. Two categories exist today.
 | Name | What it covers |
 |---|---|
 | `basic/` | Single-chapter book with intro + two chapter pages, one sectioned page. Canonical smoke fixture. |
-| `nested/` | Four-level nesting via subdirectories (`guide/`, `guide/advanced/`), tables, footnotes, admonitions, redirects, `additional-css`. |
+| `nested/` | Four-level nesting via subdirectories (`guide/`, `guide/advanced/`), tables, footnotes, admonitions, redirects. |
 | `cli/` | Minimal book exercising `init` / `clean` / `build` CLI paths. |
-| `serve/` | Book with `extra_watch_dirs` + `additional-css`. |
+| `serve/` | Book with `extra_watch_dirs`. |
 | `external-plugin/` | Three preprocessor scripts (banner / footer / noisy); matches against an external plugin contract. |
 
 ## Bundled tests (`ts-*`)

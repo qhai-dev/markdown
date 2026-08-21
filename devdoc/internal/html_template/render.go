@@ -306,15 +306,6 @@ func renderChapter(ctx *Context, cfg *model.HtmlConfig, registry *Registry,
 	ch := item.chapter
 	data := cloneData(base)
 
-	if cfg.EditURLTemplate != "" {
-		srcRel, err := filepath.Rel(ctx.Root, ctx.Config.Package.Root)
-		if err != nil {
-			srcRel = ctx.Config.Package.Root
-		}
-		source := filepath.ToSlash(filepath.Join(srcRel, ch.SourcePath))
-		data["git_repository_edit_url"] = strings.ReplaceAll(cfg.EditURLTemplate, "{path}", source)
-	}
-
 	displayName := ch.Name
 	if override, ok := ctx.ChapterTitles[ch.Path]; ok && override != "" {
 		displayName = override

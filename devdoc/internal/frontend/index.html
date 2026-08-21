@@ -16,10 +16,6 @@
         <link rel="stylesheet" href="{{.Resource "css/github-markdown.css"}}">
         <link rel="stylesheet" href="{{.Resource "highlight.css"}}">
 
-        {{range .AdditionalCSS}}
-        <link rel="stylesheet" href="{{$.Resource .}}">
-        {{end}}
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/highlight.min.js"></script>
@@ -40,18 +36,6 @@
     <body>
     <div id="mdbook-body-container">
         <script>
-            try {
-                let theme = localStorage.getItem('mdbook-theme');
-                let sidebar = localStorage.getItem('mdbook-sidebar');
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-        <script>
             const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
             let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
@@ -61,20 +45,28 @@
             html.classList.add(theme);
             html.classList.add("js");
         </script>
-        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
-                sidebar_toggle.checked = false;
             }
             if (sidebar === 'visible') {
-                sidebar_toggle.checked = true;
+                document.documentElement.dataset.sidebar = 'visible';
+            } else {
+                delete document.documentElement.dataset.sidebar;
             }
+            document.getElementById('mdbook-sidebar-toggle').addEventListener('click', () => {
+                const next = document.documentElement.dataset.sidebar === 'visible' ? 'hidden' : 'visible';
+                try { localStorage.setItem('mdbook-sidebar', next); } catch(e) { }
+                if (next === 'visible') {
+                    document.documentElement.dataset.sidebar = 'visible';
+                } else {
+                    delete document.documentElement.dataset.sidebar;
+                }
+            });
         </script>
         <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
@@ -84,25 +76,14 @@
                 <div id="mdbook-menu-bar-hover-placeholder"></div>
                 <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
-                        </label>
+                        <button id="mdbook-sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                        </button>
                         <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme">
                         </button>
                         {{if .SearchEnabled}}
                         <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
                             搜索
                         </button>
-                        {{end}}
-                    </div>
-                    <h1 class="menu-title">{{.BookTitle}}</h1>
-                    <div class="right-buttons">
-                        {{if .GitRepositoryURL}}
-                        <a href="{{.GitRepositoryURL}}" title="Git repository" aria-label="Git repository">
-                        </a>
-                        {{end}}
-                        {{if .GitRepositoryEditURL}}
-                        <a href="{{.GitRepositoryEditURL}}" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
-                        </a>
                         {{end}}
                     </div>
                 </div>
@@ -168,9 +149,6 @@
 
         <script src="{{.Resource "index.js"}}"></script>
 
-        {{range .AdditionalJS}}
-        <script src="{{$.Resource .}}"></script>
-        {{end}}
     </div>
     </body>
 </html>

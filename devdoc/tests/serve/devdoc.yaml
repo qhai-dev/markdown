@@ -10,7 +10,4 @@ build:
     - examples
 
 output:
-  html:
-    additional-css:
-      - theme-overrides.css
-
+  html: {}

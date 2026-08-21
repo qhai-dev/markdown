@@ -38,10 +38,6 @@ type RenderData struct {
 	SearchJS       bool
 	MathJaxSupport bool
 
-	// Resources.
-	AdditionalCSS []string
-	AdditionalJS  []string
-
 	// Live reload (template.URL so html/template treats it as URL-safe).
 	LiveReloadEndpoint template.URL
 
@@ -53,12 +49,6 @@ type RenderData struct {
 	// it inside <main> via {{.Content}} (the legacy data map calls it
 	// "content"; this field is the typed RenderData view).
 	Content template.HTML
-
-	// Git integration.
-	GitRepositoryURL       string
-	GitRepositoryEditURL   string
-	GitRepositoryIconClass string
-	GitRepositoryIcon      string
 }
 
 // Nav is the shape of the Previous / Next links on a page.
@@ -95,22 +85,10 @@ func makeData(ctx *Context, cfg *model.HtmlConfig, th *Theme) map[string]any {
 	if cfg.MathJaxSupport {
 		data["mathjax_support"] = true
 	}
-	if len(cfg.AdditionalCSS) > 0 {
-		data["additional_css"] = relativeToRoot(ctx.Root, cfg.AdditionalCSS)
-	}
-	if len(cfg.AdditionalJS) > 0 {
-		data["additional_js"] = relativeToRoot(ctx.Root, cfg.AdditionalJS)
-	}
 
 	search := cfg.EffectiveSearch()
 	data["search_enabled"] = search.Enable
 	data["search_js"] = search.Enable && search.CopyJS
-
-	if cfg.GitRepositoryURL != "" {
-		data["git_repository_url"] = cfg.GitRepositoryURL
-	}
-	data["git_repository_icon"] = cfg.GitRepositoryIconName()
-	data["git_repository_icon_class"] = cfg.GitRepositoryIconClass()
 
 	data["fold_enable"] = cfg.Fold.Enable
 	data["fold_level"] = int(cfg.Fold.Level)
@@ -137,10 +115,6 @@ func BuildRenderData(data map[string]any) RenderData {
 		SearchJS:               asBool(data, "search_js"),
 		MathJaxSupport:         asBool(data, "mathjax_support"),
 		IsIndex:                asBool(data, "is_index"),
-		GitRepositoryURL:       asString(data, "git_repository_url"),
-		GitRepositoryEditURL:   asString(data, "git_repository_edit_url"),
-		GitRepositoryIconClass: asString(data, "git_repository_icon_class"),
-		GitRepositoryIcon:      asString(data, "git_repository_icon"),
 	}
 	out.Env = &Env{}
 	out.Env.Path = asString(data, "path")
@@ -172,12 +146,6 @@ func BuildRenderData(data map[string]any) RenderData {
 				Link:  asString(m, "link"),
 			}
 		}
-	}
-	if v, ok := data["additional_css"]; ok {
-		out.AdditionalCSS = asStringSlice(v)
-	}
-	if v, ok := data["additional_js"]; ok {
-		out.AdditionalJS = asStringSlice(v)
 	}
 	if v, ok := data["resources"]; ok {
 		if m, ok := v.(map[string]string); ok {

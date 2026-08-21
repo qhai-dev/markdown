@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Section 1.1 - Basic Fixture</title>
         
-        <base href="/">
+        <base href="%7b0x12b98896a150%20en%20Section%201.1%20-%20Basic%20Fixture%20Section%201.1%20Basic%20Fixture%20%20light%20navy%20ltr%20../%20false%20/%20true%20true%20false%20%200x12b988b66a40%200x12b988b66aa0%20%3ch1%20id=%22section-11%22%3e%3ca%20class=%22header%22%20href=%22#section-11%22%3eSection%201.1%3c/a%3e%3c/h1%3e%0a%3cp%3eNested%20chapter.%3c/p%3e%0a%7d">
         
 
         <meta name="description" content="">
@@ -12,11 +12,9 @@
 
         <link rel="stylesheet" href="../css/variables-58e33eee.css">
         <link rel="stylesheet" href="../css/general-89657a21.css">
-        <link rel="stylesheet" href="../css/chrome-0d4ffddd.css">
-        <link rel="stylesheet" href="../css/github-markdown-004c593c.css">
+        <link rel="stylesheet" href="../css/chrome-44177400.css">
+        <link rel="stylesheet" href="../css/github-markdown-83d9ab9a.css">
         <link rel="stylesheet" href="../highlight-ff8825f1.css">
-
-        
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
@@ -38,18 +36,6 @@
     <body>
     <div id="mdbook-body-container">
         <script>
-            try {
-                let theme = localStorage.getItem('mdbook-theme');
-                let sidebar = localStorage.getItem('mdbook-sidebar');
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-        <script>
             const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
             let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
@@ -59,20 +45,28 @@
             html.classList.add(theme);
             html.classList.add("js");
         </script>
-        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
-                sidebar_toggle.checked = false;
             }
             if (sidebar === 'visible') {
-                sidebar_toggle.checked = true;
+                document.documentElement.dataset.sidebar = 'visible';
+            } else {
+                delete document.documentElement.dataset.sidebar;
             }
+            document.getElementById('mdbook-sidebar-toggle').addEventListener('click', () => {
+                const next = document.documentElement.dataset.sidebar === 'visible' ? 'hidden' : 'visible';
+                try { localStorage.setItem('mdbook-sidebar', next); } catch(e) { }
+                if (next === 'visible') {
+                    document.documentElement.dataset.sidebar = 'visible';
+                } else {
+                    delete document.documentElement.dataset.sidebar;
+                }
+            });
         </script>
         <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
@@ -82,8 +76,8 @@
                 <div id="mdbook-menu-bar-hover-placeholder"></div>
                 <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
-                        </label>
+                        <button id="mdbook-sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                        </button>
                         <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme">
                         </button>
                         
@@ -92,12 +86,7 @@
                         </button>
                         
                     </div>
-                    <h1 class="menu-title">Basic Fixture</h1>
-                    <div class="right-buttons">
-                        
-                        
-                    </div>
-                </div>
+                                    </div>
                 
                 <div id="mdbook-search-wrapper" class="hidden">
                     <form id="mdbook-searchbar-outer" class="searchbar-outer">
@@ -147,7 +136,6 @@
 
         <script src="../index-4ef60286.js"></script>
 
-        
     </div>
     </body>
 </html>

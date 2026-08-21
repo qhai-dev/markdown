@@ -53,8 +53,7 @@ type Files struct {
 }
 
 // New builds the asset set for the given theme and configuration, mirroring
-// StaticFiles::new. root is the book root, used to resolve additional-css and
-// additional-js paths.
+// StaticFiles::new. root is the book root.
 func NewStaticFiles(t *Theme, cfg *model.HtmlConfig, root string) (*Files, error) {
 	f := &Files{hashFiles: cfg.HashFiles, resources: map[string]string{}}
 
@@ -65,9 +64,6 @@ func NewStaticFiles(t *Theme, cfg *model.HtmlConfig, root string) (*Files, error
 	f.AddBuiltin("css/github-markdown.css", t.MarkdownCSS)
 	f.AddBuiltin("highlight.css", t.HighlightCSS)
 
-	for _, custom := range append(append([]string{}, cfg.AdditionalCSS...), cfg.AdditionalJS...) {
-		f.addAdditional(custom, filepath.Join(root, filepath.FromSlash(custom)))
-	}
 	return f, nil
 }
 

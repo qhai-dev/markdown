@@ -157,28 +157,6 @@ func (h *HtmlConfig) PreferredDarkThemeName() string {
 	return strings.ToLower(h.PreferredDarkTheme)
 }
 
-// GitRepositoryIconName returns the FontAwesome icon for the repository link.
-func (h *HtmlConfig) GitRepositoryIconName() string {
-	if h.GitRepositoryIcon == "" {
-		return "fab-github"
-	}
-	return h.GitRepositoryIcon
-}
-
-// GitRepositoryIconClass maps the icon's style prefix to a FontAwesome style.
-// The prefix is the segment before the first `-`, matched exactly, as
-// make_data does in crates/mdbook-html/src/html_handlebars/hbs_renderer.rs.
-func (h *HtmlConfig) GitRepositoryIconClass() string {
-	prefix, _, _ := strings.Cut(h.GitRepositoryIconName(), "-")
-	switch prefix {
-	case "fas":
-		return "solid"
-	case "fab":
-		return "brands"
-	default:
-		return "regular"
-	}
-}
 
 // RealizedTextDirection returns "ltr" or "rtl", inferring the direction from
 // the book language when it was not set explicitly. The language list is copied

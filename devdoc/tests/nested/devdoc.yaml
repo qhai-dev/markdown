@@ -10,10 +10,6 @@ build:
 
 output:
   html:
-    git-repository-url: https://github.com/example/nested
-    edit-url-template: https://github.com/example/nested/edit/main/{path}
-    additional-css:
-      - extra.css
     fold:
       enable: true
       level: 1

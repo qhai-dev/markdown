@@ -122,16 +122,11 @@ Go 端走文件系统 + front-matter,这是 M 系列的设计选择。fixture
 | `definition-lists` | bool | `true` | 定义列表支持 |
 | `admonitions` | bool | `true` | admonition 支持 |
 | `mathjax-support` | bool | `false` | MathJax 支持 |
-| `additional-css` | string[] | `[]` | 额外 CSS，注入 `<head>` |
-| `additional-js` | string[] | `[]` | 额外 JS，注入 `<body>` 底部 |
 | `fold.enable` | bool | `false` | 章节折叠 |
 | `fold.level` | uint | `0` | 折叠层级 |
 | `code.hidelines` | map<string,string> | `{}` | 语言 → 隐藏行前缀 |
 | `no-section-label` | bool | `false` | 章节标签 |
 | `search` | 表 | 见 §6 | 未写整表时用 §6 全部默认值 |
-| `git-repository-url` | string | 空 | 仓库链接 |
-| `git-repository-icon` | string | 空 | 实际取 `fab-github` |
-| `edit-url-template` | string | 空 | "编辑本页"链接模板 |
 | `input-404` | string | 空 | 404 页源文件，默认 `404.md` → 输出 `404.html`；**显式写空串禁用 404 页**（Go 端用指针区分"未写"与"写了空串"，见 `html.go` `Render404`） |
 | `site-url` | string | 空 | 站点 URL（sitemap/robots 用） |
 | `cname` | string | 空 | CNAME |
@@ -206,8 +201,6 @@ output:
     definition-lists: true
     admonitions: true
     mathjax-support: false
-    additional-css:
-      - custom.css
     hash-files: true
     search:
       enable: true

@@ -62,12 +62,12 @@ The binary is structured to mirror mdBook's crate split. Read top-down:
 - **`internal/frontend/`** — `go:embed`'d default theme (`assets/` + `index.html`). User `theme/` overrides file-by-file.
 - **`internal/plugin/`** — external preprocessor / renderer wire protocol. M3 status: code is in place but the **external-plugin link is frozen** — see the FROZEN comment at the top of `internal/plugin/cmd.go` and `doc/plan/progress.md`. Do not extend external-plugin acceptance without un-freezing first.
 
-Per-chapter subdirectory preservation, prefix/numbered/suffix zones, part titles, separators, draft chapters, redirects, `additional-css`, `fold`, and per-file front-matter (with UTF-8 BOM stripping) are handled in the loader/walk + model layer.
+Per-chapter subdirectory preservation, prefix/numbered/suffix zones, part titles, separators, draft chapters, redirects, `fold`, and per-file front-matter (with UTF-8 BOM stripping) are handled in the loader/walk + model layer.
 
 ## Test fixtures
 
 - `tests/basic` — minimal book used by `make serve` and the harness.
-- `tests/nested` — multi-level nesting, tables, footnotes, admonitions, task lists, additional-css, fold, draft chapters, part titles, separators, prefix/numbered/suffix zones, redirects. Used as a strict-mode harness fixture.
+- `tests/nested` — multi-level nesting, tables, footnotes, admonitions, task lists, fold, draft chapters, part titles, separators, prefix/numbered/suffix zones, redirects. Used as a strict-mode harness fixture.
 - `examples/basic` — example output, also serve-able via `make example`.
 - `tests/ts-*` — TypeScript-style fixtures historically imported from the Rust testsuite (see `tests/README.md`).
 - `bazel/tests/` — Bazel build fixtures, orthogonal to the Go harness.

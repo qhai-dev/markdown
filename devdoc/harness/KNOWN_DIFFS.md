@@ -32,7 +32,7 @@ Closed decisions; kept here as a project-history breadcrumb.
   Font Awesome CSS/JS/icons, the menu-bar / sidebar / footer JS,
   Theme asset hashing, `{{ resource }}` rewriting — M2 removal.
 - `redirect` table support — M2.
-- `additional-css` and `fold` rendering — M2 (`nested` fixture).
+- `fold` rendering — M2 (`nested` fixture).
 - Strict-mode byte-for-byte equivalence on `basic` and `nested` — M2.
 - **2026-08-15**: Left-side chapter list sidebar initially deleted,
   then partially restored. Today only the no-JS `toc.html` iframe

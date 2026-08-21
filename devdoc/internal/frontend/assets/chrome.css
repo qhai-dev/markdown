@@ -70,13 +70,6 @@ html {
     color: inherit;
 }
 
-.right-buttons {
-    margin: 0 15px;
-}
-.right-buttons a {
-    text-decoration: none;
-}
-
 .left-buttons {
     display: flex;
     margin: 0 5px;
@@ -425,10 +418,10 @@ ul#mdbook-searchresults span.teaser em {
 }
 
 /* sidebar-hidden */
-#mdbook-sidebar-toggle-anchor:not(:checked) ~ .sidebar {
+html:not([data-sidebar="visible"]) .sidebar {
     transform: translateX(calc(0px - var(--sidebar-width)));
 }
-[dir=rtl] #mdbook-sidebar-toggle-anchor:not(:checked) ~ .sidebar {
+[dir=rtl] html:not([data-sidebar="visible"]) .sidebar {
     transform: translateX(var(--sidebar-width));
 }
 .sidebar::-webkit-scrollbar {
@@ -439,18 +432,18 @@ ul#mdbook-searchresults span.teaser em {
 }
 
 /* sidebar-visible */
-#mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
+html[data-sidebar="visible"] .page-wrapper {
     transform: translateX(var(--sidebar-width));
 }
-[dir=rtl] #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
+[dir=rtl] html[data-sidebar="visible"] .page-wrapper {
     transform: translateX(calc(0px - var(--sidebar-width)));
 }
 @media only screen and (min-width: 620px) {
-    #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
+    html[data-sidebar="visible"] .page-wrapper {
         transform: none;
         margin-inline-start: var(--sidebar-width);
     }
-    [dir=rtl] #mdbook-sidebar-toggle-anchor:checked ~ .page-wrapper {
+    [dir=rtl] html[data-sidebar="visible"] .page-wrapper {
         transform: none;
     }
 }

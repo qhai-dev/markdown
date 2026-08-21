@@ -67,8 +67,6 @@ type HtmlConfig struct {
 	DefinitionLists  bool     `yaml:"definition-lists"`
 	Admonitions      bool     `yaml:"admonitions"`
 	MathJaxSupport   bool     `yaml:"mathjax-support"`
-	AdditionalCSS    []string `yaml:"additional-css"`
-	AdditionalJS     []string `yaml:"additional-js"`
 
 	Code Code `yaml:"code"`
 
@@ -76,10 +74,6 @@ type HtmlConfig struct {
 	NoSectionLabel bool `yaml:"no-section-label"`
 
 	Search *Search `yaml:"search"`
-
-	GitRepositoryURL  string `yaml:"git-repository-url"`
-	GitRepositoryIcon string `yaml:"git-repository-icon"`
-	EditURLTemplate   string `yaml:"edit-url-template"`
 
 	// Input404 is a pointer so an explicit empty string, which disables the
 	// page, can be told apart from the key being absent.
